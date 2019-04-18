@@ -142,25 +142,6 @@ public class UserController {
 		return R.status(temp);
 	}
 
-	@GetMapping("/test-redis")
-	public R testRedis() {
 
-
-		//jiguangSmsUtils.sendSMSCode("18342360411", "12345");
-
-		redisUtils.set("a","a");
-		System.out.println(redisUtils.get("a"));
-
-		return R.status(true);
-	}
-
-	@GetMapping("/test-send-message")
-	public R testSendMessage() {
-
-
-		jiguangSmsUtils.sendSMSCode("18342360411", "12345");
-
-		return R.status(true);
-	}
 
 }

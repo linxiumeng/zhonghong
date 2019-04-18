@@ -45,5 +45,5 @@ hs_err_pid*
 LICENSE
 doc/
 pic/
-pom.xml
 script/
+*.iml
