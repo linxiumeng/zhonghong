@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class RedisUtils {
-    @Resource(name = "redisTemp")
+    @Resource
     RedisTemplate redisTemplate;
     @Resource(name = "redisTemplate")
     ValueOperations<String, String> valueOperations;

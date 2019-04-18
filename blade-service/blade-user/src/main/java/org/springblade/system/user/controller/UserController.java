@@ -23,6 +23,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
+import org.springblade.common.utils.JiguangSmsUtils;
+import org.springblade.common.utils.RedisUtils;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.secure.BladeUser;
@@ -37,6 +39,7 @@ import org.springblade.system.user.wrapper.UserWrapper;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.Map;
 
@@ -47,12 +50,20 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping
-@AllArgsConstructor
+//@AllArgsConstructor
 public class UserController {
 
+	@Resource
 	private IUserService userService;
 
+	@Resource
 	private IDictClient dictClient;
+
+	@Resource
+	private RedisUtils redisUtils;
+
+	@Resource
+	private JiguangSmsUtils jiguangSmsUtils;
 
 	/**
 	 * 查询单条
@@ -129,6 +140,27 @@ public class UserController {
 	public R resetPassword(@ApiParam(value = "userId集合", required = true) @RequestParam String userIds) {
 		boolean temp = userService.resetPassword(userIds);
 		return R.status(temp);
+	}
+
+	@GetMapping("/test-redis")
+	public R testRedis() {
+
+
+		//jiguangSmsUtils.sendSMSCode("18342360411", "12345");
+
+		redisUtils.set("a","a");
+		System.out.println(redisUtils.get("a"));
+
+		return R.status(true);
+	}
+
+	@GetMapping("/test-send-message")
+	public R testSendMessage() {
+
+
+		jiguangSmsUtils.sendSMSCode("18342360411", "12345");
+
+		return R.status(true);
 	}
 
 }
