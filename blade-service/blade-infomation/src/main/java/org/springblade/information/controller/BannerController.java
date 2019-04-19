@@ -1,9 +1,9 @@
 package org.springblade.information.controller;
 
-import io.finepetro.common.utils.R;
-import io.finepetro.entity.Banner;
-import io.finepetro.service.BannerService;
 import io.swagger.annotations.Api;
+import org.springblade.common.entity.Banner;
+import org.springblade.common.utils.R;
+import org.springblade.information.service.BannerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
