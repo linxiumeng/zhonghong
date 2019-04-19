@@ -12,10 +12,7 @@ import org.springblade.common.utils.R;
 import org.springblade.forewarduser.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cglib.beans.BeanCopier;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -102,5 +99,7 @@ public class UserController {
         //修改
         return R.ok().put("row", this.userService.updateByIdWithCache(param2));
     }
+
+
 
 }

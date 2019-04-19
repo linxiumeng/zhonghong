@@ -22,6 +22,7 @@
         <module>blade-user-api</module>
         <module>blade-foreward-user-api</module>
         <module>blade-information-api</module>
+        <module>blade-order-api</module>
     </modules>
 
     <dependencies>

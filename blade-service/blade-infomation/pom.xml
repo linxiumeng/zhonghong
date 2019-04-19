@@ -92,6 +92,18 @@
             <artifactId>webmagic-extension</artifactId>
             <version>${webmagic.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-information-api</artifactId>
+            <version>2.2.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-information-api</artifactId>
+            <version>2.2.1</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 </project>

@@ -20,6 +20,7 @@ import org.springblade.core.launch.constant.AppConstant;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import static org.springblade.common.constant.ApplicationNameConstant.INFORMATION_MODULE;
 
@@ -29,6 +30,7 @@ import static org.springblade.common.constant.ApplicationNameConstant.INFORMATIO
  * @author Chill
  */
 @SpringCloudApplication
+@EnableScheduling
 @EnableFeignClients(AppConstant.BASE_PACKAGES)
 @ComponentScan({"org.springblade"})
 public class InformationApplication {

@@ -11,6 +11,7 @@ import org.springblade.common.entity.AccountRecharge;
 import org.springblade.common.entity.PurchaseOrders;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.form.AccountExtractForm;
+import org.springblade.common.form.AccountPayForm;
 import org.springblade.common.form.AccountRechargeForm;
 import org.springblade.common.respond.AccountDto;
 import org.springblade.common.utils.R;
@@ -100,6 +101,13 @@ public class AccountController {
         userEntity.setUserId(23L);
         accountService.pay(order,userEntity);
         return R.ok();
+    }
+
+    @PostMapping("pay")
+    public org.springblade.core.tool.api.R pay(@RequestBody AccountPayForm accountPayForm){
+        org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
+        r.setData(accountService.pay(accountPayForm.getPurchaseOrders(),accountPayForm.getUser()));
+        return r;
     }
 
 }

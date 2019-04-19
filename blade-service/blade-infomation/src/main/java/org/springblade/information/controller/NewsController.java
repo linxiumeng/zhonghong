@@ -3,7 +3,10 @@ package org.springblade.information.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springblade.common.annotation.Login;
+import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.entity.News;
+import org.springblade.common.entity.UserEntity;
 import org.springblade.common.form.PageForm;
 import org.springblade.common.utils.R;
 import org.springblade.information.service.NewsService;
@@ -30,9 +33,13 @@ public class NewsController {
      * @param id 文章id
      * @return
      */
+    @Login
     @PostMapping("detail")
     @ApiOperation(value="获取文章详情接口")
-    public R getNewDetail(@RequestParam("id") Long id) {
+    public R getNewDetail(@RequestParam("id") Long id, @LoginUser UserEntity userEntity) {
+
+        System.out.println("new detail's userEntity is "+userEntity);
+
         if (id == null) {
             return R.error("id 为 null");
         }

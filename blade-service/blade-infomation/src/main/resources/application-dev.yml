@@ -1,0 +1,14 @@
+#服务器端口
+server:
+  port: 8111
+
+#数据源配置
+spring:
+  datasource:
+    url: ${finepetro.datasource.dev.url}
+    username: ${blade.datasource.dev.username}
+    password: ${blade.datasource.dev.password}
+
+jpush:
+  appKey: 9325ea96802112de6540276a
+  masterSecret: b5be61a29d2a31ce340907b6
