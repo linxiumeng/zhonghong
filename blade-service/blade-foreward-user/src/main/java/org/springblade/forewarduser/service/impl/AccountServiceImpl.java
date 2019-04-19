@@ -7,6 +7,7 @@ import org.springblade.common.entity.*;
 import org.springblade.common.form.PayForm;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.forewarduser.feign.AccountDetailServiceFeign;
+import org.springblade.forewarduser.feign.AccountRechargeServiceFeign;
 import org.springblade.forewarduser.feign.AccountRepaymentServiceFeign;
 import org.springblade.forewarduser.feign.AccountRepaymentStepServiceFeign;
 import org.springblade.forewarduser.mapper.AccountDao;
@@ -40,6 +41,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
 
     @Resource
     AccountRepaymentStepServiceFeign accountRepaymentStepService;
+
 
 
     @Override

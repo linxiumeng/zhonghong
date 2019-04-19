@@ -20,6 +20,8 @@
         <module>blade-dict-api</module>
         <module>blade-system-api</module>
         <module>blade-user-api</module>
+        <module>blade-foreward-user-api</module>
+        <module>blade-information-api</module>
     </modules>
 
     <dependencies>

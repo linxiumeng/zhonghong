@@ -37,3 +37,16 @@
 4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
 5. 码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
 6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+
+
+#### 项目说明
+1. blade-common : 提取的公共类 其中包括工具类（util），实体类（entity），通用配置（config），表单（form），注解（annotation），拦截器（Interceptor）等等
+2. blade-gateway : 网关模块
+3. blade-service : 业务service模块 其中包括跳转类（controller），数据库底层操作类（dao），业务类（service），业务实现类（service.impl）
+4. blade-service-api : 抽取出blade-service的一些东西 比如Feign的service
+
+##### 针对于blade-service再细分一下
+1. blade-foreward-user : 前台用户服务
+2. blade-information : 信息相关服务 首页展示图（banner），新闻文章（news），公告（announcement），商品信息（goods）
+3. blade-pay : 支付相关服务（未来要不断的接入）
+4. blade-order : 需求单（demand），报价单（quotation），采购单（purchaseOrder）

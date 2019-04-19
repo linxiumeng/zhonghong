@@ -8,6 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -16,14 +17,15 @@ import java.util.List;
  *
  * @author Chill
  */
-@FeignClient(
-        value = "blade-pay"
-)
-public interface AccountDetailServiceFeign {
+@RestController
+public class AccountDetailServiceFeignImpl implements AccountDetailServiceFeign  {
 
 
+    @Override
     @PostMapping("/accountDetail/saveAccountDetail")
-    R<Boolean> save(AccountDetail detail);
+    public R<Boolean> save(AccountDetail detail){
+        return null;
+    }
 
 
 

@@ -40,7 +40,7 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @Autowired
+    @Resource
     private AccountRechargeServiceFeign accountRechargeService;
 
     @PostMapping("query")
