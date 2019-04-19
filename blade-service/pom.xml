@@ -25,6 +25,7 @@
         <module>blade-foreward-user</module>
         <module>blade-pay</module>
         <module>blade-infomation</module>
+        <module>blade-order</module>
     </modules>
 
     <dependencies>
