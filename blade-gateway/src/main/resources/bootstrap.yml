@@ -8,6 +8,10 @@ blade:
     blade-desk: blade-desk
     blade-system: blade-system
     blade-information: blade-information
+    blade-foreward-user: blade-foreward-user
+    blade-order: blade-order
+    blade-pay: blade-pay
+
 
 spring:
   cloud:
@@ -42,7 +46,18 @@ spring:
         uri: lb://${blade.service.blade-information}
         predicates:
         - Path=/${blade.service.blade-information}/**
-
+      - id: ${blade.service.blade-foreward-user}
+        uri: lb://${blade.service.blade-foreward-user}
+        predicates:
+        - Path=/${blade.service.blade-foreward-user}/**
+      - id: ${blade.service.blade-pay}
+        uri: lb://${blade.service.blade-pay}
+        predicates:
+        - Path=/${blade.service.blade-pay}/**
+      - id: ${blade.service.blade-order}
+        uri: lb://${blade.service.blade-order}
+        predicates:
+        - Path=/${blade.service.blade-order}/**
 
       discovery:
         locator:
