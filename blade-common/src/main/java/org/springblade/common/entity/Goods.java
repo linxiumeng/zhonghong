@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springblade.common.enums.goods.GoodsAuditStatusEnum;
-import org.springblade.common.enums.goods.GoodsStatusEnum;
+import org.springblade.common.enums.GoodsAuditStatusEnum;
+import org.springblade.common.enums.GoodsStatusEnum;
 
 import java.io.Serializable;
 import java.util.Date;

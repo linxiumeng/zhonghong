@@ -1,0 +1,32 @@
+
+CREATE TABLE `tb_demand` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `creat_userid` varchar(255) DEFAULT NULL COMMENT '创建用户id',
+  `f_type` varchar(255) DEFAULT NULL COMMENT '产品类型',
+  `f_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `f_unit` varchar(255) DEFAULT NULL COMMENT '产品单位',
+  `num` int(11) DEFAULT NULL COMMENT '采购数量',
+  `trade_clause` varchar(255) DEFAULT NULL COMMENT '贸易条款',
+  `payment_by` varchar(255) DEFAULT NULL COMMENT '信用方式',
+  `pricing_manner` varchar(255) DEFAULT NULL COMMENT '计价基准',
+  `contractual_value_date` varchar(255) DEFAULT NULL COMMENT '计价日期',
+  `premiums_discounts` varchar(255) DEFAULT NULL COMMENT '升贴水',
+  `pay_day` varchar(255) DEFAULT NULL COMMENT '支付日',
+  `deadline` varchar(255) DEFAULT NULL COMMENT '截止时间',
+  `remark` varchar(2550) DEFAULT NULL COMMENT '备注',
+  `place_of_origin` varchar(255) DEFAULT NULL COMMENT '油产地',
+  `oil_type` varchar(255) DEFAULT NULL COMMENT '油种类',
+  `api` varchar(255) DEFAULT NULL COMMENT 'api度',
+  `sulphur_content` varchar(255) DEFAULT NULL COMMENT '含硫量%',
+  `acid_value` varchar(255) DEFAULT NULL COMMENT '酸值mgkoh/g',
+  `carbon_residue` varchar(255) DEFAULT NULL COMMENT '残炭%',
+  `nickel` varchar(255) DEFAULT NULL COMMENT '镍ppm',
+  `vanadium` varchar(255) DEFAULT NULL COMMENT '钒ppm',
+  `shrink` varchar(255) DEFAULT NULL COMMENT '>350摄氏度质量收缩率（%）',
+  `status` int(4) DEFAULT '1' COMMENT '需求单状态0为初始化，1为招标中，2为暂停招标，3为停止招标',
+  `creat_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `f_remark` varchar(255) DEFAULT NULL COMMENT '商品备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+

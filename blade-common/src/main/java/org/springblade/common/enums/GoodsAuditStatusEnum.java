@@ -1,4 +1,4 @@
-package org.springblade.common.enums.goods;
+package org.springblade.common.enums;
 
 import com.baomidou.mybatisplus.core.enums.IEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -8,42 +8,41 @@ import java.io.Serializable;
 
 /**
  * @author hanbin
- * 产品状态 上架/下架的状态
- *
- * 产品状态0为未上架,1为已上架,2为已下架
- *
+ * 商品认证枚举
+ * <p>
+ * 审核状态0为默认状态,1为审核通过,2为审核失败
  */
-public enum GoodsStatusEnum implements IEnum {
-    NOT_ON(0,"未上架"),ON(1,"已上架"),DOWN(2,"已下架");
+public enum GoodsAuditStatusEnum implements IEnum<Integer> {
+
+    /**
+     * 默认
+     */
+    DEFAULT(0, "默认"),
+
+    /**
+     * 通过
+     */
+    OK(1, "通过"),
+
+    /**
+     * 不通过
+     */
+    NO_OK(2, "不通过");
 
     private int code;
 
     private String desc;
 
-    GoodsStatusEnum(int code, String desc) {
+    GoodsAuditStatusEnum(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
-    /**
-     * mybatis-plus的转换方法
-     * @return
-     */
-    @Override
-    public Serializable getValue() {
-        return this.getCode();
-    }
-
-    /**
-     * json构造的方法
-     * @param code
-     * @return
-     */
     @JsonCreator
-    public static GoodsStatusEnum getItem(Integer code){
+    public GoodsAuditStatusEnum getItem(Integer code){
 
         if(code != null){
-            for(GoodsStatusEnum item : values()){
+            for(GoodsAuditStatusEnum item : values()){
                 if(item.getCode() == code.intValue()){
                     return item;
                 }
@@ -68,5 +67,10 @@ public enum GoodsStatusEnum implements IEnum {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    @Override
+    public Integer getValue() {
+        return this.getCode();
     }
 }

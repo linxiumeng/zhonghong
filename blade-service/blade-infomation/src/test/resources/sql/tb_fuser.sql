@@ -1,0 +1,25 @@
+CREATE TABLE `tb_fuser` (
+  `user_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `mobile` varchar(32) DEFAULT NULL COMMENT '账号',
+  `password` varchar(64) DEFAULT NULL COMMENT '密码',
+  `unified_social_code` varchar(32) DEFAULT NULL COMMENT '统一社会编码',
+  `legal_person` varchar(32) DEFAULT NULL COMMENT '法人',
+  `card1` varchar(256) DEFAULT NULL COMMENT '身份证正面',
+  `card2` varchar(256) DEFAULT NULL COMMENT '身份证反面',
+  `business_licence` varchar(256) DEFAULT NULL COMMENT '营业执照',
+  `contacts` varchar(32) DEFAULT NULL COMMENT '联系人',
+  `contact_number` varchar(32) DEFAULT NULL COMMENT '联系电话',
+  `contact_address` varchar(255) DEFAULT NULL COMMENT '联系地址',
+  `credit_status` tinyint(4) DEFAULT '0' COMMENT '授信状态',
+  `status` tinyint(4) DEFAULT '0' COMMENT '采购商账号状态 账号状态，0未企业认证;1为企业认证中;2为企业认证失败；3为企业认证通过，授信未提交；4为授信审核中；5为授信失败；6为授信成功',
+  `register_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
+  `type` tinyint(4) DEFAULT '1' COMMENT '用户类型：1：采购商，2：供应商',
+  `company_name` varchar(256) DEFAULT NULL COMMENT '企业名称',
+  `mail` varchar(255) DEFAULT NULL COMMENT '邮箱',
+  `provider_status` varchar(255) DEFAULT '0' COMMENT '供应商认证状态 账号状态0为初始化;1为认证中;3为认证通过;2为认证失败',
+  `create_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_date` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `login_status` tinyint(255) DEFAULT '1' COMMENT '账号登录状态',
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+

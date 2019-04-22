@@ -7,7 +7,7 @@ import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.entity.Goods;
 import org.springblade.common.entity.UserEntity;
-import org.springblade.common.enums.goods.GoodsStatusEnum;
+import org.springblade.common.enums.GoodsStatusEnum;
 import org.springblade.common.form.GoodsCheckCodeForm;
 import org.springblade.common.form.GoodsStatusForm;
 import org.springblade.common.form.PageForm;

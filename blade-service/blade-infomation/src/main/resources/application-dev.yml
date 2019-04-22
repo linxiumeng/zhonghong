@@ -12,3 +12,11 @@ spring:
 jpush:
   appKey: 9325ea96802112de6540276a
   masterSecret: b5be61a29d2a31ce340907b6
+
+mybatis-plus:
+    #增加枚举类
+  typeEnumsPackage: org.springblade.common.enums
+  typeAliasesPackage: org.springblade.common.entity
+
+  configuration:
+    default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.EnumTypeHandler

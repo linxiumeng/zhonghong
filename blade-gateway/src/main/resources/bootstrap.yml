@@ -7,6 +7,7 @@ blade:
     blade-auth: blade-auth
     blade-desk: blade-desk
     blade-system: blade-system
+    blade-information: blade-information
 
 spring:
   cloud:
@@ -37,6 +38,12 @@ spring:
         uri: lb://${blade.service.blade-system}
         predicates:
         - Path=/${blade.service.blade-system}/**
+      - id: ${blade.service.blade-information}
+        uri: lb://${blade.service.blade-information}
+        predicates:
+        - Path=/${blade.service.blade-information}/**
+
+
       discovery:
         locator:
           enabled: true

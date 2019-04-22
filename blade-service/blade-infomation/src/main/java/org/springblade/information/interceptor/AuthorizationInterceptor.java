@@ -25,7 +25,6 @@ import org.springblade.common.entity.TokenEntity;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.utils.R;
 import org.springblade.information.feign.TokenServiceFeign;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;

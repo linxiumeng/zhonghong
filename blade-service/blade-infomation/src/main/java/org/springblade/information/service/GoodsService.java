@@ -1,10 +1,9 @@
 package org.springblade.information.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.common.entity.Goods;
-import org.springblade.common.enums.goods.GoodsStatusEnum;
+import org.springblade.common.enums.GoodsStatusEnum;
 import org.springblade.common.form.PageForm;
 
 /**
