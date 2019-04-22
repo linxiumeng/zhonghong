@@ -20,7 +20,7 @@ public interface CommonConstant {
 	/**
 	 * sentinel dev 地址
 	 */
-	String SENTINEL_DEV_ADDR = "127.0.0.1:8858";
+	String SENTINEL_DEV_ADDR = "127.0.0.1:8080";
 
 	/**
 	 * sentinel prod 地址
