@@ -121,7 +121,8 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
             for (Demand demand : demandList) {
                 Long createUserid = Long.valueOf(demand.getCreatUserid());
                 //调用用户服务(修改成batch)
-                UserEntity userEntity = null;
+            //    UserEntity userEntity = null;
+                UserEntity userEntity = userService.getUserById(createUserid).getData();
                 demand.setCreateUser(userEntity);
             }
         } catch (NumberFormatException e) {

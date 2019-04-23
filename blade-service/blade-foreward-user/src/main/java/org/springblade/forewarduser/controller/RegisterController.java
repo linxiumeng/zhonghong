@@ -11,6 +11,7 @@ import org.springblade.common.exception.RRException;
 import org.springblade.common.form.LoginForm;
 import org.springblade.common.form.RegisterCheckCodeForm;
 import org.springblade.common.form.RegisterForm;
+import org.springblade.common.form.RegisterWithoutCaptchaForm;
 import org.springblade.common.utils.JiguangSmsUtils;
 import org.springblade.common.utils.NumberUtils;
 import org.springblade.common.utils.R;
@@ -71,6 +72,23 @@ public class RegisterController {
             return R.error("短信下发失败！");
         }
     }
+
+
+    @PostMapping("getcodenocheck")
+    @ApiOperation("获取注册短信验证码")
+    public R getRegisterCodegetWithoutcaptcha(@RequestBody RegisterWithoutCaptchaForm registerCheckCodeForm) {
+
+        String code = NumberUtils.getRandCode();
+        String key = String.format("%s_%s", USER_REGISTER_KEY, registerCheckCodeForm.getMobile());
+        boolean flag = jiguangSmsUtils.sendSMSCode(registerCheckCodeForm.getMobile(), code);
+        if (flag) {
+            redisUtils.set(key, code, 5 * 60);
+            return R.ok("获取成功！");
+        } else {
+            return R.error("短信下发失败！");
+        }
+    }
+
 
     @PostMapping("isregister")
     @ApiOperation("判断是否注册")

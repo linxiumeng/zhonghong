@@ -9,7 +9,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springblade.common.enums.GoodsAuditStatusEnum;
 import org.springblade.common.enums.GoodsStatusEnum;
+import org.springblade.common.validation.group.InsertGroup;
+import org.springblade.common.validation.group.SelectDetailGroup;
+import org.springblade.common.validation.group.UpdateGroup;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,6 +30,7 @@ public class Goods implements Serializable {
 
     /***/
     @TableId(type = IdType.INPUT)
+    @NotNull(groups = {UpdateGroup.class, SelectDetailGroup.class})
     private Long id;
     /**
      * 用户id
@@ -41,6 +47,7 @@ public class Goods implements Serializable {
     /**
      * 产品名字
      */
+    @NotBlank(groups = {InsertGroup.class})
     private String goodsName;
     /**
      * 产品详情
@@ -49,10 +56,12 @@ public class Goods implements Serializable {
     /**
      * 产品单价
      */
+    @NotNull(groups = {InsertGroup.class})
     private Double goodsPrice;
     /**
      * 产品单位
      */
+    @NotBlank(groups = {InsertGroup.class})
     private String goodsUnit;
     /**
      * 产品状态0为未上架,1为已上架,2为已下架 , 转换器设置为ordinal转换器
@@ -61,10 +70,12 @@ public class Goods implements Serializable {
     /**
      * 库存数量
      */
+    @NotBlank(groups = {InsertGroup.class})
     private String goodsStock;
     /**
      * 图片地址
      */
+    @NotBlank(groups = {InsertGroup.class})
     private String pic;
     /**
      * 审核状态0为默认状态,1为审核通过,2为审核失败

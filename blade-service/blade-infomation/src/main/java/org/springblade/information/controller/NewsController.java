@@ -33,12 +33,9 @@ public class NewsController {
      * @param id 文章id
      * @return
      */
-    @Login
     @PostMapping("detail")
     @ApiOperation(value="获取文章详情接口")
-    public R getNewDetail(@RequestParam("id") Long id, @LoginUser UserEntity userEntity) {
-
-        System.out.println("new detail's userEntity is "+userEntity);
+    public R getNewDetail(@RequestParam("id") Long id) {
 
         if (id == null) {
             return R.error("id 为 null");

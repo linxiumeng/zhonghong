@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author hanbin
  */
 @FeignClient(
-        value = "blade-information",name="GoodsServiceFeign"
+        value = "blade-information"
 )
 public interface GoodsServiceFeign {
 

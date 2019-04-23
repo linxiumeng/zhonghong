@@ -1,4 +1,4 @@
-package org.springblade.order.feign;
+package org.springblade.pay.feign;
 
 import org.springblade.common.entity.UserEntity;
 import org.springblade.core.tool.api.R;
@@ -23,6 +23,6 @@ public interface UserServiceFeign {
      * @return
      */
     @GetMapping(USER_API_PREFIX + "/detail")
-    R<UserEntity> getUserById(@RequestParam("userId")Long id);
+    R<UserEntity> getUserById(@RequestParam("userId") Long id);
 
 }

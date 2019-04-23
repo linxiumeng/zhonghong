@@ -1,6 +1,5 @@
 package org.springblade.information.controller;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.After;
@@ -13,6 +12,7 @@ import org.springblade.common.form.LoginForm;
 import org.springblade.common.form.RegisterForm;
 import org.springblade.common.utils.R;
 import org.springblade.common.utils.RedisUtils;
+import org.springblade.information.InformationApplication;
 import org.springblade.information.feign.UserServiceFeign;
 import org.springblade.information.service.AnnouncementService;
 import org.springblade.information.service.BannerService;
@@ -40,8 +40,8 @@ import java.util.Map;
         "spring.datasource.druid.url=jdbc:h2:mem:testdb;MODE=MYSQL;DB_CLOSE_DELAY=-1",
         "spring.datasource.druid.username=root",
         "spring.datasource.druid.password=123456",
-        "spring.redis.port=7777"},
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+        "spring.redis.port=7777","spring.profiles.active = dev","blade.env=dev","spring.application.name=aa",
+        "spring.cloud.nacos.config.server-addr=localhost:8848"})
 // 让 JUnit 运行 Spring 的测试环境， 获得 Spring 环境的上下文的支持
 @RunWith(SpringRunner.class)
 public abstract class BaseServiceTest {

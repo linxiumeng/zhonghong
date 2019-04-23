@@ -2,6 +2,7 @@ package org.springblade.order.feign;
 
 import org.springblade.common.entity.UserEntity;
 import org.springblade.core.tool.api.R;
+import org.springblade.order.feign.impl.UserServiceFeignImpl;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author hanbin
  */
 @FeignClient(
-        value = "blade-user"
+        value = "blade-foreward-user",fallback = UserServiceFeignImpl.class
 )
 public interface UserServiceFeign {
 
@@ -23,6 +24,6 @@ public interface UserServiceFeign {
      * @return
      */
     @GetMapping(USER_API_PREFIX + "/detail")
-    R<UserEntity> getUserById(@RequestParam("userId")Long id);
+    R<UserEntity> getUserById(@RequestParam("userId") Long id);
 
 }

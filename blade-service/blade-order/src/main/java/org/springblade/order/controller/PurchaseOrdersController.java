@@ -130,6 +130,11 @@ public class PurchaseOrdersController {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
         wrapper.eq("id", param.getId()).eq("buyer_id", user.getUserId());
         PurchaseOrders po = purchaseOrdersService.getOne(wrapper);
+
+        if(po == null){
+            throw new RRException("订单不存在，请联系管理员");
+        }
+
         if (po.getStatus() == OrdersEnum.THREE.getStatus()) {
             PurchaseOrders purchaseOrders = new PurchaseOrders();
             purchaseOrders.setId(param.getId());
@@ -171,7 +176,10 @@ public class PurchaseOrdersController {
         AccountPayForm accountPayForm = new AccountPayForm();
         accountPayForm.setPurchaseOrders(pd);
         accountPayForm.setUser(user);
-        accountService.pay(accountPayForm);//直接付款方法
+        org.springblade.core.tool.api.R r = accountService.pay(accountPayForm);//直接付款方法
+        if(!r.isSuccess()){
+            throw new RRException(r.getMsg());
+        }
         purchaseOrders.setStatus(OrdersEnum.FOURTEEN.getStatus());
         purchaseOrdersService.updateById(purchaseOrders);
         return R.ok();

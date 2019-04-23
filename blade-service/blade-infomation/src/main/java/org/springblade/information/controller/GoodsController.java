@@ -13,12 +13,17 @@ import org.springblade.common.form.GoodsStatusForm;
 import org.springblade.common.form.PageForm;
 import org.springblade.common.utils.R;
 import org.springblade.common.utils.SmsCheckUtils;
+import org.springblade.common.validation.group.InsertGroup;
+import org.springblade.common.validation.group.SelectDetailGroup;
+import org.springblade.common.validation.group.UpdateGroup;
 import org.springblade.information.feign.UserServiceFeign;
 import org.springblade.information.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Validation;
 
 /**
  * @author linxiumeng
@@ -66,7 +71,7 @@ public class GoodsController {
 
     @ApiOperation(value = "查询商品状态")
     @PostMapping("selectStatus")
-    public R selectStatus(@RequestBody Goods param) {
+    public R selectStatus(@RequestBody @Validated(SelectDetailGroup.class) Goods param) {
         QueryWrapper<Goods> wrapper = new QueryWrapper<>();
         wrapper.eq("id", param.getId());
         Goods row = this.goodsService.getById(param.getId());
@@ -86,7 +91,7 @@ public class GoodsController {
     @ApiOperation(value = "新增商品表(TbGoods)数据")
     @PostMapping("insert")
     @Login
-    public R insert(@RequestBody GoodsCheckCodeForm param, @LoginUser UserEntity user) {
+    public R insert(@RequestBody @Validated(InsertGroup.class) GoodsCheckCodeForm param, @LoginUser UserEntity user) {
 
         //修改校验方式 ， 避免重复代码
         if (!smsCheckUtils.check(user.getMobile(), param.getCode())) {
@@ -102,7 +107,7 @@ public class GoodsController {
     @ApiOperation(value = "编辑商品数据")
     @PostMapping("update")
     @Login
-    public R update(@RequestBody GoodsCheckCodeForm param, @LoginUser UserEntity user) {
+    public R update(@RequestBody @Validated(UpdateGroup.class) GoodsCheckCodeForm param, @LoginUser UserEntity user) {
 
         if (!smsCheckUtils.check(user.getMobile(), param.getCode())) {
             return R.error("请重新获取短信验证码");

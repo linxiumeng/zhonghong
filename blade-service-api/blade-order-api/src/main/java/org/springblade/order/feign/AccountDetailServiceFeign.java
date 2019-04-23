@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author hanbin
  */
 @FeignClient(
-        value = "blade-pay",name="accountDetailServiceFeign"
+        value = "blade-pay"
 )
 public interface AccountDetailServiceFeign {
 

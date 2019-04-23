@@ -14,7 +14,7 @@
  * the License.
  */
 
-package org.springblade.information.interceptor;
+package org.springblade.order.interceptor;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +25,7 @@ import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.TokenEntity;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.utils.R;
-import org.springblade.information.feign.TokenServiceFeign;
+import org.springblade.order.feign.TokenServiceFeign;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -34,6 +34,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.Optional;
 
 /**
  * 权限(Token)验证

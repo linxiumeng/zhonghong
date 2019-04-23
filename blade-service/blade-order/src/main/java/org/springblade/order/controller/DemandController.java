@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.StringUtils;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
+import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.Demand;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.form.DemandForm;
@@ -109,7 +111,15 @@ public class DemandController {
         UserEntity userEntity = null;
 
         if (demand != null && demand.getCreatUserid() != null) {
-            userEntity = userService.getUserById(Long.valueOf(demand.getCreatUserid())).getData();
+        //    userEntity = userService.getUserById(Long.valueOf(demand.getCreatUserid())).getData();
+            if(StringUtils.isNotBlank(demand.getCreatUserid())) {
+                org.springblade.core.tool.api.R<UserEntity> r = userService.getUserById(Long.valueOf(demand.getCreatUserid()));
+                if (r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS) {
+                    userEntity = null;
+                }else{
+                    userEntity = r.getData();
+                }
+            }
             demand.setCreateUser(userEntity);
         }
 

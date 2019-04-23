@@ -1,6 +1,6 @@
 package org.springblade.order.feign;
 
-import org.springblade.common.entity.UserEntity;
+import org.springblade.common.entity.TokenEntity;
 import org.springblade.core.tool.api.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author hanbin
  */
 @FeignClient(
-        value = "blade-user"
+        value = "blade-foreward-user"
 )
-public interface UserServiceFeign {
+public interface TokenServiceFeign {
 
 
-    String USER_API_PREFIX = "/api/fuser";
+    String USER_ACCOUNT_TOKEN_API_PREFIX = "/api/user/token";
 
     /**
      * 获取用户详情
-     * @param id
+     * @param token
      * @return
      */
-    @GetMapping(USER_API_PREFIX + "/detail")
-    R<UserEntity> getUserById(@RequestParam("userId")Long id);
+    @GetMapping(USER_ACCOUNT_TOKEN_API_PREFIX + "/detail")
+    R<TokenEntity> getTokenEntityByToken(@RequestParam("token") String token);
 
 }

@@ -4,6 +4,7 @@ package org.springblade.forewarduser.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.common.entity.*;
+import org.springblade.common.exception.RRException;
 import org.springblade.common.form.PayForm;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.forewarduser.feign.AccountDetailServiceFeign;
@@ -54,6 +55,11 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
         /**
          * @TODO缺少校验
          * */
+
+        if(account.getAccount().subtract(bd).signum() == -1){
+            throw new RRException("账户余额不足，请提升额度");
+        }
+
         AccountDetail ad = new AccountDetail();
         ad.setTotal(account.getTotal());
         ad.setAccount(bd);

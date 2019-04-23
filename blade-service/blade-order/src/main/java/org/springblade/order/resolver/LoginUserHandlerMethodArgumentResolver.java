@@ -14,14 +14,15 @@
  * the License.
  */
 
-package org.springblade.information.resolver;
+package org.springblade.order.resolver;
 
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.UserEntity;
+import org.springblade.common.exception.RRException;
 import org.springblade.core.tool.api.R;
-import org.springblade.information.feign.UserServiceFeign;
-import org.springblade.information.interceptor.AuthorizationInterceptor;
+import org.springblade.order.feign.UserServiceFeign;
+import org.springblade.order.interceptor.AuthorizationInterceptor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

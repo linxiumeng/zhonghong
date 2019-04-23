@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.Goods;
 import org.springblade.common.entity.PurchaseOrders;
 import org.springblade.common.entity.Quotation;
@@ -12,6 +13,7 @@ import org.springblade.common.enums.ErrorEnum;
 import org.springblade.common.enums.OrdersEnum;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.respond.ProviderPurchaseOrderStatisticsResp;
+import org.springblade.core.tool.api.R;
 import org.springblade.order.feign.GoodsServiceFeign;
 import org.springblade.order.feign.UserServiceFeign;
 import org.springblade.order.mapper.PurchaseOrdersDao;
@@ -68,7 +70,15 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         }
 
         Long userId = goods.getUserId();
-        UserEntity provider = userService.getUserById(userId).getData();
+       // UserEntity provider = userService.getUserById(userId).getData();
+
+        R<UserEntity> r = userService.getUserById(userId);
+        UserEntity provider = r.getData();
+        if(r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS){
+            provider = null;
+            throw new RRException("供应商不存在");
+        }
+
         setContact(param, buyer, provider);
         //复制属性
         BeanUtils.copyProperties(goods, param);
@@ -88,7 +98,13 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         }
         Goods goods = goodsService.getGoodsById(param.getGoodsId().longValue()).getData();
         Long userId =goods.getUserId();
-        UserEntity provider = userService.getUserById(userId).getData();
+      //  UserEntity provider = userService.getUserById(userId).getData();
+        R<UserEntity> r = userService.getUserById(userId);
+        UserEntity provider = r.getData();
+        if(r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS){
+            provider = null;
+            throw new RRException("供应商不存在");
+        }
         setContact(param, buyer, provider);
         BeanUtils.copyProperties(goods,param);
         return param;
@@ -106,7 +122,12 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
             throw new RRException("报价单不存在");
         }
         Long userId = quotation.getUserId();
-        UserEntity provider = userService.getUserById(userId).getData();
+        R<UserEntity> r = userService.getUserById(userId);
+        UserEntity provider = r.getData();
+        if(r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS){
+            provider = null;
+            throw new RRException("供应商不存在");
+        }
         setContact(param, buyer, provider);
         BeanUtils.copyProperties(quotation,param);
         copyQuotationPropertiestToOrders(quotation,param);
@@ -121,7 +142,12 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         }
         Quotation quotation = quotationService.getById(param.getQuotationId());
         Long userId = quotation.getUserId();
-        UserEntity provider = userService.getUserById(userId).getData();
+        R<UserEntity> r = userService.getUserById(userId);
+        UserEntity provider = r.getData();
+        if(r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS){
+            provider = null;
+            throw new RRException("供应商不存在");
+        }
         setContact(param, buyer, provider);
         BeanUtils.copyProperties(quotation,param);
         return param;

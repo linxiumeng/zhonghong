@@ -1,11 +1,13 @@
 package org.springblade.forewarduser.controller;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
+import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.Account;
 import org.springblade.common.entity.AccountRecharge;
 import org.springblade.common.entity.PurchaseOrders;
@@ -107,6 +109,28 @@ public class AccountController {
     public org.springblade.core.tool.api.R pay(@RequestBody AccountPayForm accountPayForm){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
         r.setData(accountService.pay(accountPayForm.getPurchaseOrders(),accountPayForm.getUser()));
+        return r;
+    }
+
+    @GetMapping("getByUserId")
+    public org.springblade.core.tool.api.R getAccountByUserId(@RequestParam("userId")Long userId){
+        org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
+        Wrapper wrapper = new QueryWrapper<>().eq("user_id",userId);
+        Account account = accountService.getOne(wrapper);
+        if(account != null){
+            r.setData(account);
+        } else{
+            r.setCode(FeignResultCodeConstant.ENTITY_NOT_EXISTS);
+        }
+
+        return r;
+    }
+
+
+    @GetMapping("updateBySelective")
+    public org.springblade.core.tool.api.R getAccountByUserId(@RequestBody Account account){
+        org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
+        r.setData(accountService.updateById(account));
         return r;
     }
 

@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
+import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.form.ChangePassworld;
 import org.springblade.common.form.UserForm;
@@ -30,8 +31,14 @@ public class FApiUserController {
 
     @GetMapping("detail")
     public org.springblade.core.tool.api.R getUserWithApi(@RequestParam("userId")Long userId){
+        UserEntity userEntity = userService.getById(userId);
         R r = R.status(true);
-        r.setData(userService.getById(userId));
+        if(userEntity != null) {
+            r.setData(userEntity);
+        }else{
+            r.setCode(FeignResultCodeConstant.ENTITY_NOT_EXISTS);
+        }
+
         return r;
     }
 
