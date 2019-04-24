@@ -10,7 +10,7 @@ import org.springblade.common.entity.AccountRepaymentStep;
  * @author linxiumeng
  * @since 2019-03-13 13:33:47
  */
- @Mapper
+@Mapper
 public interface AccountRepaymentStepDao extends BaseMapper<AccountRepaymentStep> {
 
 }

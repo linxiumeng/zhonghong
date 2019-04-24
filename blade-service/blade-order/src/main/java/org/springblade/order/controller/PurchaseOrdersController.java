@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
+import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.PurchaseOrders;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.enums.OrdersEnum;
@@ -109,6 +110,9 @@ public class PurchaseOrdersController {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
         wrapper.eq("id", param.getId()).eq("provider_id", user.getUserId());
         PurchaseOrders po = purchaseOrdersService.getOne(wrapper);
+        if(po == null){
+            throw new RRException("采购单不存在，请确认订单号");
+        }
         if (po.getStatus() == OrdersEnum.TEN.getStatus()) {
             PurchaseOrders purchaseOrders = new PurchaseOrders();
             purchaseOrders.setId(param.getId());
@@ -155,7 +159,10 @@ public class PurchaseOrdersController {
         form.setPayForm(param);
         form.setPurchaseOrders(po);
         form.setUser(user);
-        accountService.financingPay(form);        //融资付款方法
+        org.springblade.core.tool.api.R r = accountService.financingPay(form);        //融资付款方法
+        if(r.getCode() == FeignResultCodeConstant.EXCEPTION_CODE){
+            throw new RRException(r.getMsg());
+        }
         purchaseOrders.setStatus(OrdersEnum.SIX.getStatus());
         purchaseOrdersService.updateById(purchaseOrders);
         return R.ok();
@@ -171,13 +178,15 @@ public class PurchaseOrdersController {
     @PostMapping("/buyer/pay")
     @Login
     public R pay(@RequestBody PayForm param, @LoginUser UserEntity user) {
+        //todo 这里可能要引出分布式事务
         PurchaseOrders purchaseOrders = payCheck(param, user);
         PurchaseOrders pd = purchaseOrdersService.getById(param.getOrderNo());
         AccountPayForm accountPayForm = new AccountPayForm();
         accountPayForm.setPurchaseOrders(pd);
         accountPayForm.setUser(user);
         org.springblade.core.tool.api.R r = accountService.pay(accountPayForm);//直接付款方法
-        if(!r.isSuccess()){
+        //如果出现异常 则抛出
+        if(r.getCode() == FeignResultCodeConstant.EXCEPTION_CODE){
             throw new RRException(r.getMsg());
         }
         purchaseOrders.setStatus(OrdersEnum.FOURTEEN.getStatus());
@@ -225,6 +234,9 @@ public class PurchaseOrdersController {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
         wrapper.eq("id", param.getOrderNo()).eq("buyer_id", user.getUserId());
         PurchaseOrders po = purchaseOrdersService.getOne(wrapper);
+        if(po == null){
+            throw new RRException("订单不存在，请联系管理员");
+        }
         if (po.getStatus() != OrdersEnum.FIVE.getStatus()) {
             throw new RRException("订单状态异常", 502);
         }

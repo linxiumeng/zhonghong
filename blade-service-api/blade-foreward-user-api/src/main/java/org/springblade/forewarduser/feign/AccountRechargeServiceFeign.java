@@ -1,6 +1,7 @@
 package org.springblade.forewarduser.feign;
 
 import org.springblade.common.entity.AccountRecharge;
+import org.springblade.core.tool.api.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 )
 public interface AccountRechargeServiceFeign {
 
+    String ACCOUNT_RECHARGE_API = "/api/accountRecharge";
 
-    @PostMapping("/aa")
-    boolean save(@RequestBody AccountRecharge accountRecharge);
+    @PostMapping(ACCOUNT_RECHARGE_API+"/insert")
+    R save(@RequestBody AccountRecharge accountRecharge);
 
 
 

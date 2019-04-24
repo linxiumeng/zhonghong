@@ -12,7 +12,9 @@ import org.springblade.common.entity.Account;
 import org.springblade.common.entity.AccountRecharge;
 import org.springblade.common.entity.PurchaseOrders;
 import org.springblade.common.entity.UserEntity;
+import org.springblade.common.exception.RRException;
 import org.springblade.common.form.AccountExtractForm;
+import org.springblade.common.form.AccountFinancingPayForm;
 import org.springblade.common.form.AccountPayForm;
 import org.springblade.common.form.AccountRechargeForm;
 import org.springblade.common.respond.AccountDto;
@@ -69,7 +71,11 @@ public class AccountController {
         AccountRecharge accountRecharge = new AccountRecharge();
         BeanUtils.copyProperties(form, accountRecharge);
         accountRecharge.setType(0);
-        accountRechargeService.save(accountRecharge);
+
+        org.springblade.core.tool.api.R r = accountRechargeService.save(accountRecharge);
+        if(r.getCode() == FeignResultCodeConstant.EXCEPTION_CODE){
+            throw new RRException(r.getMsg());
+        }
         return R.ok();
     }
 
@@ -90,7 +96,10 @@ public class AccountController {
         BeanUtils.copyProperties(form, accountRecharge);
         accountRecharge.setUserId(user.getUserId());
         accountRecharge.setType(1);
-        accountRechargeService.save(accountRecharge);
+        org.springblade.core.tool.api.R r = accountRechargeService.save(accountRecharge);
+        if(r.getCode() == FeignResultCodeConstant.EXCEPTION_CODE){
+            throw new RRException(r.getMsg());
+        }
         return R.ok();
     }
 
@@ -108,7 +117,30 @@ public class AccountController {
     @PostMapping("pay")
     public org.springblade.core.tool.api.R pay(@RequestBody AccountPayForm accountPayForm){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
-        r.setData(accountService.pay(accountPayForm.getPurchaseOrders(),accountPayForm.getUser()));
+        try {
+            boolean flag = accountService.pay(accountPayForm.getPurchaseOrders(), accountPayForm.getUser());
+            if(!flag){
+                throw new RRException("付款失败");
+            }
+        }catch (RRException e){
+            r.setCode(FeignResultCodeConstant.EXCEPTION_CODE);
+            r.setMsg(e.getMessage());
+        }
+        return r;
+    }
+
+    @PostMapping("financingPay")
+    public org.springblade.core.tool.api.R financingPay(@RequestBody AccountFinancingPayForm accountFinancingPayForm){
+        org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
+        try {
+            boolean flag = accountService.financingPay(accountFinancingPayForm.getPurchaseOrders(), accountFinancingPayForm.getUser(),accountFinancingPayForm.getPayForm());
+            if(!flag){
+                throw new RRException("融资付款失败");
+            }
+        }catch (RRException e){
+            r.setCode(FeignResultCodeConstant.EXCEPTION_CODE);
+            r.setMsg(e.getMessage());
+        }
         return r;
     }
 

@@ -15,7 +15,7 @@ public class UserDto {
     /**
      * 用户id
      */
-    private Integer userId;
+    private Long userId;
     /**
      * 账号
      */

@@ -25,7 +25,7 @@ public interface GoodsServiceFeign {
      * @return
      */
     @GetMapping(GOODS_API_PREFIX + "/detail")
-    R<Goods> getGoodsById(@RequestParam("goods") Long id);
+    R<Goods> getGoodsById(@RequestParam("goodsId") Long id);
 
     /**
      * 删减库存

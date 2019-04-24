@@ -114,4 +114,18 @@ public class AccountRepaymentController {
         return R.ok();
     }
 
+
+    @PostMapping("insertWithId")
+    public org.springblade.core.tool.api.R<AccountRepayment> saveWithId(@RequestBody AccountRepayment accountRepayment){
+        org.springblade.core.tool.api.R<AccountRepayment> r = org.springblade.core.tool.api.R.status(true);
+        Integer i = accountRepaymentService.insertWithId(accountRepayment);
+        if(i != null && i > 0) {
+            r.setData(accountRepayment);
+        }else{
+            r.setCode(FeignResultCodeConstant.ENTITY_NOT_EXISTS);
+        }
+        return r;
+    }
+
+
 }

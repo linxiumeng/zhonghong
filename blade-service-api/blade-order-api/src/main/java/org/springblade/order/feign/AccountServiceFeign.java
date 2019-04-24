@@ -25,7 +25,7 @@ public interface AccountServiceFeign {
      * @return
      */
     @PostMapping(USER_ACCOUNT_API_PREFIX + "/pay")
-    R<Boolean> pay(@RequestBody AccountPayForm accountnPayForm);
+    R pay(@RequestBody AccountPayForm accountnPayForm);
 
     /**
      * 融资支付
@@ -33,7 +33,7 @@ public interface AccountServiceFeign {
      * @return
      */
     @PostMapping(USER_ACCOUNT_API_PREFIX + "/financingPay")
-    R<Boolean> financingPay(@RequestBody AccountFinancingPayForm accountFinancingPayForm);
+    R financingPay(@RequestBody AccountFinancingPayForm accountFinancingPayForm);
 
 
 }

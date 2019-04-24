@@ -71,7 +71,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
 
     @Resource
     private UserAccountDao userAccountDao;
-
+    public static final String USER_REGISTER_KEY = "market:user:register";
     /**
      * 这里处理回滚异常
      * @param form
@@ -86,7 +86,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
             return R.error(501,"用户已存在！");
         }
 
-        String key = String.format("%s_%s", "", form.getMobile());
+        String key = String.format("%s_%s", USER_REGISTER_KEY, form.getMobile());
         String code = redisUtils.get(key);
         if (!(code != null && form.getCode().equals(code))) {
             return R.error("请重新获取短信验证码");
@@ -155,7 +155,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         }
 
         //获取缓存中的验证码
-        String code = redisUtils.get("anonymous::"+form.getMarkCode());
+        String code = redisUtils.get(Constant.ANONYMOUS_PREFIX+form.getMarkCode());
 
         if(StringUtils.isBlank(code) || !code.equalsIgnoreCase(form.getCaptcha())){
             throw new RRException("验证码错误");
@@ -181,7 +181,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
      * @return 更新成功行数
      */
     @Override
-    @CacheEvict(value = "user", key = "#user.userId")
+  //  @CacheEvict(value = "user", key = "#user.userId")
     public Integer changePw(ChangePassworld pw, UserEntity user) {
      //   Assert.isNull(user, ErrorEnum.用户不存在.getDesc());
         //密码错误
@@ -200,7 +200,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
      * @return 用户实体
      */
     @Override
-    @Cacheable(value = "user", key = "#id", unless = "#result == null")
+   // @Cacheable(value = "user", key = "#id", unless = "#result == null")
     public UserEntity selectByIdFromCache(Long id) {
         return this.getById(id);
     }
@@ -212,7 +212,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
      * @return 更新结果
      */
     @Override
-    @CacheEvict(value = "user", key = "#userEntity.userId")
+  //  @CacheEvict(value = "user", key = "#userEntity.userId")
     public Boolean updateByIdWithCache(UserEntity userEntity) {
         return this.updateById(userEntity);
     }

@@ -17,9 +17,16 @@ package org.springblade.forewarduser.config;
 
 
 import org.springblade.core.secure.registry.SecureRegistry;
+import org.springblade.forewarduser.interceptor.AuthorizationInterceptor;
+import org.springblade.forewarduser.resolver.LoginUserHandlerMethodArgumentResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * secure模块api放行配置
@@ -34,5 +41,23 @@ public class UserRegistryConfiguration implements WebMvcConfigurer {
         SecureRegistry secureRegistry = new SecureRegistry();
         secureRegistry.excludePathPatterns("/**");
         return secureRegistry;
+    }
+
+    @Resource
+    AuthorizationInterceptor authorizationInterceptor;
+
+    @Resource
+    private LoginUserHandlerMethodArgumentResolver loginUserHandlerMethodArgumentResolver;
+
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authorizationInterceptor).addPathPatterns("/api/**");
+        //   registry.addInterceptor(permissionCheckInterceptor).addPathPatterns("/api/**");
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(loginUserHandlerMethodArgumentResolver);
     }
 }

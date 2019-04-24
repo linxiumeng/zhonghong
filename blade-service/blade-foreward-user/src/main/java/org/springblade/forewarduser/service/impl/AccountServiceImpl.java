@@ -3,10 +3,12 @@ package org.springblade.forewarduser.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.*;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.form.PayForm;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.tool.api.R;
 import org.springblade.forewarduser.feign.AccountDetailServiceFeign;
 import org.springblade.forewarduser.feign.AccountRechargeServiceFeign;
 import org.springblade.forewarduser.feign.AccountRepaymentServiceFeign;
@@ -97,7 +99,11 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
         ar.setPaidInterest(new BigDecimal(0.0));
         ar.setPeriods(param1.getStages());
         ar.setRecentRepaymentDate(new Date());
-        accountRepaymentService.saveWithId(ar);
+        R<AccountRepayment> r = accountRepaymentService.saveWithId(ar);
+        if(r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS){
+            throw new RRException("付款信息新增失败");
+        }
+        ar = r.getData();
         account.setCreditLimit(account.getCreditLimit().subtract(bd));
         updateById(account);
 
@@ -119,7 +125,13 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
             insertList.add(accountRepaymentStep);
         }
 
-        return accountRepaymentStepService.batchSave(insertList);
+        R result = accountRepaymentStepService.batchSave(insertList);
+
+        if(result.getCode() == 200){
+            return true;
+        }else{
+            return false;
+        }
 
     }
 }

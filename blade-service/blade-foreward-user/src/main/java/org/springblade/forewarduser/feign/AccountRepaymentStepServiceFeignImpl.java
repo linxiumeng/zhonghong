@@ -1,6 +1,7 @@
 package org.springblade.forewarduser.feign;
 
 import org.springblade.common.entity.AccountRepaymentStep;
+import org.springblade.core.tool.api.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +20,8 @@ public class AccountRepaymentStepServiceFeignImpl implements AccountRepaymentSte
 
     @Override
     @PostMapping("/ab")
-    public boolean batchSave(@RequestBody List<AccountRepaymentStep> accountRepaymentSteps){
-        return false;
+    public R batchSave(@RequestBody List<AccountRepaymentStep> accountRepaymentSteps){
+        return null;
     }
 
     
