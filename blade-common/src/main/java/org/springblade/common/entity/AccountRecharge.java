@@ -25,7 +25,7 @@ public class AccountRecharge {
     /***/
     private Long userId;
     /**
-     * 充值类型
+     * 充值类型 0是充值，1是提现
      */
     private Integer type;
     /**
@@ -33,7 +33,7 @@ public class AccountRecharge {
      */
     private Double account;
     /**
-     * 状态
+     * 充值状态
      */
     private Integer status;
     /**

@@ -19,10 +19,14 @@ import java.util.Date;
 @TableName("tb_account")
 public class Account {
 
-    /***/
+    /**
+     * id
+     */
     @TableId(type = IdType.INPUT)
     private Long id;
-    /***/
+    /**
+     * 用户id
+     */
     private Long userId;
     /**
      * 可用余额
