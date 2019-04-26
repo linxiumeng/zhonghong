@@ -42,10 +42,14 @@ public class AccountDetail {
      * 备注
      */
     private String remark;
-    /***/
+    /**
+     * 创建时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date createDate;
-    /***/
+    /**
+     * 更新时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date updateDate;
 }

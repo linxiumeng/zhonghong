@@ -17,23 +17,31 @@ import java.util.Date;
  */
 @Data
 @TableName("tb_banner")
-public class Banner{
-    
-        /***/
-        @TableId(type = IdType.INPUT)
-        private Long id;
-        /***/
-            private String logo;
-        /***/
-            private String path;
-        /***/
-            private Integer sort;
-        /***/
-            private Integer isOpen;
-        /***/
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
-            private Date createDate;
-        /***/
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
-            private Date updateDate;
+public class Banner {
+
+    /***/
+    @TableId(type = IdType.INPUT)
+    private Long id;
+    /**
+     * logo
+     */
+    private String logo;
+    /**
+     * banner路径
+     */
+    private String path;
+    /**
+     * 排序
+     */
+    private Integer sort;
+    /**
+     * 是否展示 0-隐藏，1-展示
+     */
+    private Integer isOpen;
+    /***/
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
+    private Date createDate;
+    /***/
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
+    private Date updateDate;
 }

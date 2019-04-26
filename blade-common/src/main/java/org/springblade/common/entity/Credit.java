@@ -14,23 +14,37 @@ import lombok.Data;
  */
 @Data
 @TableName("tb_credit")
-public class Credit{
-    
-        /***/
-        @TableId(type = IdType.INPUT)
-        private Integer id;
-        /**用户id*/
-            private Long userId;
-        /**借款申请表*/
-            private String loanApplication;
-        /**财务报表*/
-            private String financialStatement;
-        /**缴税证明*/
-            private String taxCertification;
-        /**银行流水*/
-            private String accountStatement;
-        /**授信额度证明*/
-            private String certificateOfCreditLine;
-        /**其他证明*/
-            private String orther;
+public class Credit {
+
+    /***/
+    @TableId(type = IdType.INPUT)
+    private Integer id;
+    /**
+     * 用户id
+     */
+    private Long userId;
+    /**
+     * 借款申请表
+     */
+    private String loanApplication;
+    /**
+     * 财务报表
+     */
+    private String financialStatement;
+    /**
+     * 缴税证明
+     */
+    private String taxCertification;
+    /**
+     * 银行流水
+     */
+    private String accountStatement;
+    /**
+     * 授信额度证明
+     */
+    private String certificateOfCreditLine;
+    /**
+     * 其他证明
+     */
+    private String orther;
 }
