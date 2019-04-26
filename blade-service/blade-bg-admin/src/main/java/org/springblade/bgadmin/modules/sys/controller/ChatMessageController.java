@@ -1,11 +1,9 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.ChatMessageEntity;
-import io.finepetro.modules.sys.service.ChatMessageService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springblade.bgadmin.modules.sys.entity.ChatMessageEntity;
+import org.springblade.bgadmin.modules.sys.service.ChatMessageService;
+import org.springblade.common.utils.PageUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +28,7 @@ public class ChatMessageController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:chatmessage:list")
+    //@RequiresPermissions("sys:chatmessage:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = chatMessageService.queryPage(params);
 
@@ -42,9 +40,9 @@ public class ChatMessageController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:chatmessage:info")
+    //@RequiresPermissions("sys:chatmessage:info")
     public R info(@PathVariable("id") Integer id) {
-            ChatMessageEntity chatMessage = chatMessageService.selectById(id);
+            ChatMessageEntity chatMessage = chatMessageService.getById(id);
 
         return R.ok().put("chatMessage", chatMessage);
     }
@@ -53,9 +51,9 @@ public class ChatMessageController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:chatmessage:save")
+    //@RequiresPermissions("sys:chatmessage:save")
     public R save(@RequestBody ChatMessageEntity chatMessage) {
-            chatMessageService.insert(chatMessage);
+            chatMessageService.save(chatMessage);
 
         return R.ok();
     }
@@ -64,10 +62,10 @@ public class ChatMessageController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:chatmessage:update")
+    //@RequiresPermissions("sys:chatmessage:update")
     public R update(@RequestBody ChatMessageEntity chatMessage) {
-        ValidatorUtils.validateEntity(chatMessage);
-            chatMessageService.updateAllColumnById(chatMessage);//全部更新
+        //ValidatorUtils.validateEntity(chatMessage);
+            chatMessageService.updateById(chatMessage);//全部更新
 
         return R.ok();
     }
@@ -76,9 +74,9 @@ public class ChatMessageController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:chatmessage:delete")
+    //@RequiresPermissions("sys:chatmessage:delete")
     public R delete(@RequestBody Integer[] ids) {
-            chatMessageService.deleteBatchIds(Arrays.asList(ids));
+            chatMessageService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

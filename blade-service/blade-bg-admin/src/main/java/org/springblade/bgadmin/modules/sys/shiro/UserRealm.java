@@ -17,20 +17,6 @@
 package org.springblade.bgadmin.modules.sys.shiro;
 
 
-import io.finepetro.common.utils.Constant;
-import io.finepetro.modules.sys.dao.SysMenuDao;
-import io.finepetro.modules.sys.dao.SysUserDao;
-import io.finepetro.modules.sys.entity.SysMenuEntity;
-import io.finepetro.modules.sys.entity.SysUserEntity;
-import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.authc.*;
-import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,15 +30,16 @@ import java.util.*;
  * @date 2016年11月10日 上午11:55:49
  */
 @Component
-public class UserRealm extends AuthorizingRealm {
+public class UserRealm{
+/*public class UserRealm extends AuthorizingRealm {
     @Autowired
     private SysUserDao sysUserDao;
     @Autowired
     private SysMenuDao sysMenuDao;
     
-    /**
+    *//**
      * 授权(验证权限时调用)
-     */
+     *//*
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SysUserEntity user = (SysUserEntity)principals.getPrimaryPrincipal();
@@ -85,9 +72,9 @@ public class UserRealm extends AuthorizingRealm {
 		return info;
 	}
 
-	/**
+	*//**
 	 * 认证(登录时调用)
-	 */
+	 *//*
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken authcToken) throws AuthenticationException {
@@ -118,5 +105,5 @@ public class UserRealm extends AuthorizingRealm {
 		shaCredentialsMatcher.setHashAlgorithmName(ShiroUtils.hashAlgorithmName);
 		shaCredentialsMatcher.setHashIterations(ShiroUtils.hashIterations);
 		super.setCredentialsMatcher(shaCredentialsMatcher);
-	}
+	}*/
 }

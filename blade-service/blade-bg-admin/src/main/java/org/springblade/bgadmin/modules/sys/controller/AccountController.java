@@ -1,11 +1,9 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.AccountEntity;
-import io.finepetro.modules.sys.service.AccountService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springblade.bgadmin.modules.sys.entity.AccountEntity;
+import org.springblade.bgadmin.modules.sys.service.AccountService;
+import org.springblade.common.utils.PageUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +28,7 @@ public class AccountController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:account:list")
+    //@RequiresPermissions("sys:account:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = accountService.queryPage(params);
 
@@ -42,9 +40,9 @@ public class AccountController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:account:info")
+    //@RequiresPermissions("sys:account:info")
     public R info(@PathVariable("id") Integer id) {
-            AccountEntity account = accountService.selectById(id);
+            AccountEntity account = accountService.getById(id);
 
         return R.ok().put("account", account);
     }
@@ -53,9 +51,9 @@ public class AccountController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:account:save")
+    //@RequiresPermissions("sys:account:save")
     public R save(@RequestBody AccountEntity account) {
-            accountService.insert(account);
+            accountService.save(account);
 
         return R.ok();
     }
@@ -64,10 +62,10 @@ public class AccountController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:account:update")
+    //@RequiresPermissions("sys:account:update")
     public R update(@RequestBody AccountEntity account) {
-        ValidatorUtils.validateEntity(account);
-            accountService.updateAllColumnById(account);//全部更新
+        //ValidatorUtils.validateEntity(account);
+            accountService.updateById(account);//全部更新
 
         return R.ok();
     }
@@ -76,9 +74,9 @@ public class AccountController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:account:delete")
+    //@RequiresPermissions("sys:account:delete")
     public R delete(@RequestBody Integer[] ids) {
-            accountService.deleteBatchIds(Arrays.asList(ids));
+            accountService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

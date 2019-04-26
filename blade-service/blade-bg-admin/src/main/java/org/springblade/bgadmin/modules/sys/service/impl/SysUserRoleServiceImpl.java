@@ -17,11 +17,11 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.utils.MapUtils;
-import io.finepetro.modules.sys.dao.SysUserRoleDao;
-import io.finepetro.modules.sys.entity.SysUserRoleEntity;
-import io.finepetro.modules.sys.service.SysUserRoleService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.bgadmin.modules.sys.dao.SysUserRoleDao;
+import org.springblade.bgadmin.modules.sys.entity.SysUserRoleEntity;
+import org.springblade.bgadmin.modules.sys.service.SysUserRoleService;
+import org.springblade.common.utils.MapUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleDao, SysUserR
 	@Override
 	public void saveOrUpdate(Long userId, List<Long> roleIdList) {
 		//先删除用户与角色关系
-		this.deleteByMap(new MapUtils().put("user_id", userId));
+		this.removeByMap(new MapUtils().put("user_id", userId));
 
 		if(roleIdList == null || roleIdList.size() == 0){
 			return ;
@@ -55,7 +55,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleDao, SysUserR
 
 			list.add(sysUserRoleEntity);
 		}
-		this.insertBatch(list);
+		this.saveBatch(list);
 	}
 
 	@Override

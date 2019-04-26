@@ -1,11 +1,9 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.TokenEntity;
-import io.finepetro.modules.sys.service.TokenService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springblade.bgadmin.modules.sys.service.TokenService;
+import org.springblade.common.entity.TokenEntity;
+import org.springblade.common.utils.PageUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +28,7 @@ public class TokenController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:token:list")
+    //@RequiresPermissions("sys:token:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = tokenService.queryPage(params);
 
@@ -42,9 +40,9 @@ public class TokenController {
      * 信息
      */
     @RequestMapping("/info/{userId}")
-    @RequiresPermissions("sys:token:info")
+    //@RequiresPermissions("sys:token:info")
     public R info(@PathVariable("userId") Integer userId) {
-            TokenEntity token = tokenService.selectById(userId);
+            TokenEntity token = tokenService.getById(userId);
 
         return R.ok().put("token", token);
     }
@@ -53,9 +51,9 @@ public class TokenController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:token:save")
+    //@RequiresPermissions("sys:token:save")
     public R save(@RequestBody TokenEntity token) {
-            tokenService.insert(token);
+            tokenService.save(token);
 
         return R.ok();
     }
@@ -64,10 +62,10 @@ public class TokenController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:token:update")
+    //@RequiresPermissions("sys:token:update")
     public R update(@RequestBody TokenEntity token) {
-        ValidatorUtils.validateEntity(token);
-            tokenService.updateAllColumnById(token);//全部更新
+       // ValidatorUtils.validateEntity(token);
+            tokenService.updateById(token);//全部更新
 
         return R.ok();
     }
@@ -76,9 +74,9 @@ public class TokenController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:token:delete")
+    //@RequiresPermissions("sys:token:delete")
     public R delete(@RequestBody Integer[] userIds) {
-            tokenService.deleteBatchIds(Arrays.asList(userIds));
+            tokenService.removeByIds(Arrays.asList(userIds));
 
         return R.ok();
     }

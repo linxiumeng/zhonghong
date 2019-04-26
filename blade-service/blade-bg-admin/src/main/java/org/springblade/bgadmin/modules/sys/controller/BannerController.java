@@ -2,14 +2,12 @@ package org.springblade.bgadmin.modules.sys.controller;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.PutObjectResult;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import io.finepetro.common.exception.RRException;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.oss.cloud.CloudStorageConfig;
-import io.finepetro.modules.sys.entity.BannerEntity;
-import io.finepetro.modules.sys.service.BannerService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springblade.bgadmin.modules.oss.cloud.CloudStorageConfig;
+import org.springblade.bgadmin.modules.sys.entity.BannerEntity;
+import org.springblade.bgadmin.modules.sys.service.BannerService;
+import org.springblade.common.exception.RRException;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,9 +39,9 @@ public class BannerController {
      * 列表sys:banner:list
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:banner:list")
+    //@RequiresPermissions("sys:banner:list")
     public R list(@RequestParam Map<String, Object> params) {
-        return R.ok().put("result", bannerService.selectList(new EntityWrapper<BannerEntity>().orderBy("`sort`", false)));
+        return R.ok().put("result", bannerService.list(new QueryWrapper<BannerEntity>().orderBy(true,false,"`sort`")));
 
     }
 
@@ -52,7 +50,7 @@ public class BannerController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:banner:add")
+    //@RequiresPermissions("sys:banner:add")
     public R save(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             throw new RRException("上传文件不能为NULL");
@@ -89,9 +87,9 @@ public class BannerController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:banner:showhide")
+    //@RequiresPermissions("sys:banner:showhide")
     public R update(@RequestBody BannerEntity banner) {
-        ValidatorUtils.validateEntity(banner);
+        //ValidatorUtils.validateEntity(banner);
         bannerService.updateById(banner);
         return R.ok();
     }
@@ -100,9 +98,9 @@ public class BannerController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:banner:delete")
+    //@RequiresPermissions("sys:banner:delete")
     public R delete(@RequestBody Integer[] ids) {
-        bannerService.deleteBatchIds(Arrays.asList(ids));
+        bannerService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }
 

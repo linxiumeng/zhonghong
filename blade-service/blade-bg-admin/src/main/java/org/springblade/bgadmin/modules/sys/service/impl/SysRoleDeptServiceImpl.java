@@ -16,10 +16,10 @@
 
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.modules.sys.dao.SysRoleDeptDao;
-import io.finepetro.modules.sys.entity.SysRoleDeptEntity;
-import io.finepetro.modules.sys.service.SysRoleDeptService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.bgadmin.modules.sys.dao.SysRoleDeptDao;
+import org.springblade.bgadmin.modules.sys.entity.SysRoleDeptEntity;
+import org.springblade.bgadmin.modules.sys.service.SysRoleDeptService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +56,7 @@ public class SysRoleDeptServiceImpl extends ServiceImpl<SysRoleDeptDao, SysRoleD
 
 			list.add(sysRoleDeptEntity);
 		}
-		this.insertBatch(list);
+		this.saveBatch(list);
 	}
 
 	@Override

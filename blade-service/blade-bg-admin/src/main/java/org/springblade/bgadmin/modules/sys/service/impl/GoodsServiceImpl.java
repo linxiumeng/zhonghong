@@ -1,15 +1,14 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.SqlHelper;
-
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.Query;
-import io.finepetro.modules.sys.dao.GoodsDao;
-import io.finepetro.modules.sys.entity.GoodsEntity;
-import io.finepetro.modules.sys.service.GoodsService;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.bgadmin.common.utils.Query;
+import org.springblade.bgadmin.modules.sys.dao.GoodsDao;
+import org.springblade.bgadmin.modules.sys.entity.GoodsEntity;
+import org.springblade.bgadmin.modules.sys.service.GoodsService;
+import org.springblade.common.utils.PageUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -20,18 +19,18 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDao, GoodsEntity> impleme
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<GoodsEntity> page = this.selectPage(
+        IPage<GoodsEntity> page = this.page(
                 new Query<GoodsEntity>(params).getPage(),
-                new EntityWrapper<GoodsEntity>()
+                new QueryWrapper<GoodsEntity>()
         );
 
         return new PageUtils(page);
     }
 
     @Override
-    public Page listGoodsWithType(Page page, Wrapper wrapper) {
+    public IPage listGoodsWithType(IPage page, Wrapper wrapper) {
 
-        wrapper = SqlHelper.fillWrapper(page,wrapper);
+        //wrapper = SqlHelper.fillWrapper(page,wrapper);
         page.setRecords(baseMapper.selectPageList(page,wrapper));
         return page;
     }

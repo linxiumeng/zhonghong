@@ -17,14 +17,14 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.utils.Constant;
-import io.finepetro.common.utils.MapUtils;
-import io.finepetro.modules.sys.dao.SysMenuDao;
-import io.finepetro.modules.sys.entity.SysMenuEntity;
-import io.finepetro.modules.sys.service.SysMenuService;
-import io.finepetro.modules.sys.service.SysRoleMenuService;
-import io.finepetro.modules.sys.service.SysUserService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.bgadmin.common.utils.Constant;
+import org.springblade.bgadmin.modules.sys.dao.SysMenuDao;
+import org.springblade.bgadmin.modules.sys.entity.SysMenuEntity;
+import org.springblade.bgadmin.modules.sys.service.SysMenuService;
+import org.springblade.bgadmin.modules.sys.service.SysRoleMenuService;
+import org.springblade.bgadmin.modules.sys.service.SysUserService;
+import org.springblade.common.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,9 +80,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 	@Override
 	public void delete(Long menuId){
 		//删除菜单
-		this.deleteById(menuId);
+		this.delete(menuId);
 		//删除菜单与角色关联
-		sysRoleMenuService.deleteByMap(new MapUtils().put("menu_id", menuId));
+		sysRoleMenuService.removeByMap(new MapUtils().put("menu_id", menuId));
 	}
 
 	/**

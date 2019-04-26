@@ -1,7 +1,7 @@
 package org.springblade.bgadmin.modules.sys.form;
 
-import io.finepetro.modules.sys.enums.AccountRepaymentStatusEnum;
 import lombok.Data;
+import org.springblade.bgadmin.modules.sys.enums.AccountRepaymentStatusEnum;
 
 /**
  * @author hanbin

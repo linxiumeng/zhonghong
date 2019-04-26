@@ -17,21 +17,15 @@
 package org.springblade.bgadmin.modules.oss.controller;
 
 import com.google.gson.Gson;
-import io.finepetro.common.exception.RRException;
-import io.finepetro.common.utils.ConfigConstant;
-import io.finepetro.common.utils.Constant;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.common.validator.group.AliyunGroup;
-import io.finepetro.common.validator.group.QcloudGroup;
-import io.finepetro.common.validator.group.QiniuGroup;
-import io.finepetro.modules.oss.cloud.CloudStorageConfig;
-import io.finepetro.modules.oss.cloud.OSSFactory;
-import io.finepetro.modules.oss.entity.SysOssEntity;
-import io.finepetro.modules.oss.service.SysOssService;
-import io.finepetro.modules.sys.service.SysConfigService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springblade.bgadmin.common.utils.ConfigConstant;
+import org.springblade.bgadmin.modules.oss.cloud.CloudStorageConfig;
+import org.springblade.bgadmin.modules.oss.cloud.OSSFactory;
+import org.springblade.bgadmin.modules.oss.entity.SysOssEntity;
+import org.springblade.bgadmin.modules.oss.service.SysOssService;
+import org.springblade.bgadmin.modules.sys.service.SysConfigService;
+import org.springblade.common.exception.RRException;
+import org.springblade.common.utils.PageUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,7 +58,7 @@ public class SysOssController {
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("sys:oss:all")
+	//@RequiresPermissions("sys:oss:all")
 	public R list(@RequestParam Map<String, Object> params){
 		PageUtils page = sysOssService.queryPage(params);
 
@@ -76,7 +70,7 @@ public class SysOssController {
      * 云存储配置信息
      */
     @RequestMapping("/config")
-    @RequiresPermissions("sys:oss:all")
+   // @RequiresPermissions("sys:oss:all")
     public R config(){
         CloudStorageConfig config = sysConfigService.getConfigObject(KEY, CloudStorageConfig.class);
 
@@ -88,10 +82,10 @@ public class SysOssController {
 	 * 保存云存储配置信息
 	 */
 	@RequestMapping("/saveConfig")
-	@RequiresPermissions("sys:oss:all")
+	//@RequiresPermissions("sys:oss:all")
 	public R saveConfig(@RequestBody CloudStorageConfig config){
 		//校验类型
-		ValidatorUtils.validateEntity(config);
+		/*ValidatorUtils.validateEntity(config);
 
 		if(config.getType() == Constant.CloudService.QINIU.getValue()){
 			//校验七牛数据
@@ -102,7 +96,7 @@ public class SysOssController {
 		}else if(config.getType() == Constant.CloudService.QCLOUD.getValue()){
 			//校验腾讯云数据
 			ValidatorUtils.validateEntity(config, QcloudGroup.class);
-		}
+		}*/
 
         sysConfigService.updateValueByKey(KEY, new Gson().toJson(config));
 
@@ -130,7 +124,7 @@ public class SysOssController {
 		SysOssEntity ossEntity = new SysOssEntity();
 		ossEntity.setUrl(url);
 		ossEntity.setCreateDate(new Date());
-		sysOssService.insert(ossEntity);
+		sysOssService.save(ossEntity);
 
 		return R.ok().put("url", url);
 	}
@@ -140,9 +134,9 @@ public class SysOssController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("sys:oss:all")
+	//@RequiresPermissions("sys:oss:all")
 	public R delete(@RequestBody Long[] ids){
-		sysOssService.deleteBatchIds(Arrays.asList(ids));
+		sysOssService.removeByIds(Arrays.asList(ids));
 
 		return R.ok();
 	}

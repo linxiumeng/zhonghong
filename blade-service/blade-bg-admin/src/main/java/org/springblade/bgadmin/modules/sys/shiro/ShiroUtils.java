@@ -16,12 +16,6 @@
 
 package org.springblade.bgadmin.modules.sys.shiro;
 
-import io.finepetro.common.exception.RRException;
-import io.finepetro.modules.sys.entity.SysUserEntity;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.crypto.hash.SimpleHash;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 
 /**
  * Shiro工具类
@@ -31,9 +25,9 @@ import org.apache.shiro.subject.Subject;
  * @date 2016年11月12日 上午9:49:19
  */
 public class ShiroUtils {
-	/**  加密算法 */
+	/**  加密算法 *//*
 	public final static String hashAlgorithmName = "SHA-256";
-	/**  循环次数 */
+	*//**  循环次数 *//*
 	public final static int hashIterations = 16;
 
 	public static String sha256(String password, String salt) {
@@ -79,6 +73,6 @@ public class ShiroUtils {
 		}
 		getSession().removeAttribute(key);
 		return kaptcha.toString();
-	}
+	}*/
 
 }

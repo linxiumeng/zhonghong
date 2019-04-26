@@ -1,18 +1,12 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.SqlHelper;
-
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.Query;
-import io.finepetro.modules.sys.dao.FuserDao;
-import io.finepetro.modules.sys.entity.FuserAccountEntity;
-import io.finepetro.modules.sys.entity.FuserEntity;
-import io.finepetro.modules.sys.service.FuserService;
+import org.springblade.bgadmin.common.utils.Query;
 import org.springblade.bgadmin.modules.sys.dao.FuserDao;
+import org.springblade.bgadmin.modules.sys.entity.FuserAccountEntity;
 import org.springblade.bgadmin.modules.sys.entity.FuserEntity;
 import org.springblade.bgadmin.modules.sys.service.FuserService;
 import org.springblade.common.utils.PageUtils;
@@ -22,13 +16,14 @@ import java.util.Map;
 
 
 @Service("fuserService")
-public class FuserServiceImpl extends ServiceImpl<FuserDao, FuserEntity> implements FuserService {
+public class
+FuserServiceImpl extends ServiceImpl<FuserDao, FuserEntity> implements FuserService {
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<FuserEntity> page = this.selectPage(
+        IPage<FuserEntity> page = this.page(
                 new Query<FuserEntity>(params).getPage(),
-                new EntityWrapper<FuserEntity>()
+                new QueryWrapper<>()
         );
 
         return new PageUtils(page);
@@ -40,22 +35,22 @@ public class FuserServiceImpl extends ServiceImpl<FuserDao, FuserEntity> impleme
     }
 
     @Override
-    public Page<FuserAccountEntity> listUserAccountByWrapper(Page page, Wrapper wrapper) {
-        wrapper = SqlHelper.fillWrapper(page,wrapper);
+    public IPage<FuserAccountEntity> listUserAccountByWrapper(IPage page, Wrapper wrapper) {
+        //wrapper = SqlHelper.fillWrapper(page,wrapper);
         page.setRecords(baseMapper.selectFuserAccountByWrapper(page,wrapper));
         return page;
     }
 
     @Override
-    public Page<FuserAccountEntity> listWaitReviewUserAccount(Page page, Wrapper wrapper) {
-        wrapper = SqlHelper.fillWrapper(page,wrapper);
+    public IPage<FuserAccountEntity> listWaitReviewUserAccount(IPage page, Wrapper wrapper) {
+        //wrapper = SqlHelper.fillWrapper(page,wrapper);
         page.setRecords(baseMapper.selectWaitingReviewFuserAccountByWrapper(page,wrapper));
         return page;
     }
 
     @Override
-    public Page<FuserAccountEntity> listWaitCreditUserAccount(Page page, Wrapper wrapper) {
-        wrapper = SqlHelper.fillWrapper(page,wrapper);
+    public IPage<FuserAccountEntity> listWaitCreditUserAccount(IPage page, Wrapper wrapper) {
+        //wrapper = SqlHelper.fillWrapper(page,wrapper);
         page.setRecords(baseMapper.selectWaitingCreditFuserAccountByWrapper(page,wrapper));
         return page;
     }

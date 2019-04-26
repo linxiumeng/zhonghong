@@ -1,13 +1,12 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.modules.sys.dao.FaqDao;
-import io.finepetro.modules.sys.entity.FaqEntity;
-import io.finepetro.modules.sys.service.FaqService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.bgadmin.modules.sys.dao.FaqDao;
+import org.springblade.bgadmin.modules.sys.entity.FaqEntity;
+import org.springblade.bgadmin.modules.sys.service.FaqService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,8 +18,8 @@ import java.util.Date;
 @Service
 public class FaqServiceImpl extends ServiceImpl<FaqDao, FaqEntity> implements FaqService {
     @Override
-    public Page<FaqEntity> listFaq(Page page, Date startDate, Date endDate, String keywords) {
-        Wrapper wrapper = new EntityWrapper();
+    public IPage<FaqEntity> listFaq(IPage page, Date startDate, Date endDate, String keywords) {
+        QueryWrapper wrapper = new QueryWrapper();
         if (endDate != null) {
             wrapper.lt("create_date", endDate);
         }
@@ -31,7 +30,7 @@ public class FaqServiceImpl extends ServiceImpl<FaqDao, FaqEntity> implements Fa
             wrapper.like("title", keywords);
         }
         // 是否显示倒叙 + 序号倒叙 + 创建日期倒叙
-        wrapper.orderBy("is_open",false).orderBy("`order`",false).orderBy("create_date",false);
-        return this.selectPage(page, wrapper);
+        wrapper.orderBy(true,false,"is_open").orderBy(true,false,"`order`").orderBy(true,false,"create_date");
+        return this.page(page, wrapper);
     }
 }

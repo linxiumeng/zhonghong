@@ -17,26 +17,21 @@
 package org.springblade.bgadmin.common.aspect;
 
 
-import io.finepetro.common.annotation.DataFilter;
-import io.finepetro.common.exception.RRException;
-import io.finepetro.common.utils.Constant;
-import io.finepetro.modules.sys.entity.SysUserEntity;
-import io.finepetro.modules.sys.service.SysDeptService;
-import io.finepetro.modules.sys.service.SysRoleDeptService;
-import io.finepetro.modules.sys.service.SysUserRoleService;
-import io.finepetro.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springblade.bgadmin.common.annotation.DataFilter;
+import org.springblade.bgadmin.modules.sys.entity.SysUserEntity;
+import org.springblade.bgadmin.modules.sys.service.SysDeptService;
+import org.springblade.bgadmin.modules.sys.service.SysRoleDeptService;
+import org.springblade.bgadmin.modules.sys.service.SysUserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -60,7 +55,7 @@ public class DataFilterAspect {
 
     }
 
-    @Before("dataFilterCut()")
+   /* @Before("dataFilterCut()")
     public void dataFilter(JoinPoint point) throws Throwable {
         Object params = point.getArgs()[0];
         if(params != null && params instanceof Map){
@@ -76,7 +71,7 @@ public class DataFilterAspect {
         }
 
         throw new RRException("数据权限接口，只能是Map类型参数，且不能为NULL");
-    }
+    }*/
 
     /**
      * 获取数据过滤的SQL

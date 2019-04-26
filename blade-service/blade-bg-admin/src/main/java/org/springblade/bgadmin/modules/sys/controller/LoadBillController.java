@@ -1,15 +1,15 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
 import com.aliyun.oss.OSSClient;
-import com.baomidou.mybatisplus.plugins.Page;
-import io.finepetro.common.utils.R;
-import io.finepetro.modules.oss.cloud.CloudStorageConfig;
-import io.finepetro.modules.sys.entity.LoadBill;
-import io.finepetro.modules.sys.entity.PurchaseOrdersEntity;
-import io.finepetro.modules.sys.form.LoadBillForm;
-import io.finepetro.modules.sys.form.mybatis.LoadBillCondition;
-import io.finepetro.modules.sys.service.LoadBillService;
-import io.finepetro.modules.sys.service.PurchaseOrdersService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springblade.bgadmin.modules.oss.cloud.CloudStorageConfig;
+import org.springblade.bgadmin.modules.sys.entity.LoadBill;
+import org.springblade.bgadmin.modules.sys.entity.PurchaseOrdersEntity;
+import org.springblade.bgadmin.modules.sys.form.LoadBillForm;
+import org.springblade.bgadmin.modules.sys.form.mybatis.LoadBillCondition;
+import org.springblade.bgadmin.modules.sys.service.LoadBillService;
+import org.springblade.bgadmin.modules.sys.service.PurchaseOrdersService;
+import org.springblade.common.utils.R;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,7 +55,7 @@ public class LoadBillController {
             return R.error("订单id为空");
         }
 
-        PurchaseOrdersEntity purchaseOrdersEntity = purchaseOrdersService.selectById(orderId);
+        PurchaseOrdersEntity purchaseOrdersEntity = purchaseOrdersService.getById(orderId);
         if(purchaseOrdersEntity == null){
             return R.error("订单不存在");
         }
@@ -67,7 +67,7 @@ public class LoadBillController {
 
         BeanUtils.copyProperties(loadBillForm,loadBill);
 
-        boolean flag = loadBillService.insert(loadBill);
+        boolean flag = loadBillService.save(loadBill);
         if (flag) {
             return R.ok();
         }
@@ -83,7 +83,7 @@ public class LoadBillController {
     @RequestMapping("/delete")
     //   @RequiresPermissions("sys:purchaseorders:delete")
     public R delete(@RequestBody Integer[] ids) {
-        loadBillService.deleteBatchIds(Arrays.asList(ids));
+        loadBillService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

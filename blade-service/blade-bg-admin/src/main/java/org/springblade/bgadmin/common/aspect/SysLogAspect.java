@@ -17,18 +17,17 @@
 package org.springblade.bgadmin.common.aspect;
 
 import com.google.gson.Gson;
-import io.finepetro.common.annotation.SysLog;
-import io.finepetro.common.utils.HttpContextUtils;
-import io.finepetro.common.utils.IPUtils;
-import io.finepetro.modules.sys.entity.SysLogEntity;
-import io.finepetro.modules.sys.entity.SysUserEntity;
-import io.finepetro.modules.sys.service.SysLogService;
-import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springblade.bgadmin.common.annotation.SysLog;
+import org.springblade.bgadmin.modules.sys.entity.SysLogEntity;
+import org.springblade.bgadmin.modules.sys.entity.SysUserEntity;
+import org.springblade.bgadmin.modules.sys.service.SysLogService;
+import org.springblade.common.utils.HttpContextUtils;
+import org.springblade.common.utils.IPUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +44,7 @@ import java.util.Date;
 @Aspect
 @Component
 public class SysLogAspect {
-	@Autowired
+	/*@Autowired
 	private SysLogService sysLogService;
 	
 	@Pointcut("@annotation(io.finepetro.common.annotation.SysLog)")
@@ -104,6 +103,6 @@ public class SysLogAspect {
 		sysLog.setTime(time);
 		sysLog.setCreateDate(new Date());
 		//保存系统日志
-		sysLogService.insert(sysLog);
-	}
+		sysLogService.save(sysLog);
+	}*/
 }

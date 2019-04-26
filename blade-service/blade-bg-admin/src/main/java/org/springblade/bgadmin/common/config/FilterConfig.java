@@ -16,7 +16,7 @@
 
 package org.springblade.bgadmin.common.config;
 
-import io.finepetro.common.xss.XssFilter;
+import org.springblade.common.xss.XssFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

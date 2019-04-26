@@ -17,7 +17,7 @@
 package org.springblade.bgadmin.modules.oss.cloud;
 
 import com.aliyun.oss.OSSClient;
-import io.finepetro.common.exception.RRException;
+import org.springblade.common.exception.RRException;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

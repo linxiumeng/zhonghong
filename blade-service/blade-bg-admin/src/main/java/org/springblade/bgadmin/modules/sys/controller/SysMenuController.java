@@ -16,16 +16,16 @@
 
 package org.springblade.bgadmin.modules.sys.controller;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import io.finepetro.common.annotation.SysLog;
-import io.finepetro.common.exception.RRException;
-import io.finepetro.common.utils.Constant;
-import io.finepetro.common.utils.R;
-import io.finepetro.modules.sys.entity.SysMenuEntity;
-import io.finepetro.modules.sys.form.SysMenuForm;
-import io.finepetro.modules.sys.service.SysMenuService;
-import io.finepetro.modules.sys.service.SysRoleMenuService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.bgadmin.common.annotation.SysLog;
+import org.springblade.bgadmin.common.utils.Constant;
+import org.springblade.bgadmin.modules.sys.entity.SysMenuEntity;
+import org.springblade.bgadmin.modules.sys.form.SysMenuForm;
+import org.springblade.bgadmin.modules.sys.service.SysMenuService;
+import org.springblade.bgadmin.modules.sys.service.SysRoleMenuService;
+import org.springblade.common.exception.RRException;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,9 +65,9 @@ public class SysMenuController extends AbstractController {
 	@RequestMapping("/list")
 	//@RequiresPermissions("sys:menu:list")
 	public R list(@RequestBody SysMenuForm sysMenuForm){
-		List<SysMenuEntity> menuList = sysMenuService.selectList(new EntityWrapper());
+		List<SysMenuEntity> menuList = sysMenuService.list(new QueryWrapper<>());
 		for(SysMenuEntity sysMenuEntity : menuList){
-			SysMenuEntity parentMenuEntity = sysMenuService.selectById(sysMenuEntity.getParentId());
+			SysMenuEntity parentMenuEntity = sysMenuService.getById(sysMenuEntity.getParentId());
 			if(parentMenuEntity != null){
 				sysMenuEntity.setParentName(parentMenuEntity.getName());
 			}
@@ -108,7 +108,7 @@ public class SysMenuController extends AbstractController {
 	@RequestMapping("/info/{menuId}")
 	//@RequiresPermissions("sys:menu:info")
 	public R info(@PathVariable("menuId") Long menuId){
-		SysMenuEntity menu = sysMenuService.selectById(menuId);
+		SysMenuEntity menu = sysMenuService.getById(menuId);
 		return R.ok().put("menu", menu);
 	}
 	
@@ -122,7 +122,7 @@ public class SysMenuController extends AbstractController {
 		//数据校验
 		verifyForm(menu);
 		
-		sysMenuService.insert(menu);
+		sysMenuService.save(menu);
 		
 		return R.ok();
 	}
@@ -186,7 +186,7 @@ public class SysMenuController extends AbstractController {
 		//上级菜单类型
 		int parentType = Constant.MenuType.CATALOG.getValue();
 		if(menu.getParentId() != 0){
-			SysMenuEntity parentMenu = sysMenuService.selectById(menu.getParentId());
+			SysMenuEntity parentMenu = sysMenuService.getById(menu.getParentId());
 			parentType = parentMenu.getType();
 		}
 		

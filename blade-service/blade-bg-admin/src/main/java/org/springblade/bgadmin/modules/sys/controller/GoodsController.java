@@ -1,16 +1,14 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.CheckBGListUtils;
-import io.finepetro.modules.sys.entity.GoodsEntity;
-import io.finepetro.modules.sys.enums.GoodsFormEnum;
-import io.finepetro.modules.sys.form.GoodsForm;
-import io.finepetro.modules.sys.service.GoodsService;
-import org.apache.shiro.authz.annotation.Logical;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springblade.bgadmin.modules.sys.CheckBGListUtils;
+import org.springblade.bgadmin.modules.sys.entity.GoodsEntity;
+import org.springblade.bgadmin.modules.sys.enums.GoodsFormEnum;
+import org.springblade.bgadmin.modules.sys.form.GoodsForm;
+import org.springblade.bgadmin.modules.sys.service.GoodsService;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,10 +35,10 @@ public class GoodsController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions(value = {"sys:chanpinliebiao:list","sys:chanpinshenhe:list"},logical = Logical.OR)
+    //@RequiresPermissions(value = {"sys:chanpinliebiao:list","sys:chanpinshenhe:list"},logical = Logical.OR)
     public R list(@RequestBody GoodsForm goodsForm) {
-        Page page = new Page(goodsForm.getPage(),goodsForm.getSize());
-        EntityWrapper entityWrapper = new EntityWrapper();
+        IPage page = new Page(goodsForm.getPage(),goodsForm.getSize());
+        QueryWrapper<GoodsEntity> entityWrapper = new QueryWrapper();
         CheckBGListUtils.check(entityWrapper,goodsForm,"create_date","goods_name","goods_company");
 
         GoodsFormEnum goodsFormEnum = goodsForm.getGoodsFormStatus();
@@ -71,14 +69,14 @@ public class GoodsController {
      * 信息
      */
     @RequestMapping("/detail")
-    @RequiresPermissions(value = {"sys:chanpinliebiao:detail"})
+    //@RequiresPermissions(value = {"sys:chanpinliebiao:detail"})
     public R info(@RequestBody GoodsForm goodsForm) {
 
         if(goodsForm.getGoodsId() == null){
             return R.error("参数错误");
         }
 
-        GoodsEntity goods = goodsService.selectById(goodsForm.getGoodsId());
+        GoodsEntity goods = goodsService.getById(goodsForm.getGoodsId());
 
         return R.ok().put("goods", goods);
     }
@@ -87,9 +85,9 @@ public class GoodsController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:goods:save")
+    //@RequiresPermissions("sys:goods:save")
     public R save(@RequestBody GoodsEntity goods) {
-            goodsService.insert(goods);
+            goodsService.save(goods);
 
         return R.ok();
     }
@@ -98,10 +96,10 @@ public class GoodsController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:goods:update")
+    //@RequiresPermissions("sys:goods:update")
     public R update(@RequestBody GoodsEntity goods) {
-        ValidatorUtils.validateEntity(goods);
-            goodsService.updateAllColumnById(goods);//全部更新
+        //ValidatorUtils.validateEntity(goods);
+            goodsService.updateById(goods);//全部更新
 
         return R.ok();
     }
@@ -110,15 +108,15 @@ public class GoodsController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:goods:delete")
+    //@RequiresPermissions("sys:goods:delete")
     public R delete(@RequestBody Integer[] ids) {
-            goodsService.deleteBatchIds(Arrays.asList(ids));
+            goodsService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }
 
     @PostMapping("review")
-    @RequiresPermissions("sys:chanpinshenhe:verify")
+    //@RequiresPermissions("sys:chanpinshenhe:verify")
     public R review(@RequestBody GoodsForm goodsForm){
         if(goodsForm.getGoodsId() == null || goodsForm.getAuditStatus() == null){
             return R.error("参数缺失");
@@ -136,7 +134,7 @@ public class GoodsController {
     }
 
     @PostMapping("put_on")
-    @RequiresPermissions("sys:chanpinliebiao:updown")
+    //@RequiresPermissions("sys:chanpinliebiao:updown")
     public R push(@RequestBody GoodsForm goodsForm){
         if(goodsForm.getGoodsId() == null || goodsForm.getGoodsStatus() == null){
             return R.error("参数缺失");

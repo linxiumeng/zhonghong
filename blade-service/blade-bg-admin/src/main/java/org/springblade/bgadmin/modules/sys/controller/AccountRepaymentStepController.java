@@ -1,14 +1,13 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.AccountRepaymentStepEntity;
-import io.finepetro.modules.sys.form.AccountRepaymentStepForm;
-import io.finepetro.modules.sys.form.mybatis.AccountRepaymentStepDaoCondition;
-import io.finepetro.modules.sys.service.AccountRepaymentStepService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springblade.bgadmin.modules.sys.entity.AccountRepaymentStepEntity;
+import org.springblade.bgadmin.modules.sys.form.AccountRepaymentStepForm;
+import org.springblade.bgadmin.modules.sys.form.mybatis.AccountRepaymentStepDaoCondition;
+import org.springblade.bgadmin.modules.sys.service.AccountRepaymentStepService;
+import org.springblade.common.utils.PageUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +33,7 @@ public class AccountRepaymentStepController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:accountrepaymentstep:list")
+   // @RequiresPermissions("sys:accountrepaymentstep:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = accountRepaymentStepService.queryPage(params);
 
@@ -46,9 +45,9 @@ public class AccountRepaymentStepController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:accountrepaymentstep:info")
+    //@RequiresPermissions("sys:accountrepaymentstep:info")
     public R info(@PathVariable("id") Integer id) {
-            AccountRepaymentStepEntity accountRepaymentStep = accountRepaymentStepService.selectById(id);
+            AccountRepaymentStepEntity accountRepaymentStep = accountRepaymentStepService.getById(id);
 
         return R.ok().put("accountRepaymentStep", accountRepaymentStep);
     }
@@ -57,9 +56,9 @@ public class AccountRepaymentStepController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:accountrepaymentstep:save")
+    //@RequiresPermissions("sys:accountrepaymentstep:save")
     public R save(@RequestBody AccountRepaymentStepEntity accountRepaymentStep) {
-            accountRepaymentStepService.insert(accountRepaymentStep);
+            accountRepaymentStepService.save(accountRepaymentStep);
 
         return R.ok();
     }
@@ -68,10 +67,10 @@ public class AccountRepaymentStepController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:accountrepaymentstep:update")
+    //@RequiresPermissions("sys:accountrepaymentstep:update")
     public R update(@RequestBody AccountRepaymentStepEntity accountRepaymentStep) {
-        ValidatorUtils.validateEntity(accountRepaymentStep);
-            accountRepaymentStepService.updateAllColumnById(accountRepaymentStep);//全部更新
+        //ValidatorUtils.validateEntity(accountRepaymentStep);
+            accountRepaymentStepService.updateById(accountRepaymentStep);//全部更新
 
         return R.ok();
     }
@@ -80,16 +79,16 @@ public class AccountRepaymentStepController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:accountrepaymentstep:delete")
+    //@RequiresPermissions("sys:accountrepaymentstep:delete")
     public R delete(@RequestBody Integer[] ids) {
-            accountRepaymentStepService.deleteBatchIds(Arrays.asList(ids));
+            accountRepaymentStepService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }
 
     @PostMapping("step_list")
     public R listPaymentSteps(@RequestBody AccountRepaymentStepForm form){
-        Page page = new Page(form.getPage(),form.getSize());
+        IPage page = new Page(form.getPage(),form.getSize());
         AccountRepaymentStepDaoCondition condition = new AccountRepaymentStepDaoCondition();
         BeanUtils.copyProperties(form,condition);
         return R.ok().put("result",accountRepaymentStepService.listUserAccountRepaymentStep(page,condition));

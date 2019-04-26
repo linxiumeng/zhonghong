@@ -1,6 +1,7 @@
 package org.springblade.bgadmin.modules.sys.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.bgadmin.modules.sys.entity.AccountRepaymentEntity;
@@ -25,7 +26,7 @@ public interface AccountRepaymentService extends IService<AccountRepaymentEntity
      * @param wrapper
      * @return
      */
-    Page listAccountRepayment(Page page, Wrapper wrapper);
+    IPage listAccountRepayment(IPage page, Wrapper wrapper);
 
 }
 

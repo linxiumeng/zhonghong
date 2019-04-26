@@ -1,11 +1,9 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.AnnouncementEntity;
-import io.finepetro.modules.sys.service.AnnouncementService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springblade.bgadmin.modules.sys.entity.AnnouncementEntity;
+import org.springblade.bgadmin.modules.sys.service.AnnouncementService;
+import org.springblade.common.utils.PageUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +28,7 @@ public class AnnouncementController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:announcement:list")
+    //@RequiresPermissions("sys:announcement:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = announcementService.queryPage(params);
 
@@ -42,9 +40,9 @@ public class AnnouncementController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:announcement:info")
+    //@RequiresPermissions("sys:announcement:info")
     public R info(@PathVariable("id") Integer id) {
-            AnnouncementEntity announcement = announcementService.selectById(id);
+            AnnouncementEntity announcement = announcementService.getById(id);
 
         return R.ok().put("announcement", announcement);
     }
@@ -53,9 +51,9 @@ public class AnnouncementController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:announcement:save")
+    //@RequiresPermissions("sys:announcement:save")
     public R save(@RequestBody AnnouncementEntity announcement) {
-            announcementService.insert(announcement);
+            announcementService.save(announcement);
 
         return R.ok();
     }
@@ -64,10 +62,10 @@ public class AnnouncementController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:announcement:update")
+    //@RequiresPermissions("sys:announcement:update")
     public R update(@RequestBody AnnouncementEntity announcement) {
-        ValidatorUtils.validateEntity(announcement);
-            announcementService.updateAllColumnById(announcement);//全部更新
+       //ValidatorUtils.validateEntity(announcement);
+            announcementService.updateById(announcement);//全部更新
 
         return R.ok();
     }
@@ -76,9 +74,9 @@ public class AnnouncementController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:announcement:delete")
+    //@RequiresPermissions("sys:announcement:delete")
     public R delete(@RequestBody Integer[] ids) {
-            announcementService.deleteBatchIds(Arrays.asList(ids));
+            announcementService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

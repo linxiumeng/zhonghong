@@ -1,14 +1,13 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-
-import com.baomidou.mybatisplus.plugins.Page;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.NoticeEntity;
-import io.finepetro.modules.sys.form.NoticeForm;
-import io.finepetro.modules.sys.service.NoticeService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.bgadmin.modules.sys.entity.NoticeEntity;
+import org.springblade.bgadmin.modules.sys.form.NoticeForm;
+import org.springblade.bgadmin.modules.sys.service.NoticeService;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,9 +37,9 @@ public class NoticeController {
     public R list(@RequestBody NoticeForm noticeForm) {
       //  PageUtils page = noticeService.queryPage(params);
 
-        Page<NoticeEntity> page = new Page<>(noticeForm.getPage(),noticeForm.getSize());
+        IPage<NoticeEntity> page = new Page<>(noticeForm.getPage(),noticeForm.getSize());
 
-        Wrapper wrapper = new EntityWrapper();
+        QueryWrapper<NoticeEntity> wrapper = new QueryWrapper();
 
         if(StringUtils.isNotBlank(noticeForm.getKeywords())){
             wrapper.eq("title",noticeForm.getKeywords());
@@ -59,7 +58,7 @@ public class NoticeController {
         }
 
 
-        page = noticeService.selectPage(page,wrapper.orderBy("is_open",false).orderBy("create_date",false));
+        page = noticeService.page(page,wrapper.orderBy(true,false,"is_open").orderBy(true,false,"create_date"));
 
         return R.ok().put("result", page);
     }
@@ -72,7 +71,7 @@ public class NoticeController {
   //  @RequiresPermissions("sys:notice:info")
     public R info(@RequestBody NoticeEntity noticeEntity) {
         if(noticeEntity.getId() != null) {
-            NoticeEntity notice = noticeService.selectById(noticeEntity.getId());
+            NoticeEntity notice = noticeService.getById(noticeEntity.getId());
 
             return R.ok().put("notice", notice);
         }
@@ -85,7 +84,7 @@ public class NoticeController {
     @RequestMapping("/save")
   //  @RequiresPermissions("sys:notice:save")
     public R save(@RequestBody NoticeEntity notice) {
-            noticeService.insert(notice);
+            noticeService.save(notice);
 
         return R.ok();
     }
@@ -96,7 +95,7 @@ public class NoticeController {
     @RequestMapping("/update")
  //   @RequiresPermissions("sys:notice:update")
     public R update(@RequestBody NoticeEntity notice) {
-        ValidatorUtils.validateEntity(notice);
+       // ValidatorUtils.validateEntity(notice);
         noticeService.updateById(notice);
         return R.ok();
     }
@@ -107,7 +106,7 @@ public class NoticeController {
     @RequestMapping("/delete")
   //  @RequiresPermissions("sys:notice:delete")
     public R delete(@RequestBody Integer[] ids) {
-            noticeService.deleteBatchIds(Arrays.asList(ids));
+            noticeService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

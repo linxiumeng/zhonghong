@@ -1,11 +1,9 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.RepertoryEntity;
-import io.finepetro.modules.sys.service.RepertoryService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springblade.bgadmin.modules.sys.entity.RepertoryEntity;
+import org.springblade.bgadmin.modules.sys.service.RepertoryService;
+import org.springblade.common.utils.PageUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +28,7 @@ public class RepertoryController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:repertory:list")
+    //@RequiresPermissions("sys:repertory:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = repertoryService.queryPage(params);
 
@@ -42,9 +40,9 @@ public class RepertoryController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:repertory:info")
+    //@RequiresPermissions("sys:repertory:info")
     public R info(@PathVariable("id") Integer id) {
-            RepertoryEntity repertory = repertoryService.selectById(id);
+            RepertoryEntity repertory = repertoryService.getById(id);
 
         return R.ok().put("repertory", repertory);
     }
@@ -53,9 +51,9 @@ public class RepertoryController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:repertory:save")
+   // @RequiresPermissions("sys:repertory:save")
     public R save(@RequestBody RepertoryEntity repertory) {
-            repertoryService.insert(repertory);
+            repertoryService.save(repertory);
 
         return R.ok();
     }
@@ -64,10 +62,10 @@ public class RepertoryController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:repertory:update")
+    //@RequiresPermissions("sys:repertory:update")
     public R update(@RequestBody RepertoryEntity repertory) {
-        ValidatorUtils.validateEntity(repertory);
-            repertoryService.updateAllColumnById(repertory);//全部更新
+        //ValidatorUtils.validateEntity(repertory);
+            repertoryService.updateById(repertory);//全部更新
 
         return R.ok();
     }
@@ -76,9 +74,9 @@ public class RepertoryController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:repertory:delete")
+    //@RequiresPermissions("sys:repertory:delete")
     public R delete(@RequestBody Integer[] ids) {
-            repertoryService.deleteBatchIds(Arrays.asList(ids));
+            repertoryService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

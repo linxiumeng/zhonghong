@@ -16,20 +16,6 @@
 
 package org.springblade.bgadmin.common.config;
 
-import io.finepetro.modules.sys.shiro.UserRealm;
-import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
-import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.servlet.ShiroHttpSession;
-import org.apache.shiro.web.servlet.SimpleCookie;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
-import org.apache.shiro.web.session.mgt.ServletContainerSessionManager;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.LinkedHashMap;
@@ -43,10 +29,10 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfig {
-
-    /**
+/*
+    *//**
      * 单机环境，session交给shiro管理
-     */
+     *//*
     @Bean
     @ConditionalOnProperty(prefix = "finepetro", name = "cluster", havingValue = "false")
     public DefaultWebSessionManager sessionManager(@Value("${finepetro.globalSessionTimeout:3600}") long globalSessionTimeout, SimpleCookie simpleCookie){
@@ -59,9 +45,9 @@ public class ShiroConfig {
         return sessionManager;
     }
 
-    /**
+    *//**
      * 集群环境，session交给spring-session管理
-     */
+     *//*
     @Bean
     @ConditionalOnProperty(prefix = "finepetro", name = "cluster", havingValue = "true")
     public ServletContainerSessionManager servletContainerSessionManager() {
@@ -127,12 +113,12 @@ public class ShiroConfig {
     }
 
 
-    /*@Bean("rememberMeManager")
+    *//*@Bean("rememberMeManager")
     public RememberMeManager getRememberMeManager(SimpleCookie simpleCookie){
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(simpleCookie);
         return cookieRememberMeManager;
-    }*/
+    }*//*
 
     @Bean
     public SimpleCookie getSimpleCookie(){
@@ -141,5 +127,5 @@ public class ShiroConfig {
         cookie.setPath("/");
         cookie.setHttpOnly(false);
         return cookie;
-    }
+    }*/
 }

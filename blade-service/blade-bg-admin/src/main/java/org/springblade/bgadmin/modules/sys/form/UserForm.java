@@ -1,10 +1,10 @@
 package org.springblade.bgadmin.modules.sys.form;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.finepetro.modules.sys.enums.UserCreditStatusEnum;
-import io.finepetro.modules.sys.enums.UserLoginStatusEnum;
-import io.finepetro.modules.sys.enums.UserStatusEnum;
 import lombok.Data;
+import org.springblade.bgadmin.modules.sys.enums.UserCreditStatusEnum;
+import org.springblade.bgadmin.modules.sys.enums.UserLoginStatusEnum;
+import org.springblade.bgadmin.modules.sys.enums.UserStatusEnum;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 

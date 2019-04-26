@@ -16,12 +16,7 @@
 
 package org.springblade.bgadmin.modules.sys.shiro;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * Shiro权限标签
@@ -33,23 +28,23 @@ import javax.annotation.Resource;
 @Component
 public class ShiroTag {
 
-	@Resource
+	/*@Resource
 	UserRealm userRealm;
 
-	/**
+	*//**
 	 * 是否拥有该权限
 	 * @param permission  权限标识
 	 * @return   true：是     false：否
-	 */
+	 *//*
 	public boolean hasPermission(String permission) {
 		Subject subject = SecurityUtils.getSubject();
 		return subject != null && subject.isPermitted(permission);
 	}
 
-	/**
+	*//**
 	 * 获取认证消息
 	 * @return
-	 */
+	 *//*
 	public AuthorizationInfo getAllPermission(){
 		Subject subject = SecurityUtils.getSubject();
 		if(subject != null) {
@@ -57,5 +52,5 @@ public class ShiroTag {
 		}
 		return null;
 	}
-
+*/
 }

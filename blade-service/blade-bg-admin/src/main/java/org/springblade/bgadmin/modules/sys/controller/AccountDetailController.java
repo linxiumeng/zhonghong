@@ -1,14 +1,14 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.AccountDetailEntity;
-import io.finepetro.modules.sys.form.AccountDetailForm;
-import io.finepetro.modules.sys.service.AccountDetailService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springblade.bgadmin.modules.sys.entity.AccountDetailEntity;
+import org.springblade.bgadmin.modules.sys.form.AccountDetailForm;
+import org.springblade.bgadmin.modules.sys.service.AccountDetailService;
+import org.springblade.common.entity.AccountDetail;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,8 +37,8 @@ public class AccountDetailController {
     @RequestMapping("/list")
   //  @RequiresPermissions("sys:accountdetail:list")
     public R list(@RequestBody AccountDetailForm accountDetailForm) {
-        Page page = new Page(accountDetailForm.getPage(),accountDetailForm.getSize());
-        EntityWrapper wrapper = new EntityWrapper();
+        IPage page = new Page(accountDetailForm.getPage(),accountDetailForm.getSize());
+        QueryWrapper <AccountDetailEntity> wrapper = new QueryWrapper();
 
         if(accountDetailForm.getStatus() != null){
             wrapper.eq("type",accountDetailForm.getStatus());
@@ -53,7 +53,8 @@ public class AccountDetailController {
         }
 
         if(StringUtils.isNotBlank(accountDetailForm.getKeywords())){
-            wrapper.andNew().eq("users.company_name",accountDetailForm.getKeywords()).or().eq("users.mobile",accountDetailForm.getKeywords());
+            //wrapper.andNew().eq("users.company_name",accountDetailForm.getKeywords()).or().eq("users.mobile",accountDetailForm.getKeywords());
+            wrapper.and(i->i.eq("users.company_name",accountDetailForm.getKeywords()).or().eq("users.mobile",accountDetailForm.getKeywords()));
         }
 
         return R.ok().put("result", accountDetailService.listAccountDetailWithUser(page,wrapper));
@@ -64,9 +65,9 @@ public class AccountDetailController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:accountdetail:info")
+    //@RequiresPermissions("sys:accountdetail:info")
     public R info(@PathVariable("id") Integer id) {
-            AccountDetailEntity accountDetail = accountDetailService.selectById(id);
+            AccountDetailEntity accountDetail = accountDetailService.getById(id);
 
         return R.ok().put("accountDetail", accountDetail);
     }
@@ -75,9 +76,9 @@ public class AccountDetailController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:accountdetail:save")
+    //@RequiresPermissions("sys:accountdetail:save")
     public R save(@RequestBody AccountDetailEntity accountDetail) {
-            accountDetailService.insert(accountDetail);
+            accountDetailService.save(accountDetail);
 
         return R.ok();
     }
@@ -86,10 +87,10 @@ public class AccountDetailController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:accountdetail:update")
+    //@RequiresPermissions("sys:accountdetail:update")
     public R update(@RequestBody AccountDetailEntity accountDetail) {
-        ValidatorUtils.validateEntity(accountDetail);
-            accountDetailService.updateAllColumnById(accountDetail);//全部更新
+        //ValidatorUtils.validateEntity(accountDetail);
+            accountDetailService.updateById(accountDetail);//全部更新
 
         return R.ok();
     }
@@ -98,9 +99,9 @@ public class AccountDetailController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:accountdetail:delete")
+    //@RequiresPermissions("sys:accountdetail:delete")
     public R delete(@RequestBody Integer[] ids) {
-            accountDetailService.deleteBatchIds(Arrays.asList(ids));
+            accountDetailService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

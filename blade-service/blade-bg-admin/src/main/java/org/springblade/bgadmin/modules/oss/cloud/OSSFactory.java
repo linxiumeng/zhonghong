@@ -17,10 +17,9 @@
 package org.springblade.bgadmin.modules.oss.cloud;
 
 
-import io.finepetro.common.utils.ConfigConstant;
-import io.finepetro.common.utils.Constant;
-import io.finepetro.common.utils.SpringContextUtils;
-import io.finepetro.modules.sys.service.SysConfigService;
+import org.springblade.bgadmin.common.utils.ConfigConstant;
+import org.springblade.bgadmin.modules.sys.service.SysConfigService;
+import org.springblade.common.utils.SpringContextUtils;
 
 /**
  * 文件上传Factory
@@ -39,7 +38,9 @@ public final class OSSFactory {
         //获取云存储配置信息
         CloudStorageConfig config = sysConfigService.getConfigObject(ConfigConstant.CLOUD_STORAGE_CONFIG_KEY, CloudStorageConfig.class);
 
-        if(config.getType() == Constant.CloudService.QINIU.getValue()){
+        return new AliyunCloudStorageService(config);
+
+       /* if(config.getType() == Constant.CloudService.QINIU.getValue()){
             return new QiniuCloudStorageService(config);
         }else if(config.getType() == Constant.CloudService.ALIYUN.getValue()){
             return new AliyunCloudStorageService(config);
@@ -47,7 +48,7 @@ public final class OSSFactory {
             return new QcloudCloudStorageService(config);
         }
 
-        return null;
+        return null;*/
     }
 
 }

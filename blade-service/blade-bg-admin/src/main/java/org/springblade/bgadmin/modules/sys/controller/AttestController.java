@@ -1,12 +1,10 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.AttestEntity;
-import io.finepetro.modules.sys.service.AttestService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springblade.bgadmin.modules.sys.entity.AttestEntity;
+import org.springblade.bgadmin.modules.sys.service.AttestService;
+import org.springblade.common.utils.PageUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +32,7 @@ public class AttestController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:attest:list")
+    //@RequiresPermissions("sys:attest:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = attestService.queryPage(params);
 
@@ -48,7 +46,7 @@ public class AttestController {
     @RequestMapping("/detail")
   //  @RequiresPermissions("sys:attest:info")
     public R info(@RequestParam("userId") Integer id) {
-        AttestEntity attest = attestService.selectOne(new EntityWrapper<AttestEntity>().eq("user_id",id));
+        AttestEntity attest = attestService.getOne(new QueryWrapper<AttestEntity>().eq("user_id",id));
         return R.ok().put("attest", attest);
     }
 
@@ -56,9 +54,9 @@ public class AttestController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:attest:save")
+    //@RequiresPermissions("sys:attest:save")
     public R save(@RequestBody AttestEntity attest) {
-            attestService.insert(attest);
+            attestService.save(attest);
 
         return R.ok();
     }
@@ -67,10 +65,10 @@ public class AttestController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:attest:update")
+    //@RequiresPermissions("sys:attest:update")
     public R update(@RequestBody AttestEntity attest) {
-        ValidatorUtils.validateEntity(attest);
-            attestService.updateAllColumnById(attest);//全部更新
+        //ValidatorUtils.validateEntity(attest);
+            attestService.updateById(attest);//全部更新
 
         return R.ok();
     }
@@ -79,9 +77,9 @@ public class AttestController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:attest:delete")
+    //@RequiresPermissions("sys:attest:delete")
     public R delete(@RequestBody Integer[] ids) {
-            attestService.deleteBatchIds(Arrays.asList(ids));
+            attestService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

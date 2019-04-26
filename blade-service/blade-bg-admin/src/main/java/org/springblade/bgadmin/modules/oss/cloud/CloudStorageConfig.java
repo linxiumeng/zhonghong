@@ -17,12 +17,12 @@
 package org.springblade.bgadmin.modules.oss.cloud;
 
 
-import io.finepetro.common.validator.group.AliyunGroup;
-import io.finepetro.common.validator.group.QcloudGroup;
-import io.finepetro.common.validator.group.QiniuGroup;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
+import org.springblade.bgadmin.common.validator.group.AliyunGroup;
+import org.springblade.bgadmin.common.validator.group.QcloudGroup;
+import org.springblade.bgadmin.common.validator.group.QiniuGroup;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

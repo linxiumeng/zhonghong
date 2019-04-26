@@ -1,12 +1,12 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.modules.sys.dao.LoadBillDao;
-import io.finepetro.modules.sys.entity.LoadBill;
-import io.finepetro.modules.sys.entity.LoadBillWithOrder;
-import io.finepetro.modules.sys.form.mybatis.LoadBillCondition;
-import io.finepetro.modules.sys.service.LoadBillService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.bgadmin.modules.sys.dao.LoadBillDao;
+import org.springblade.bgadmin.modules.sys.entity.LoadBill;
+import org.springblade.bgadmin.modules.sys.entity.LoadBillWithOrder;
+import org.springblade.bgadmin.modules.sys.form.mybatis.LoadBillCondition;
+import org.springblade.bgadmin.modules.sys.service.LoadBillService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class LoadBillServiceImpl extends ServiceImpl<LoadBillDao,LoadBill> implements LoadBillService{
+public class LoadBillServiceImpl extends ServiceImpl<LoadBillDao, LoadBill> implements LoadBillService {
     @Override
     public LoadBillWithOrder getLoadBillByIdWithOrder(Integer id) {
         return baseMapper.selectByIdWithOrder(id);
     }
 
     @Override
-    public Page listLoadBillWithOrder(Page page, LoadBillCondition condition) {
+    public IPage listLoadBillWithOrder(IPage page, LoadBillCondition condition) {
         page.setRecords(baseMapper.selectListWithOrder(page,condition));
         return page;
     }

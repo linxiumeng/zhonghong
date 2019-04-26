@@ -1,7 +1,7 @@
 package org.springblade.bgadmin.modules.sys.form;
 
-import io.finepetro.modules.sys.enums.GoodsFormEnum;
 import lombok.Data;
+import org.springblade.bgadmin.modules.sys.enums.GoodsFormEnum;
 
 /**
  * @author hanbin

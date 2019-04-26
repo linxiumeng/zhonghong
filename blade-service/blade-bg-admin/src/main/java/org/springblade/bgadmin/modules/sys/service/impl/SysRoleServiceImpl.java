@@ -16,17 +16,16 @@
 
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.annotation.DataFilter;
-import io.finepetro.common.utils.Constant;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.Query;
-import io.finepetro.modules.sys.dao.SysRoleDao;
-import io.finepetro.modules.sys.entity.SysRoleEntity;
-import io.finepetro.modules.sys.service.*;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.bgadmin.common.annotation.DataFilter;
+import org.springblade.bgadmin.common.utils.Query;
+import org.springblade.bgadmin.modules.sys.dao.SysRoleDao;
+import org.springblade.bgadmin.modules.sys.entity.SysRoleEntity;
+import org.springblade.bgadmin.modules.sys.service.*;
+import org.springblade.common.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,11 +58,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 	public PageUtils queryPage(Map<String, Object> params) {
 		String roleName = (String)params.get("roleName");
 
-		Page<SysRoleEntity> page = this.selectPage(
+		IPage<SysRoleEntity> page = this.page(
 			new Query<SysRoleEntity>(params).getPage(),
-			new EntityWrapper<SysRoleEntity>()
+			new QueryWrapper<SysRoleEntity>()
 				.like(StringUtils.isNotBlank(roleName),"role_name", roleName)
-				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
+				//.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
 		);
 
 
@@ -72,9 +71,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void save(SysRoleEntity role) {
+	public boolean save(SysRoleEntity role) {
 		role.setCreateTime(new Date());
-		this.insert(role);
+
 
 		if(role.getMenuIdList() !=null) {
 
@@ -86,6 +85,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 
 		//保存角色与部门关系
 	//	sysRoleDeptService.saveOrUpdate(role.getRoleId(), role.getDeptIdList());
+		return super.save(role);
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteBatch(Long[] roleIds) {
 		//删除角色
-		this.deleteBatchIds(Arrays.asList(roleIds));
+		this.removeByIds(Arrays.asList(roleIds));
 
 		//删除角色与菜单关联
 		sysRoleMenuService.deleteBatch(roleIds);

@@ -29,7 +29,7 @@ public class AccountRepaymentServiceImpl extends ServiceImpl<AccountRepaymentDao
     }
 
     @Override
-    public Page listAccountRepayment(Page page, Wrapper wrapper) {
+    public IPage listAccountRepayment(IPage page, Wrapper wrapper) {
         page.setRecords(baseMapper.selectByOrderIdWithStepList(page,wrapper));
         return page;
     }

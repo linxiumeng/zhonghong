@@ -1,13 +1,14 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.Query;
-import io.finepetro.modules.sys.dao.TokenDao;
-import io.finepetro.modules.sys.entity.TokenEntity;
-import io.finepetro.modules.sys.service.TokenService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.bgadmin.common.utils.Query;
+import org.springblade.bgadmin.modules.sys.dao.TokenDao;
+
+import org.springblade.bgadmin.modules.sys.service.TokenService;
+import org.springblade.common.entity.TokenEntity;
+import org.springblade.common.utils.PageUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -18,9 +19,9 @@ public class TokenServiceImpl extends ServiceImpl<TokenDao, TokenEntity> impleme
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<TokenEntity> page = this.selectPage(
+        IPage<TokenEntity> page = this.page(
                 new Query<TokenEntity>(params).getPage(),
-                new EntityWrapper<TokenEntity>()
+                new QueryWrapper<TokenEntity>()
         );
 
         return new PageUtils(page);

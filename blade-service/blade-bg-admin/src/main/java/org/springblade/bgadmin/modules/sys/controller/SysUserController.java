@@ -17,24 +17,8 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import io.finepetro.common.annotation.SysLog;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.Assert;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.common.validator.group.AddGroup;
-import io.finepetro.modules.sys.entity.SysUserEntity;
-import io.finepetro.modules.sys.form.BaseForm;
-import io.finepetro.modules.sys.service.*;
-import io.finepetro.modules.sys.shiro.ShiroTag;
-import io.finepetro.modules.sys.shiro.ShiroUtils;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.shiro.authz.AuthorizationInfo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 系统用户
@@ -46,7 +30,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/sys/user")
 public class SysUserController extends AbstractController {
-	@Autowired
+	/*@Autowired
 	private SysUserService sysUserService;
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
@@ -69,9 +53,9 @@ public class SysUserController extends AbstractController {
 	@Autowired
 	ShiroTag shiroTag;
 	
-	/**
+	*//**
 	 * 所有用户列表
-	 */
+	 *//*
 	@RequestMapping("/list")
 //	@RequiresPermissions("sys:user:list")
 	public R list(@RequestBody BaseForm baseForm){
@@ -87,17 +71,17 @@ public class SysUserController extends AbstractController {
 	//	return null;
 	}
 	
-	/**
+	*//**
 	 * 获取登录的用户信息
-	 */
+	 *//*
 	@RequestMapping("/info")
 	public R info(){
 		return R.ok().put("user", getUser());
 	}
 	
-	/**
+	*//**
 	 * 修改登录用户密码
-	 */
+	 *//*
 	@SysLog("修改密码")
 	@RequestMapping("/password")
 	public R password(String password, String newPassword){
@@ -117,9 +101,9 @@ public class SysUserController extends AbstractController {
 		return R.ok();
 	}
 	
-	/**
+	*//**
 	 * 用户信息
-	 */
+	 *//*
 	@RequestMapping("/info/{userId}")
 	//@RequiresPermissions("sys:user:info")
 	public R info(@PathVariable("userId") Long userId){
@@ -132,9 +116,9 @@ public class SysUserController extends AbstractController {
 		return R.ok().put("user", user);
 	}
 	
-	/**
+	*//**
 	 * 保存用户
-	 */
+	 *//*
 //	@SysLog("保存用户")
 	@RequestMapping("/save")
 	//@RequiresPermissions("sys:user:save")
@@ -146,9 +130,9 @@ public class SysUserController extends AbstractController {
 		return R.ok();
 	}
 	
-	/**
+	*//**
 	 * 修改用户
-	 */
+	 *//*
 //	@SysLog("修改用户")
 	@RequestMapping("/update")
 	//@RequiresPermissions("sys:user:update")
@@ -162,9 +146,9 @@ public class SysUserController extends AbstractController {
 		return R.ok();
 	}
 	
-	/**
+	*//**
 	 * 删除用户
-	 */
+	 *//*
 	@SysLog("删除用户")
 	@RequestMapping("/delete")
 	//@RequiresPermissions("sys:user:delete")
@@ -237,5 +221,5 @@ public class SysUserController extends AbstractController {
 		System.out.println(ShiroUtils.sha256("hanbin", "4FHgJKzFsXrl8SBEGBhP"));
 	}
 
-
+*/
 }

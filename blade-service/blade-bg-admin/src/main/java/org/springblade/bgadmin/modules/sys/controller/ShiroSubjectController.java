@@ -1,11 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import io.finepetro.common.utils.R;
-import io.finepetro.modules.sys.shiro.ShiroTag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 
 /**
  * @author hanbin
@@ -14,7 +10,7 @@ import javax.annotation.Resource;
 @RequestMapping("/api/permission")
 public class ShiroSubjectController {
 
-    @Resource
+    /*@Resource
     ShiroTag shiroTag;
 
 
@@ -28,7 +24,7 @@ public class ShiroSubjectController {
 
     @RequestMapping("/list")
     public R getPermissionList() {
-        /*Map<String, List<String>> resultMap = new HashMap<>(32);
+        *//*Map<String, List<String>> resultMap = new HashMap<>(32);
         AuthorizationInfo authorizationInfo = shiroTag.getAllPermission();
         Collection<String> permissionList = authorizationInfo.getStringPermissions();
         for (String permission : permissionList) {
@@ -45,11 +41,11 @@ public class ShiroSubjectController {
                     }
             );
 
-        }*/
+        }*//*
 
 
         return R.ok();//.put("result", resultMap);
     }
-
+*/
 
 }

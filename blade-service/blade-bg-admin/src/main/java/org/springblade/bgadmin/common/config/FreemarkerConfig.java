@@ -16,14 +16,7 @@
 
 package org.springblade.bgadmin.common.config;
 
-import io.finepetro.modules.sys.shiro.ShiroTag;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * Freemarker配置
@@ -33,7 +26,7 @@ import java.util.Properties;
  */
 @Configuration
 public class FreemarkerConfig {
-
+/*
     @Bean
     public FreeMarkerConfigurer freeMarkerConfigurer(ShiroTag shiroTag){
         FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
@@ -47,6 +40,6 @@ public class FreemarkerConfig {
         settings.setProperty("number_format", "0.##");
         configurer.setFreemarkerSettings(settings);
         return configurer;
-    }
+    }*/
 
 }

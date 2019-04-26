@@ -1,13 +1,12 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.DemandEntity;
-import io.finepetro.modules.sys.form.DemandForm;
-import io.finepetro.modules.sys.form.mybatis.DemandCondition;
-import io.finepetro.modules.sys.service.DemandService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springblade.bgadmin.modules.sys.entity.DemandEntity;
+import org.springblade.bgadmin.modules.sys.form.DemandForm;
+import org.springblade.bgadmin.modules.sys.form.mybatis.DemandCondition;
+import org.springblade.bgadmin.modules.sys.service.DemandService;
+import org.springblade.common.utils.R;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +38,7 @@ public class DemandController {
     public R list(@RequestBody DemandForm demandForm) {
       //  PageUtils page = demandService.queryPage(params);
 
-        Page page = new Page(demandForm.getPage(),demandForm.getSize());
+        IPage page = new Page(demandForm.getPage(),demandForm.getSize());
         DemandCondition demandCondition = new DemandCondition();
         BeanUtils.copyProperties(demandForm,demandCondition);
         return R.ok().put("result", demandService.listDemandOrderUsers(page,demandCondition));
@@ -50,9 +49,9 @@ public class DemandController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:demand:info")
+    //@RequiresPermissions("sys:demand:info")
     public R info(@PathVariable("id") Integer id) {
-            DemandEntity demand = demandService.selectById(id);
+            DemandEntity demand = demandService.getById(id);
 
         return R.ok().put("demand", demand);
     }
@@ -61,9 +60,9 @@ public class DemandController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:demand:save")
+    //@RequiresPermissions("sys:demand:save")
     public R save(@RequestBody DemandEntity demand) {
-            demandService.insert(demand);
+            demandService.save(demand);
 
         return R.ok();
     }
@@ -72,10 +71,10 @@ public class DemandController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:demand:update")
+    //@RequiresPermissions("sys:demand:update")
     public R update(@RequestBody DemandEntity demand) {
-        ValidatorUtils.validateEntity(demand);
-            demandService.updateAllColumnById(demand);//全部更新
+        //ValidatorUtils.validateEntity(demand);
+            demandService.updateById(demand);//全部更新
 
         return R.ok();
     }
@@ -84,9 +83,9 @@ public class DemandController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:demand:delete")
+    //@RequiresPermissions("sys:demand:delete")
     public R delete(@RequestBody Integer[] ids) {
-            demandService.deleteBatchIds(Arrays.asList(ids));
+            demandService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }
