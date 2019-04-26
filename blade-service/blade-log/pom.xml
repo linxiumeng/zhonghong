@@ -21,6 +21,9 @@
             <artifactId>blade-core-boot</artifactId>
             <version>${blade.tool.version}</version>
         </dependency>
+
+
+
     </dependencies>
 
 </project>

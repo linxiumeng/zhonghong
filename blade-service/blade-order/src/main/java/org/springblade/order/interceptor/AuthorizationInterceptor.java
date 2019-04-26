@@ -25,6 +25,7 @@ import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.TokenEntity;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.utils.R;
+import org.springblade.core.log.logger.BladeLogger;
 import org.springblade.order.feign.TokenServiceFeign;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -51,10 +52,18 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     @Resource
     ObjectMapper objectMapper;
 
+    @Resource
+    BladeLogger logger;
+
     public static final String USER_KEY = "userId";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+        System.out.println("xxxxxxxxxxxxxxx");
+
+      //  logger.info("a","aaaaaaa");
+
         Login annotation;
         if (handler instanceof HandlerMethod) {
             annotation = ((HandlerMethod) handler).getMethodAnnotation(Login.class);
@@ -78,9 +87,15 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             throw new RRException("token不能为空");
         }
 
+
+        System.out.println("==================="+System.currentTimeMillis());
+        long startTime = System.currentTimeMillis();
+
         //查询token信息
         org.springblade.core.tool.api.R<TokenEntity> r = tokenService.getTokenEntityByToken(token);
         TokenEntity tokenEntity = r.getData();
+
+        System.out.println("------------------"+(System.currentTimeMillis() - startTime));
 
         //判断feign的返回
         if (r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS || tokenEntity == null || tokenEntity.getExpireTime() == null ||  tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()) {

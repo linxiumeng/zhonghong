@@ -62,6 +62,6 @@ public interface UserAccountDao extends BaseMapper<UserAccount> {
             @Result(column = "provider_status",property = "providerStatus"),
             @Result(column="user_id",property="account",one=@One(select="io.finepetro.dao.AccountDao.selectAccountByUserId",fetchType= FetchType.EAGER))
     })
-    List<UserAccount> selectListWithAccount(RowBounds rowBounds, @Param("ew") Wrapper wrapper);
+    List<UserAccount> selectListWithAccount(IPage iPage, @Param("ew") Wrapper wrapper);
 
 }

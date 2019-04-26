@@ -25,6 +25,7 @@
         <module>blade-pay</module>
         <module>blade-infomation</module>
         <module>blade-order</module>
+        <module>blade-bg-admin</module>
     </modules>
 
     <dependencies>

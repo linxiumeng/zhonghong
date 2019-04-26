@@ -17,10 +17,15 @@ package org.springblade.order;
 
 import org.springblade.core.launch.BladeApplication;
 import org.springblade.core.launch.constant.AppConstant;
+import org.springframework.boot.Banner;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.springblade.common.constant.ApplicationNameConstant.INFORMATION_MODULE;
 import static org.springblade.common.constant.ApplicationNameConstant.ORDER_MODULE;

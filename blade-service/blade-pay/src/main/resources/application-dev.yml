@@ -12,3 +12,4 @@ spring:
 jpush:
   appKey: 9325ea96802112de6540276a
   masterSecret: b5be61a29d2a31ce340907b6
+

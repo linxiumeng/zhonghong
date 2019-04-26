@@ -52,6 +52,6 @@ public interface DemandDao extends BaseMapper<Demand> {
 
 
     })
-    List<DemandResp> selectDemandListWithQuotationList(RowBounds rowBounds, @Param("ew") Wrapper wrapper);
+    List<DemandResp> selectDemandListWithQuotationList(IPage iPage, @Param("ew") Wrapper wrapper);
 
 }
