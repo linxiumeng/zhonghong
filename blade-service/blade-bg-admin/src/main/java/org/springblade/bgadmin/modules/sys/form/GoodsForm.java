@@ -29,7 +29,7 @@ public class GoodsForm extends BaseForm{
     GoodsFormEnum goodsFormStatus;
 
 
-    Integer goodsType;
+    String goodsType;
 
 
 

@@ -189,15 +189,15 @@ public class SysUserController extends AbstractController {
 		Map<String,Integer> statisticsMap = new HashMap<>(8);
 		if(collection.contains("sys:shanghushenhe:verify")) {
 			//企业待认证个数
-			// 过滤了身份状态不是1的用户
-			int companyWaitVerificationCount = userService.count(new QueryWrapper<FuserEntity>().notIn("status", 1));
+			// 过滤了身份状态不是0,1的用户an
+			int companyWaitVerificationCount = userService.count(new QueryWrapper<FuserEntity>().notIn("status",2,3));
 			statisticsMap.put("companyWaitVerificationCount", companyWaitVerificationCount);
 		}
 
 		if(collection.contains("sys:shanghushouxin:credit")) {
 			//采购商待授信个数
 			// 过滤了授信状态是0 ，并且是采购商的用户
-			int purcharesWaitCreditCount = userService.count(new QueryWrapper<FuserEntity>().eq("credit_status", 0));
+			int purcharesWaitCreditCount = userService.count(new QueryWrapper<FuserEntity>().eq("status",3).notIn("credit_status", 3));
 			statisticsMap.put("purchaesWaitCreditCount", purcharesWaitCreditCount);
 		}
 

@@ -46,7 +46,7 @@
     </select>
 
     <select id="selectWaitingReviewFuserAccountByWrapper" resultMap="fuserAccountMap">
-        select users.*,attest.creat_time from tb_fuser users join
+        select users.*,attest.creat_time from tb_fuser users left join
         (select user_id as attest_user_id,id as attest_id,creat_time
         from tb_attest a where creat_time =
         (select max(creat_time) from tb_attest b where a.user_id = b.user_id))

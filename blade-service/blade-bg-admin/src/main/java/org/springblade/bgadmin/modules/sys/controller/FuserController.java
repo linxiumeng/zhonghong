@@ -184,8 +184,8 @@ public class FuserController {
             entityWrapper.lt("attest.creat_time",userForm.getEndDate());
         }
 
-        if(userForm.getWaitPageConditionStatus() == null || (userForm.getWaitPageConditionStatus() != 1 && userForm.getWaitPageConditionStatus() != 2)){
-            entityWrapper.in("status",new Object[]{1,2});
+        if(userForm.getWaitPageConditionStatus() == null ){
+            entityWrapper.in("status",new Object[]{0,1});
         } else {
             entityWrapper.eq("status",userForm.getWaitPageConditionStatus());
         }
@@ -225,7 +225,7 @@ public class FuserController {
         if(userForm.getCreditStatus() != null){
             entityWrapper.eq("credit_status",userForm.getCreditStatus().getCode());
         }else {
-            entityWrapper.in("credit_status",new Object[]{1,2,3});
+            entityWrapper.in("credit_status",new Object[]{0,1,2});
         }
 
         if (StringUtils.isNotBlank(userForm.getKeywords())) {

@@ -3,6 +3,7 @@ package org.springblade.bgadmin.modules.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.modules.sys.CheckBGListUtils;
 import org.springblade.bgadmin.modules.sys.entity.GoodsEntity;
 import org.springblade.bgadmin.modules.sys.enums.GoodsFormEnum;
@@ -43,7 +44,7 @@ public class GoodsController {
 
         GoodsFormEnum goodsFormEnum = goodsForm.getGoodsFormStatus();
 
-        if(goodsForm.getGoodsType() != null){
+        if(StringUtils.isNotBlank(goodsForm.getGoodsType())){
             entityWrapper.eq("goods_type",goodsForm.getGoodsType());
         }
 

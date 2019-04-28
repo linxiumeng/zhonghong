@@ -21,7 +21,7 @@
     </resultMap>
 
     <select id="selectAccountRechargeList" resultMap="accountRechargeMap">
-        select * from tb_account_recharge recharge join tb_fuser users on recharge.user_id = users.user_id
+        select * from tb_account_recharge recharge left join tb_fuser users on recharge.user_id = users.user_id
 
         <where>${ew.sqlSegment}</where>
 
