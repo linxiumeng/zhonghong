@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 public class DataSourceAspect implements Ordered {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Pointcut("@annotation(io.finepetro.datasources.annotation.DataSource)")
+    @Pointcut("@annotation(org.springblade.bgadmin.datasources.annotation.DataSource)")
     public void dataSourcePointCut() {
 
     }

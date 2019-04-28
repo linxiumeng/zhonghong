@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户表</title>
+        <#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <#if shiro.hasPermission("sys:fuser:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            </#if>
+            <#if shiro.hasPermission("sys:fuser:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            </#if>
+            <#if shiro.hasPermission("sys:fuser:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+                                                                            <div class="form-group">
+                        <div class="col-sm-2 control-label">账号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.mobile"
+                                   placeholder="账号"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">密码</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.password"
+                                   placeholder="密码"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">统一社会编码</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.unifiedSocialCode"
+                                   placeholder="统一社会编码"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">法人</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.legalPerson"
+                                   placeholder="法人"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">身份证正面</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.card1"
+                                   placeholder="身份证正面"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">身份证反面</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.card2"
+                                   placeholder="身份证反面"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">营业执照</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.businessLicence"
+                                   placeholder="营业执照"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">联系人</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.contacts"
+                                   placeholder="联系人"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">联系电话</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.contactNumber"
+                                   placeholder="联系电话"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">联系地址</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.contactAddress"
+                                   placeholder="联系地址"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">授信状态</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.creditStatus"
+                                   placeholder="授信状态"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">采购商账号状态 账号状态，0未企业认证;1为企业认证中;2为企业认证失败；3为企业认证通过，授信未提交；4为授信审核中；5为授信失败；6为授信成功</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.status"
+                                   placeholder="采购商账号状态 账号状态，0未企业认证;1为企业认证中;2为企业认证失败；3为企业认证通过，授信未提交；4为授信审核中；5为授信失败；6为授信成功"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">注册时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.registerDate"
+                                   placeholder="注册时间"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">用户类型：1：采购商，2：供应商</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.type"
+                                   placeholder="用户类型：1：采购商，2：供应商"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">企业名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.companyName"
+                                   placeholder="企业名称"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">邮箱</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.mail"
+                                   placeholder="邮箱"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">供应商认证状态 账号状态0为初始化;1为认证中;3为认证通过;2为认证失败</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.providerStatus"
+                                   placeholder="供应商认证状态 账号状态0为初始化;1为认证中;3为认证通过;2为认证失败"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.createDate"
+                                   placeholder=""/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="fuser.updateDate"
+                                   placeholder=""/>
+                        </div>
+                    </div>
+                                        <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/sys/fuser.js?_${.now?long}"></script>
+</body>
+</html>

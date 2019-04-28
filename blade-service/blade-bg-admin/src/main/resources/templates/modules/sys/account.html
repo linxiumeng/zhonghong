@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>余额表</title>
+        <#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <#if shiro.hasPermission("sys:account:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            </#if>
+            <#if shiro.hasPermission("sys:account:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            </#if>
+            <#if shiro.hasPermission("sys:account:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+                                                                            <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="account.userId"
+                                   placeholder=""/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">可用余额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="account.account"
+                                   placeholder="可用余额"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">账户总资产</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="account.total"
+                                   placeholder="账户总资产"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">冻结金额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="account.freezeAmount"
+                                   placeholder="冻结金额"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">保证金</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="account.cashFund"
+                                   placeholder="保证金"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">审批额度</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="account.creditLimit"
+                                   placeholder="审批额度"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">单笔可用额度</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="account.creditUnit"
+                                   placeholder="单笔可用额度"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">最高可用额度</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="account.creditHigh"
+                                   placeholder="最高可用额度"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="account.createDate"
+                                   placeholder=""/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="account.updateDate"
+                                   placeholder=""/>
+                        </div>
+                    </div>
+                                        <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/sys/account.js?_${.now?long}"></script>
+</body>
+</html>

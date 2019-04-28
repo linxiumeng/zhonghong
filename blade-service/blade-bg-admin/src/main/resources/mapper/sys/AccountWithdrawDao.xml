@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.finepetro.modules.sys.dao.AccountWithdrawDao">
+
+    <resultMap id="accountWithdrawMap" type="io.finepetro.modules.sys.entity.AccountWithdrawWithUserEntity">
+        <result column="id" property="id"/>
+        <result property="status" column="status"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="createDate" column="create_date"/>
+        <result property="userId" column="user_id"/>
+        <result property="amount" column="amount"/>
+        <result property="remark" column="remark"/>
+        <result property="withdrawDate" column="withdraw_date"/>
+        <association property="userEntity" column="user_id" select="io.finepetro.modules.sys.dao.FuserDao.selectByUserId"/>
+    </resultMap>
+
+
+    <select id="selectAccountWithdrawList" resultMap="accountWithdrawMap">
+        select * from tb_account_withdraw withdraw join tb_fuser users on withdraw.user_id = users.user_id
+
+        <where>${ew.sqlSegment}</where>
+
+        order by withdraw.create_date desc
+    </select>
+
+</mapper>

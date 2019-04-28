@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.finepetro.modules.sys.dao.AccountRepaymentDetailLogDao">
+
+    <resultMap id="detailLogMap" type="io.finepetro.modules.sys.entity.AccountRepaymentDetailLogWithUserEntity">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="wait_amount" property="waitAmount"/>
+        <result column="repayment_detail_id" property="repaymentDetailId"/>
+        <result column="repayment_amount" property="repaymentAmount"/>
+        <result column="wait_interest" property="waitInterest"/>
+        <result column="stauts" property="status"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_date" property="updateDate"/>
+        <association property="userEntity" column="user_id" select="io.finepetro.modules.sys.dao.FuserDao.selectByUserId"/>
+    </resultMap>
+
+
+    <select id="selectAccountRepaymentDetailLogList" resultMap="detailLogMap">
+        select * from tb_account_repayment_detail_logs log join tb_fuser users on log.user_id = users.user_id
+        <where>
+            ${ew.sqlSegment}
+        </where>
+        order by log.create_date
+    </select>
+
+</mapper>

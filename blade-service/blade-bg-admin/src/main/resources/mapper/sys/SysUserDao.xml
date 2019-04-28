@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.finepetro.modules.sys.dao.SysUserDao">
+
+	<resultMap id="sysUserMaap" type="io.finepetro.modules.sys.entity.SysUserEntity">
+		<id column="user_id" property="userId"/>
+		<result column="status" property="status"/>
+		<result column="salt" property="salt"/>
+		<result column="email" property="email"/>
+		<result column="mobile" property="mobile"/>
+		<result column="password" property="password"/>
+		<result column="username" property="username"/>
+		<collection property="roleEntityList" column="user_id" select="io.finepetro.modules.sys.dao.SysUserRoleDao.selectByUserId"/>
+	</resultMap>
+	
+	<!-- 查询用户的所有权限 -->
+	<select id="queryAllPerms" resultType="string">
+		select m.perms from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+			LEFT JOIN sys_menu m on rm.menu_id = m.menu_id 
+		where ur.user_id = #{userId}
+	</select>
+	
+	<!-- 查询用户的所有菜单ID --> 
+	<select id="queryAllMenuId" resultType="long">
+		select distinct rm.menu_id from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+		where ur.user_id = #{userId}
+	</select>
+
+
+	<select id="selectListWithRoleIdList" resultMap="sysUserMaap">
+		select * from sys_user
+		<where>
+			${ew.sqlSegment}
+		</where>
+		order by create_time desc
+	</select>
+
+</mapper>

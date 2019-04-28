@@ -30,10 +30,10 @@ import java.util.Properties;
  * @author Mark sunlightcs@gmail.com
  * @since 2.1.0 2017-04-20
  */
-@Configuration
+//@Configuration
 public class KaptchaConfig {
 
-    @Bean
+    /*@Bean
     public DefaultKaptcha producer() {
         Properties properties = new Properties();
         properties.put("kaptcha.border", "no");
@@ -43,5 +43,5 @@ public class KaptchaConfig {
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
         defaultKaptcha.setConfig(config);
         return defaultKaptcha;
-    }
+    }*/
 }

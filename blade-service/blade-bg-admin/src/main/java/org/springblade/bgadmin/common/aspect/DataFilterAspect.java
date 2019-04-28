@@ -44,13 +44,11 @@ import java.util.Set;
 @Component
 public class DataFilterAspect {
     @Autowired
-    private SysDeptService sysDeptService;
-    @Autowired
     private SysUserRoleService sysUserRoleService;
     @Autowired
     private SysRoleDeptService sysRoleDeptService;
 
-    @Pointcut("@annotation(io.finepetro.common.annotation.DataFilter)")
+    @Pointcut("@annotation(org.springblade.bgadmin.common.annotation.DataFilter)")
     public void dataFilterCut() {
 
     }
