@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.finepetro.modules.sys.dao.DemandDao">
+<mapper namespace="org.springblade.bgadmin.modules.sys.dao.DemandDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="io.finepetro.modules.sys.entity.DemandOrderUserEntity" id="demandMap">
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.DemandOrderUserEntity" id="demandMap">
         <result property="id" column="id"/>
         <result property="creatUserid" column="creat_userid"/>
         <result property="fType" column="f_type"/>
@@ -34,16 +34,16 @@
         <result property="fRemark" column="f_remark"/>
 
         <association property="userEntity" column="creat_userid"
-                     select="io.finepetro.modules.sys.dao.FuserDao.selectByUserId"/>
+                     select="org.springblade.bgadmin.modules.sys.dao.FuserDao.selectByUserId"/>
         <association property="purchaseOrdersEntity" column="purchase_id"
-                     select="io.finepetro.modules.sys.dao.PurchaseOrdersDao.selectByOrderId"/>
+                     select="org.springblade.bgadmin.modules.sys.dao.PurchaseOrdersDao.selectByOrderId"/>
 
-        <association property="quotationCount" column="id" select="io.finepetro.modules.sys.dao.QuotationDao.selectQuotationCountByDemandId"/>
+        <association property="quotationCount" column="id" select="org.springblade.bgadmin.modules.sys.dao.QuotationDao.selectQuotationCountByDemandId"/>
 
     </resultMap>
 
     <!-- 这是第二套解决方案 可大大提高性能 但是书写麻烦  暂时不用他 -->
-    <resultMap type="io.finepetro.modules.sys.entity.DemandOrderUserEntity" id="demandMapImprove">
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.DemandOrderUserEntity" id="demandMapImprove">
         <id property="id" column="demand_id"/>
         <result property="creatUserid" column="demand_creat_userid"/>
         <result property="fType" column="demand_f_type"/>
@@ -72,7 +72,7 @@
         <result property="updateTime" column="demand_update_time"/>
         <result property="fRemark" column="demand_f_remark"/>
 
-        <association property="userEntity" javaType="io.finepetro.modules.sys.entity.FuserEntity">
+        <association property="userEntity" javaType="org.springblade.bgadmin.modules.sys.entity.FuserEntity">
             <id column="users.user_id" property="userId"/>
             <result property="mobile" column="users_mobile"/>
             <result property="unifiedSocialCode" column="unified_social_code"/>
@@ -91,7 +91,7 @@
             <result property="mail" column="users_mail"/>
             <result property="providerStatus" column="users_provider_status"/>
         </association>
-        <association property="purchaseOrdersEntity" javaType="io.finepetro.modules.sys.entity.PurchaseOrdersEntity">
+        <association property="purchaseOrdersEntity" javaType="org.springblade.bgadmin.modules.sys.entity.PurchaseOrdersEntity">
             <id property="id" column="purchase_id"/>
             <result property="buyerId" column="purchase_buyer_id"/>
             <result property="buyerCompany" column="purchase_buyer_company"/>
@@ -144,7 +144,7 @@
     </resultMap>
 
     <select id="selectDemandList" resultMap="demandMap"
-            parameterType="io.finepetro.modules.sys.form.mybatis.DemandCondition">
+            parameterType="org.springblade.bgadmin.modules.sys.form.mybatis.DemandCondition">
         select *,purchase.id as purchase_id from tb_demand demand
 
 

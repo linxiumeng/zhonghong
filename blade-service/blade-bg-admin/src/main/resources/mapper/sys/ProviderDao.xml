@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.finepetro.modules.sys.dao.ProviderDao">
+<mapper namespace="org.springblade.bgadmin.modules.sys.dao.ProviderDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="io.finepetro.modules.sys.entity.ProviderEntity" id="providerMap">
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.ProviderEntity" id="providerMap">
                     <result property="userId" column="user_id"/>
                     <result property="mobile" column="mobile"/>
                     <result property="userName" column="user_name"/>

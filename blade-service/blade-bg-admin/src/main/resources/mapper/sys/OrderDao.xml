@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.finepetro.modules.sys.dao.OrderDao">
+<mapper namespace="org.springblade.bgadmin.modules.sys.dao.OrderDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="io.finepetro.modules.sys.entity.OrderEntity" id="orderMap">
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.OrderEntity" id="orderMap">
                     <result property="id" column="id"/>
                     <result property="buyerId" column="buyer_id"/>
                     <result property="buyerCompany" column="buyer_company"/>

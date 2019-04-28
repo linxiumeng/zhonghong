@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.finepetro.modules.sys.dao.LoadBillDao">
+<mapper namespace="org.springblade.bgadmin.modules.sys.dao.LoadBillDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="io.finepetro.modules.sys.entity.LoadBillWithOrder" id="loadBillMap">
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.LoadBillWithOrder" id="loadBillMap">
         <result property="id" column="id"/>
         <result property="orderId" column="order_id"/>
         <result property="path" column="path"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
-        <association property="purchaseOrdersEntity" column="order_id" select="io.finepetro.modules.sys.dao.PurchaseOrdersDao.selectByOrderId"/>
+        <association property="purchaseOrdersEntity" column="order_id" select="org.springblade.bgadmin.modules.sys.dao.PurchaseOrdersDao.selectByOrderId"/>
     </resultMap>
 
 
-    <select id="selectListWithOrder" parameterType="io.finepetro.modules.sys.form.mybatis.LoadBillCondition" resultMap="loadBillMap">
+    <select id="selectListWithOrder" parameterType="org.springblade.bgadmin.modules.sys.form.mybatis.LoadBillCondition" resultMap="loadBillMap">
         select * from tb_load_bill bill join tb_purchase_orders orders on bill.order_id = orders.id
         where
         1=1
@@ -34,7 +34,7 @@
         select * from tb_load_bill where id = #{id}
     </select>
 
-    <select id="selectByOrderId" resultType="io.finepetro.modules.sys.entity.LoadBill">
+    <select id="selectByOrderId" resultType="org.springblade.bgadmin.modules.sys.entity.LoadBill">
         select * from tb_load_bill where order_id = #{id}
     </select>
 

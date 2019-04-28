@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.finepetro.modules.sys.dao.AccountRepaymentDetailLogDao">
+<mapper namespace="org.springblade.bgadmin.modules.sys.dao.AccountRepaymentDetailLogDao">
 
-    <resultMap id="detailLogMap" type="io.finepetro.modules.sys.entity.AccountRepaymentDetailLogWithUserEntity">
+    <resultMap id="detailLogMap" type="org.springblade.bgadmin.modules.sys.entity.AccountRepaymentDetailLogWithUserEntity">
         <result column="id" property="id"/>
         <result column="user_id" property="userId"/>
         <result column="wait_amount" property="waitAmount"/>
@@ -13,7 +13,7 @@
         <result column="stauts" property="status"/>
         <result column="create_date" property="createDate"/>
         <result column="update_date" property="updateDate"/>
-        <association property="userEntity" column="user_id" select="io.finepetro.modules.sys.dao.FuserDao.selectByUserId"/>
+        <association property="userEntity" column="user_id" select="org.springblade.bgadmin.modules.sys.dao.FuserDao.selectByUserId"/>
     </resultMap>
 
 

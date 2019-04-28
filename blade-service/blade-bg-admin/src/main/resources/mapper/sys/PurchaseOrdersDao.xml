@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.finepetro.modules.sys.dao.PurchaseOrdersDao">
+<mapper namespace="org.springblade.bgadmin.modules.sys.dao.PurchaseOrdersDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="io.finepetro.modules.sys.entity.PurchaseOrdersRepaymentEntity" id="purchaseOrdersMap">
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.PurchaseOrdersRepaymentEntity" id="purchaseOrdersMap">
         <result property="id" column="id"/>
         <result property="buyerId" column="buyer_id"/>
         <result property="buyerCompany" column="buyer_company"/>
@@ -53,14 +53,14 @@
         <result property="settleBill" column="settle_bill"/>
         <result property="filePoint" column="file_point"/>
 
-        <association property="loadBillEntity" column="id" select="io.finepetro.modules.sys.dao.LoadBillDao.selectByOrderId"/>
+        <association property="loadBillEntity" column="id" select="org.springblade.bgadmin.modules.sys.dao.LoadBillDao.selectByOrderId"/>
 
-        <association property="accountRepaymentEntity" column="id" select="io.finepetro.modules.sys.dao.AccountRepaymentDao.selectByOrderIdWithStep"/>
+        <association property="accountRepaymentEntity" column="id" select="org.springblade.bgadmin.modules.sys.dao.AccountRepaymentDao.selectByOrderIdWithStep"/>
 
     </resultMap>
 
 
-    <select id="selectByOrderId" parameterType="int" resultType="io.finepetro.modules.sys.entity.PurchaseOrdersEntity">
+    <select id="selectByOrderId" parameterType="int" resultType="org.springblade.bgadmin.modules.sys.entity.PurchaseOrdersEntity">
         select * from tb_purchase_orders where id = #{id}
     </select>
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.finepetro.modules.sys.dao.AccountRepaymentDao">
+<mapper namespace="org.springblade.bgadmin.modules.sys.dao.AccountRepaymentDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="io.finepetro.modules.sys.entity.AccountRepaymentWithStepEntity" id="accountRepaymentMap">
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.AccountRepaymentWithStepEntity" id="accountRepaymentMap">
         <result property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="orderId" column="order_id"/>
@@ -20,21 +20,21 @@
         <result property="createDate" column="create_date"/>
         <result property="updateDate" column="update_date"/>
 
-        <association property="overDeadLineCount" column="id" select="io.finepetro.modules.sys.dao.AccountRepaymentStepDao.selectOverDeadLineCount"/>
+        <association property="overDeadLineCount" column="id" select="org.springblade.bgadmin.modules.sys.dao.AccountRepaymentStepDao.selectOverDeadLineCount"/>
 
-        <association property="userEntity" column="user_id" select="io.finepetro.modules.sys.dao.FuserDao.selectByUserId"/>
+        <association property="userEntity" column="user_id" select="org.springblade.bgadmin.modules.sys.dao.FuserDao.selectByUserId"/>
 
-        <association property="ordersEntity" column="order_id" select="io.finepetro.modules.sys.dao.PurchaseOrdersDao.selectByOrderId"/>
+        <association property="ordersEntity" column="order_id" select="org.springblade.bgadmin.modules.sys.dao.PurchaseOrdersDao.selectByOrderId"/>
 
-        <association property="alreadyPayCount" column="id" select="io.finepetro.modules.sys.dao.AccountRepaymentStepDao.selectAlreadyPayCount"/>
+        <association property="alreadyPayCount" column="id" select="org.springblade.bgadmin.modules.sys.dao.AccountRepaymentStepDao.selectAlreadyPayCount"/>
 
         <collection property="accountRepaymentStepEntityList" column="id"
-                    select="io.finepetro.modules.sys.dao.AccountRepaymentStepDao.selectAccountRepaymentStepList"/>
+                    select="org.springblade.bgadmin.modules.sys.dao.AccountRepaymentStepDao.selectAccountRepaymentStepList"/>
     </resultMap>
 
 
     <select id="selectByRepaymentId" parameterType="int"
-            resultType="io.finepetro.modules.sys.entity.AccountRepaymentEntity">
+            resultType="org.springblade.bgadmin.modules.sys.entity.AccountRepaymentEntity">
         select * from tb_account_repayment where id = #{id}
     </select>
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.finepetro.modules.sys.dao.FuserDao">
+<mapper namespace="org.springblade.bgadmin.modules.sys.dao.FuserDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="io.finepetro.modules.sys.entity.FuserAccountEntity" id="fuserAccountMap">
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.FuserAccountEntity" id="fuserAccountMap">
         <result property="userId" column="user_id"/>
         <result property="mobile" column="mobile"/>
         <result property="password" column="password"/>
@@ -27,10 +27,10 @@
         <result property="updateDate" column="update_date"/>
 
         <!--<association property="overDeadLineCount"/>-->
-        <association property="productCount" column="user_id" select="io.finepetro.modules.sys.dao.GoodsDao.selectPutOnGoodsByUserId"/>
-        <association property="accountEntity" column="user_id" select="io.finepetro.modules.sys.dao.AccountDao.selectByUserId"/>
-        <association property="attestEntity" column="user_id" select="io.finepetro.modules.sys.dao.AttestDao.selectByUserId"/>
-        <association property="creditEntity" column="user_id" select="io.finepetro.modules.sys.dao.CreditDao.selectByUserId"/>
+        <association property="productCount" column="user_id" select="org.springblade.bgadmin.modules.sys.dao.GoodsDao.selectPutOnGoodsByUserId"/>
+        <association property="accountEntity" column="user_id" select="org.springblade.bgadmin.modules.sys.dao.AccountDao.selectByUserId"/>
+        <association property="attestEntity" column="user_id" select="org.springblade.bgadmin.modules.sys.dao.AttestDao.selectByUserId"/>
+        <association property="creditEntity" column="user_id" select="org.springblade.bgadmin.modules.sys.dao.CreditDao.selectByUserId"/>
     </resultMap>
 
     <select id="selectFuserAccountByUserId" parameterType="int" resultMap="fuserAccountMap">
@@ -78,7 +78,7 @@
 
     </select>
 
-    <select id = "selectByUserId" parameterType="int" resultType="io.finepetro.modules.sys.entity.FuserEntity">
+    <select id = "selectByUserId" parameterType="int" resultType="org.springblade.bgadmin.modules.sys.entity.FuserEntity">
         select * from tb_fuser where user_id = #{id}
     </select>
 
