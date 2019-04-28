@@ -1,6 +1,8 @@
 #服务器端口
 server:
   port: 8200
+  servlet:
+    context-path: /finepetro-admin
 
 #数据源配置
 spring:
@@ -8,6 +10,9 @@ spring:
     url: ${finepetro.datasource.dev.url}
     username: ${blade.datasource.dev.username}
     password: ${blade.datasource.dev.password}
+  freemarker:
+    suffix: .html
+    request-context-attribute: request
 
 jpush:
   appKey: 9325ea96802112de6540276a

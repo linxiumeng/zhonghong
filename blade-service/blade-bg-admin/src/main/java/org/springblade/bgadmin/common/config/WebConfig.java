@@ -39,7 +39,7 @@ public class WebConfig implements WebMvcConfigurer {
                 "/static/**",
                 "/swagger/**",
                 "/v2/api-docs",
-                "/webjars/**","/statics/**")).excludePathPatterns("/**");
+                "/webjars/**","/statics/**"));
     }
 
     //    @Override
