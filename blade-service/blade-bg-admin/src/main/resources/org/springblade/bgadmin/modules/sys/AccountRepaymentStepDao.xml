@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springblade.bgadmin.modules.sys.mapper.AccountRepaymentStepDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.UserAccountRepaymentStepEntity" id="accountRepaymentStepMap">
+        <result property="id" column="id"/>
+        <result property="repaymentId" column="repayment_id"/>
+        <result property="account" column="account"/>
+        <result property="interest" column="interest"/>
+        <result property="paidAccount" column="paid_account"/>
+        <result property="paidInterest" column="paid_interest"/>
+        <result property="status" column="status"/>
+        <result property="preiod" column="preiod"/>
+        <result property="preiodDate" column="preiod_date"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+
+        <association property="userEntity" column="user_id" select="org.springblade.bgadmin.modules.sys.mapper.FuserDao.selectByUserId"/>
+        <association property="accountRepaymentEntity" column="repayment_id" select="org.springblade.bgadmin.modules.sys.mapper.AccountRepaymentDao.selectByRepaymentId"/>
+
+    </resultMap>
+
+
+    <select id="selectUserAccountRepaymentStepsList" parameterType="org.springblade.bgadmin.modules.sys.form.mybatis.AccountRepaymentStepDaoCondition"
+            resultMap="accountRepaymentStepMap">
+        select * from tb_account_repayment_step step
+
+
+        join tb_account_repayment repayment on step.repayment_id = repayment.id
+        join tb_fuser fuser on repayment.user_id = fuser.user_id
+
+
+        where 1 = 1
+        <if test="condition.keywords != null and condition.keywords != ''">
+            and (fuser.company_name = #{condition.keywords} or fuser.mobile = #{condition.keywords})
+        </if>
+
+        <if test="condition.status != null">
+            and step.status = #{condition.status}
+        </if>
+
+        <if test="condition.startDate != null">
+            and step.create_date &gt; #{condition.startDate}
+        </if>
+
+        <if test="condition.endDate != null">
+            and step.create_date &lt; #{condition.endDate}
+        </if>
+
+        order by step.create_date desc
+
+    </select>
+
+
+    <select id="selectAccountRepaymentStepList" resultType="org.springblade.bgadmin.modules.sys.entity.AccountRepaymentStepEntity" parameterType="int">
+        select * from tb_account_repayment_step where repayment_id = #{id}
+    </select>
+
+
+    <select id="selectOverDeadLineCount" resultType="int" parameterType="int">
+        select count(1) from tb_account_repayment_step where status = 2 and repayment_id = #{id}
+    </select>
+
+    <select id="selectAlreadyPayCount" resultType="int" parameterType="int">
+        select count(1) from tb_account_repayment_step where status = 1 and repayment_id = #{id}
+    </select>
+
+</mapper>

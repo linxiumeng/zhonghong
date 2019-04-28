@@ -46,7 +46,7 @@ public class AttestController {
     @RequestMapping("/detail")
   //  @RequiresPermissions("sys:attest:info")
     public R info(@RequestParam("userId") Integer id) {
-        AttestEntity attest = attestService.getOne(new QueryWrapper<AttestEntity>().eq("user_id",id));
+        AttestEntity attest = attestService.list(new QueryWrapper<AttestEntity>().eq("user_id",id).orderBy(true,false,"creat_time")).get(0);
         return R.ok().put("attest", attest);
     }
 
@@ -56,8 +56,7 @@ public class AttestController {
     @RequestMapping("/save")
     //@RequiresPermissions("sys:attest:save")
     public R save(@RequestBody AttestEntity attest) {
-            attestService.save(attest);
-
+        attestService.save(attest);
         return R.ok();
     }
 

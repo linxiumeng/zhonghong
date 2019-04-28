@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springblade.bgadmin.modules.sys.mapper.CreditDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.CreditEntity" id="creditMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="loanApplication" column="loan_application"/>
+        <result property="financialStatement" column="financial_statement"/>
+        <result property="taxCertification" column="tax_certification"/>
+        <result property="accountStatement" column="account_statement"/>
+        <result property="certificateOfCreditLine" column="certificate_of_credit_line"/>
+        <result property="orther" column="orther"/>
+    </resultMap>
+
+    <select id="selectByUserId" parameterType="int" resultMap="creditMap">
+        select * from tb_credit where user_id = #{userId} order by create_date desc limit 1
+    </select>
+
+
+</mapper>

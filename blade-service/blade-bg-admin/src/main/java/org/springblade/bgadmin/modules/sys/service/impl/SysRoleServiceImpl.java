@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.common.annotation.DataFilter;
 import org.springblade.bgadmin.common.utils.Query;
-import org.springblade.bgadmin.modules.sys.dao.SysRoleDao;
+import org.springblade.bgadmin.modules.sys.mapper.SysRoleDao;
 import org.springblade.bgadmin.modules.sys.entity.SysRoleEntity;
 import org.springblade.bgadmin.modules.sys.service.*;
 import org.springblade.common.utils.PageUtils;
@@ -50,8 +50,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 	private SysRoleDeptService sysRoleDeptService;
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
-	@Autowired
-	private SysDeptService sysDeptService;
 
 	@Override
 	@DataFilter(subDept = true, user = false)

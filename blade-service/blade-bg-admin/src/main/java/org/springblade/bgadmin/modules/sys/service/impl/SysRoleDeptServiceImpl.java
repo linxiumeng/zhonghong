@@ -17,7 +17,7 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springblade.bgadmin.modules.sys.dao.SysRoleDeptDao;
+import org.springblade.bgadmin.modules.sys.mapper.SysRoleDeptDao;
 import org.springblade.bgadmin.modules.sys.entity.SysRoleDeptEntity;
 import org.springblade.bgadmin.modules.sys.service.SysRoleDeptService;
 import org.springframework.stereotype.Service;

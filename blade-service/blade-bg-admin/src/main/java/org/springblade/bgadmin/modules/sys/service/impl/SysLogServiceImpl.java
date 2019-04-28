@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.common.utils.Query;
-import org.springblade.bgadmin.modules.sys.dao.SysLogDao;
+import org.springblade.bgadmin.modules.sys.mapper.SysLogDao;
 import org.springblade.bgadmin.modules.sys.entity.SysLogEntity;
 import org.springblade.bgadmin.modules.sys.service.SysLogService;
 import org.springblade.common.utils.PageUtils;

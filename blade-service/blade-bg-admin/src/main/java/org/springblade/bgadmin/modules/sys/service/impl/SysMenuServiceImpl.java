@@ -19,7 +19,7 @@ package org.springblade.bgadmin.modules.sys.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.bgadmin.common.utils.Constant;
-import org.springblade.bgadmin.modules.sys.dao.SysMenuDao;
+import org.springblade.bgadmin.modules.sys.mapper.SysMenuDao;
 import org.springblade.bgadmin.modules.sys.entity.SysMenuEntity;
 import org.springblade.bgadmin.modules.sys.service.SysMenuService;
 import org.springblade.bgadmin.modules.sys.service.SysRoleMenuService;

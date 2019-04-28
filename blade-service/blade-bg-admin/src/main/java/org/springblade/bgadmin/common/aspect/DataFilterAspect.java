@@ -24,7 +24,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springblade.bgadmin.common.annotation.DataFilter;
 import org.springblade.bgadmin.modules.sys.entity.SysUserEntity;
-import org.springblade.bgadmin.modules.sys.service.SysDeptService;
 import org.springblade.bgadmin.modules.sys.service.SysRoleDeptService;
 import org.springblade.bgadmin.modules.sys.service.SysUserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;

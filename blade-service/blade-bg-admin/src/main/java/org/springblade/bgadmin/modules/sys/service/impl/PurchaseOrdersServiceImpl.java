@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.bgadmin.common.utils.Query;
-import org.springblade.bgadmin.modules.sys.dao.PurchaseOrdersDao;
+import org.springblade.bgadmin.modules.sys.mapper.PurchaseOrdersDao;
 import org.springblade.bgadmin.modules.sys.entity.PurchaseOrdersEntity;
 import org.springblade.bgadmin.modules.sys.entity.PurchaseOrdersRepaymentEntity;
 import org.springblade.bgadmin.modules.sys.service.PurchaseOrdersService;

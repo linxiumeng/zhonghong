@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.bgadmin.common.utils.Query;
-import org.springblade.bgadmin.modules.sys.dao.NewsDao;
+import org.springblade.bgadmin.modules.sys.mapper.NewsDao;
 import org.springblade.bgadmin.modules.sys.entity.NewsEntity;
 import org.springblade.bgadmin.modules.sys.service.NewsService;
 import org.springblade.common.utils.PageUtils;

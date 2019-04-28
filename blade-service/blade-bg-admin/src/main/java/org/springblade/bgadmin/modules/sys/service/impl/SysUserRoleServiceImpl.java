@@ -18,7 +18,7 @@ package org.springblade.bgadmin.modules.sys.service.impl;
 
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springblade.bgadmin.modules.sys.dao.SysUserRoleDao;
+import org.springblade.bgadmin.modules.sys.mapper.SysUserRoleDao;
 import org.springblade.bgadmin.modules.sys.entity.SysUserRoleEntity;
 import org.springblade.bgadmin.modules.sys.service.SysUserRoleService;
 import org.springblade.common.utils.MapUtils;

@@ -1,6 +1,7 @@
 package org.springblade.bgadmin.modules.sys.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -35,6 +36,7 @@ public class FaqEntity {
     /**
      * 循序
      */
+    @TableField("`order`")
     private Integer order;
 
     /**

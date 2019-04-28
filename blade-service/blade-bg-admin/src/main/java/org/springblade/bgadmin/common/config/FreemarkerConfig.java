@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Mark sunlightcs@gmail.com
  * @since 3.0.0 2017-09-28
  */
-@Configuration
+//@Configuration
 public class FreemarkerConfig {
 /*
     @Bean

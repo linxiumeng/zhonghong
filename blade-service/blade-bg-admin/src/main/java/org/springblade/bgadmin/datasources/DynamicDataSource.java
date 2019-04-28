@@ -1,3 +1,4 @@
+/*
 package org.springblade.bgadmin.datasources;
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
@@ -5,12 +6,14 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import javax.sql.DataSource;
 import java.util.Map;
 
+*/
 /**
  * 动态数据源
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2017/8/19 1:03
- */
+ *//*
+
 public class DynamicDataSource extends AbstractRoutingDataSource {
     private static final ThreadLocal<String> contextHolder = new ThreadLocal<>();
 
@@ -38,3 +41,4 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     }
 
 }
+*/

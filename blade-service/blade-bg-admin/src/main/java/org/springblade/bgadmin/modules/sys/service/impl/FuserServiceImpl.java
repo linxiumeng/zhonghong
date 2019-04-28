@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.bgadmin.common.utils.Query;
-import org.springblade.bgadmin.modules.sys.dao.FuserDao;
+import org.springblade.bgadmin.modules.sys.mapper.FuserDao;
 import org.springblade.bgadmin.modules.sys.entity.FuserAccountEntity;
 import org.springblade.bgadmin.modules.sys.entity.FuserEntity;
 import org.springblade.bgadmin.modules.sys.service.FuserService;

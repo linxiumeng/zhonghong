@@ -2,6 +2,13 @@ package org.springblade.bgadmin.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.UnknownSessionException;
+import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.web.session.mgt.WebSessionKey;
+import org.springblade.common.utils.R;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -18,7 +25,7 @@ import java.io.PrintWriter;
 @Component
 public class SessionInterceptor extends HandlerInterceptorAdapter {
 
- /*   @Resource
+    @Resource
     ObjectMapper objectMapper;
 
     @Override
@@ -56,6 +63,6 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
         }
 
         return true;
-    }*/
+    }
 
 }

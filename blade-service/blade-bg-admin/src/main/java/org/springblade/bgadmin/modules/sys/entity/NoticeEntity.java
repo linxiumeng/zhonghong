@@ -1,5 +1,6 @@
 package org.springblade.bgadmin.modules.sys.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -25,6 +26,7 @@ public class NoticeEntity implements Serializable {
             /**
          * 发布人
          */
+            @TableField(value = "`issuer`")
             private String issuer;
             /**
          * 
@@ -33,6 +35,7 @@ public class NoticeEntity implements Serializable {
             /**
          * 
          */
+            @TableField(value = "`desc`")
             private String desc;
             /**
          * 

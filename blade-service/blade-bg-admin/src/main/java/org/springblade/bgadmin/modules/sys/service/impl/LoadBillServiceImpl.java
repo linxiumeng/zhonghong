@@ -2,7 +2,7 @@ package org.springblade.bgadmin.modules.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springblade.bgadmin.modules.sys.dao.LoadBillDao;
+import org.springblade.bgadmin.modules.sys.mapper.LoadBillDao;
 import org.springblade.bgadmin.modules.sys.entity.LoadBill;
 import org.springblade.bgadmin.modules.sys.entity.LoadBillWithOrder;
 import org.springblade.bgadmin.modules.sys.form.mybatis.LoadBillCondition;

@@ -25,12 +25,10 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.common.annotation.DataFilter;
 import org.springblade.bgadmin.common.utils.Query;
-import org.springblade.bgadmin.modules.sys.dao.SysUserDao;
+import org.springblade.bgadmin.modules.sys.mapper.SysUserDao;
 import org.springblade.bgadmin.modules.sys.entity.SysUserEntity;
-import org.springblade.bgadmin.modules.sys.service.SysDeptService;
 import org.springblade.bgadmin.modules.sys.service.SysUserRoleService;
 import org.springblade.bgadmin.modules.sys.service.SysUserService;
-import org.springblade.bgadmin.modules.sys.shiro.ShiroUtils;
 import org.springblade.common.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,8 +50,6 @@ import java.util.Map;
 public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
-	@Autowired
-	private SysDeptService sysDeptService;
 
 	@Override
 	public List<Long> queryAllMenuId(Long userId) {

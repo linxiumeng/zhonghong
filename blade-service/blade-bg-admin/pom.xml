@@ -14,6 +14,7 @@
     <properties>
         <aliyun.oss.version>2.5.0</aliyun.oss.version>
         <druid.version>1.1.10</druid.version>
+        <shiro.version>1.4.0</shiro.version>
     </properties>
 
     <artifactId>blade-bg-admin</artifactId>
@@ -27,11 +28,23 @@
             <artifactId>blade-core-boot</artifactId>
             <version>${blade.tool.version}</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-core-swagger</artifactId>
             <version>${blade.tool.version}</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>${shiro.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-desk-api</artifactId>
@@ -47,11 +60,11 @@
             <artifactId>aliyun-sdk-oss</artifactId>
             <version>${aliyun.oss.version}</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid.version}</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
 </project>

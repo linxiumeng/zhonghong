@@ -17,7 +17,7 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springblade.bgadmin.modules.sys.dao.SysRoleMenuDao;
+import org.springblade.bgadmin.modules.sys.mapper.SysRoleMenuDao;
 import org.springblade.bgadmin.modules.sys.entity.SysRoleMenuEntity;
 import org.springblade.bgadmin.modules.sys.service.SysRoleMenuService;
 import org.springframework.stereotype.Service;

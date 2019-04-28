@@ -58,7 +58,7 @@ public class NoticeController {
         }
 
 
-        page = noticeService.page(page,wrapper.orderBy(true,false,"is_open").orderBy(true,false,"create_date"));
+        page = noticeService.page(page,wrapper.orderBy(true,false,"is_open","create_date"));
 
         return R.ok().put("result", page);
     }

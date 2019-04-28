@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springblade.bgadmin.modules.sys.mapper.FuserDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.FuserAccountEntity" id="fuserAccountMap">
+        <result property="userId" column="user_id"/>
+        <result property="mobile" column="mobile"/>
+        <result property="password" column="password"/>
+        <result property="unifiedSocialCode" column="unified_social_code"/>
+        <result property="legalPerson" column="legal_person"/>
+        <result property="card1" column="card1"/>
+        <result property="card2" column="card2"/>
+        <result property="businessLicence" column="business_licence"/>
+        <result property="contacts" column="contacts"/>
+        <result property="contactNumber" column="contact_number"/>
+        <result property="contactAddress" column="contact_address"/>
+        <result property="creditStatus" column="credit_status" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
+        <result property="status" column="status" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
+        <result property="registerDate" column="register_date"/>
+        <result property="type" column="type"/>
+        <result property="companyName" column="company_name"/>
+        <result property="mail" column="mail"/>
+        <result property="providerStatus" column="provider_status"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+
+        <!--<association property="overDeadLineCount"/>-->
+        <association property="productCount" column="user_id" select="org.springblade.bgadmin.modules.sys.mapper.GoodsDao.selectPutOnGoodsByUserId"/>
+        <association property="accountEntity" column="user_id" select="org.springblade.bgadmin.modules.sys.mapper.AccountDao.selectByUserId"/>
+        <association property="attestEntity" column="user_id" select="org.springblade.bgadmin.modules.sys.mapper.AttestDao.selectByUserId"/>
+        <association property="creditEntity" column="user_id" select="org.springblade.bgadmin.modules.sys.mapper.CreditDao.selectByUserId"/>
+    </resultMap>
+
+    <select id="selectFuserAccountByUserId" parameterType="int" resultMap="fuserAccountMap">
+        select * from tb_fuser where user_id = #{id}
+    </select>
+
+    <select id="selectFuserAccountByWrapper" resultMap="fuserAccountMap">
+        select * from tb_fuser
+        <where>
+            ${ew.sqlSegment}
+        </where>
+        order by create_date desc
+    </select>
+
+    <select id="selectWaitingReviewFuserAccountByWrapper" resultMap="fuserAccountMap">
+        select users.*,attest.creat_time from tb_fuser users join
+        (select user_id as attest_user_id,id as attest_id,creat_time
+        from tb_attest a where creat_time =
+        (select max(creat_time) from tb_attest b where a.user_id = b.user_id))
+        attest on attest.attest_user_id = users.user_id
+
+        <where>
+            ${ew.sqlSegment}
+        </where>
+
+        order by attest.creat_time desc
+
+    </select>
+
+
+    <select id="selectWaitingCreditFuserAccountByWrapper" resultMap="fuserAccountMap">
+        select users.*,credit.create_date as credit_create_date  from tb_fuser users join
+        (select user_id as credit_user_id,id as credit_id,create_date
+        from tb_credit a where create_date =
+        (select max(create_date) from tb_credit b where a.user_id = b.user_id))
+        credit on credit.credit_user_id = users.user_id
+
+        <where>
+            ${ew.sqlSegment}
+        </where>
+
+        group by users.user_id
+
+        order by credit_create_date desc
+
+    </select>
+
+    <select id = "selectByUserId" parameterType="int" resultType="org.springblade.bgadmin.modules.sys.entity.FuserEntity">
+        select * from tb_fuser where user_id = #{id}
+    </select>
+
+</mapper>

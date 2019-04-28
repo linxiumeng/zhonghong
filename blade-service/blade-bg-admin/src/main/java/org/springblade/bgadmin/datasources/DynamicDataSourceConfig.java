@@ -1,3 +1,4 @@
+/*
 package org.springblade.bgadmin.datasources;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
@@ -10,12 +11,14 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
+*/
 /**
  * 配置多数据源
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2017/8/19 0:41
- */
+ *//*
+
 @Configuration
 public class DynamicDataSourceConfig {
 
@@ -40,3 +43,4 @@ public class DynamicDataSourceConfig {
         return new DynamicDataSource(firstDataSource, targetDataSources);
     }
 }
+*/

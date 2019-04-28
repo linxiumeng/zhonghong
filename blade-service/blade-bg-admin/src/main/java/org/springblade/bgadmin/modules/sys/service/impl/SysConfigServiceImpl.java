@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.common.utils.Query;
-import org.springblade.bgadmin.modules.sys.dao.SysConfigDao;
+import org.springblade.bgadmin.modules.sys.mapper.SysConfigDao;
 import org.springblade.bgadmin.modules.sys.entity.SysConfigEntity;
 import org.springblade.bgadmin.modules.sys.redis.SysConfigRedis;
 import org.springblade.bgadmin.modules.sys.service.SysConfigService;

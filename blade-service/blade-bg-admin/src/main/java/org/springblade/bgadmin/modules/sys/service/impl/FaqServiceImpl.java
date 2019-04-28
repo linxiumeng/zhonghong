@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
-import org.springblade.bgadmin.modules.sys.dao.FaqDao;
+import org.springblade.bgadmin.modules.sys.mapper.FaqDao;
 import org.springblade.bgadmin.modules.sys.entity.FaqEntity;
 import org.springblade.bgadmin.modules.sys.service.FaqService;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,14 @@
+finepetro:
+  cluster: false  #集群配置  true集群环境   false单机环境，还需打开pom.xml里的spring-session-data-redis注释
+  globalSessionTimeout: 3600   #单机环境，session过期时间为60分钟
+  redis:
+    open: false  #是否开启redis缓存  true开启   false关闭
 
 #mybatis
 mybatis-plus:
   #增加美剧枚举处理
   typeEnumsPackage: org.springblade.bgadmin.modules.sys.enums
-  mapper-locations: classpath*:mapper/**/*.xml
+  mapper-locations: classpath*:org/springblade/bgadmin/modules/**/*.xml
   #实体扫描，多个package用逗号或者分号分隔
   typeAliasesPackage: org.springblade.bgadmin.modules.*.entity
   global-config:
@@ -25,8 +30,9 @@ mybatis-plus:
     #自定义填充策略接口实现
     #meta-object-handler: com.baomidou.springboot.xxx
     #自定义SQL注入器
-   # sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+   # sql-injector: com.baomidou.mybatisplus.bgadmin.LogicSqlInjector
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
     call-setters-on-nulls: true
+    default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.EnumTypeHandler

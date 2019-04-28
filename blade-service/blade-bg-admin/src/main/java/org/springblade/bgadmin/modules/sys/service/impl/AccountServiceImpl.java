@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.bgadmin.common.utils.Query;
-import org.springblade.bgadmin.modules.sys.dao.AccountDao;
+import org.springblade.bgadmin.modules.sys.mapper.AccountDao;
 import org.springblade.bgadmin.modules.sys.entity.AccountEntity;
 import org.springblade.bgadmin.modules.sys.service.AccountService;
 import org.springblade.common.utils.PageUtils;

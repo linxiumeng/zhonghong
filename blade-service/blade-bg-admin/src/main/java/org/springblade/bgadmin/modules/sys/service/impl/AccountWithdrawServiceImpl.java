@@ -3,7 +3,7 @@ package org.springblade.bgadmin.modules.sys.service.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springblade.bgadmin.modules.sys.dao.AccountWithdrawDao;
+import org.springblade.bgadmin.modules.sys.mapper.AccountWithdrawDao;
 import org.springblade.bgadmin.modules.sys.entity.AccountWithdrawEntity;
 import org.springblade.bgadmin.modules.sys.service.AccountWithdrawService;
 import org.springframework.stereotype.Service;
