@@ -20,7 +20,7 @@ public class AttestForm extends Attest {
      */
     private Long userId;
     /**
-     * 状态
+     * 状态 状态 认证状态0为初始化，1为认证通过，2为认证失败
      */
     private Integer status;
     /**

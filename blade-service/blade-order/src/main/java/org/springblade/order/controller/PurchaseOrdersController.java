@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.constant.FeignResultCodeConstant;
@@ -42,6 +43,7 @@ public class PurchaseOrdersController {
     @ApiOperation(value = "商品下单接口")
     @PostMapping("insert")
     @Login
+    @HasPermission(needVerifyUser = true)
     @Transactional(rollbackFor = Exception.class)
     public R insert(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
         //直接减库存 生成订单
@@ -59,6 +61,7 @@ public class PurchaseOrdersController {
     /***************************需求单   个人认为是报价单 下单接口*/
     @ApiOperation(value = "需求单下单接口")
     @PostMapping("demandinsert")
+    @HasPermission(needVerifyUser = true)
     @Login
     public R demandinsert(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
         boolean flag = purchaseOrdersService.putPurchaseOrderByQuotation(user, param);
@@ -76,6 +79,7 @@ public class PurchaseOrdersController {
     /***********************供应商确认采购单生成订单接口*/
     @ApiOperation(value = "供应商确认采购单接口")
     @PostMapping("/provider/createorder")
+    @HasPermission(needVerifyUser = true)
     @Login
     public R createOrder(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
         boolean flag = purchaseOrdersService.confirmPurchaseOrder(param, user.getUserId());
@@ -86,6 +90,7 @@ public class PurchaseOrdersController {
     }
 
     @ApiOperation(value = "供应商发送订单金额接口")
+    @HasPermission(needVerifyUser = true)
     @PostMapping("/provider/sendprice")
     @Login
     public R sendPrice(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
@@ -105,6 +110,7 @@ public class PurchaseOrdersController {
 
     @ApiOperation(value = "供应商确认收款接口")
     @PostMapping("/provider/confirmreceipt")
+    @HasPermission(needVerifyUser = true)
     @Login
     public R confirmReceipt(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
@@ -126,6 +132,7 @@ public class PurchaseOrdersController {
     /***********采购商接口*/
     @ApiOperation(value = "采购商确认订单金额接口")
     @PostMapping("/buyer/confirmprice")
+    @HasPermission(needVerifyUser = true)
     @Login
     public R confirmPrice(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
         if (param.getStatus() == OrdersEnum.FIVE.getStatus() && param.getStatus() == OrdersEnum.FOUR.getStatus()) {
@@ -151,6 +158,7 @@ public class PurchaseOrdersController {
 
     @ApiOperation(value = "采购商融资付款接口")
     @PostMapping("/buyer/financing")
+    @HasPermission(needVerifyCredit = true)
     @Login
     public R financing(@RequestBody PayForm param, @LoginUser UserEntity user) {
         PurchaseOrders po = purchaseOrdersService.getById(param.getOrderNo());
@@ -176,6 +184,7 @@ public class PurchaseOrdersController {
 
     @ApiOperation(value = "采购商直接付款接口")
     @PostMapping("/buyer/pay")
+    @HasPermission(needVerifyCredit = true)
     @Login
     public R pay(@RequestBody PayForm param, @LoginUser UserEntity user) {
         //todo 这里可能要引出分布式事务
@@ -195,6 +204,7 @@ public class PurchaseOrdersController {
     }
 
     @ApiOperation(value = "采购商查询采购单接口")
+    @HasPermission(needVerifyUser = true)
     @PostMapping("/buyer/listpage")
     @Login
     public R buyerlistpage(@RequestBody PageForm param, @LoginUser UserEntity user) {
@@ -202,6 +212,7 @@ public class PurchaseOrdersController {
     }
 
     @ApiOperation(value = "供应商查询采购单接口")
+    @HasPermission(needVerifyUser = true)
     @PostMapping("/provider/listpage")
     @Login
     public R providerlistpage(@RequestBody PageForm param, @LoginUser UserEntity user) {
@@ -209,6 +220,7 @@ public class PurchaseOrdersController {
     }
 
     @ApiOperation(value = "订单详情")
+    @HasPermission(needVerifyUser = true)
     @PostMapping("/detail")
     @Login
     // @HasPermission(identification = UserTypeEnum.PURCHASER)

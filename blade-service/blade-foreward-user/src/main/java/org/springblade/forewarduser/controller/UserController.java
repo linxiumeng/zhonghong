@@ -2,9 +2,11 @@ package org.springblade.forewarduser.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.entity.UserEntity;
+import org.springblade.common.enums.PermissionCodeEnum;
 import org.springblade.common.form.ChangePassworld;
 import org.springblade.common.form.UserForm;
 import org.springblade.common.respond.UserDto;
@@ -39,6 +41,7 @@ public class UserController {
      */
     @PostMapping("selectbyid")
     @Login
+    @HasPermission(needVerifyUser = true)
     public R selectOne(@RequestBody UserForm userForm) {
         UserEntity userEntity = this.userService.selectByIdFromCache(userForm.getUserId());
         UserDto userDto = null;
@@ -98,6 +101,34 @@ public class UserController {
         param2.setMail(userForm.getMail());
         //修改
         return R.ok().put("row", this.userService.updateByIdWithCache(param2));
+    }
+
+
+    @ApiOperation(value="判断页面跳转")
+    @PostMapping("userValidation")
+    @Login
+    public R userValidation(@LoginUser UserEntity currentUser){
+        Integer status = currentUser.getStatus();
+        Integer creditStatus = currentUser.getCreditStatus();
+        if(status== 0){
+            return R.ok().put("result", PermissionCodeEnum.ZERE.getStatus()).put("msg",PermissionCodeEnum.ZERE.getDesc());
+        }else if(status== 1){
+            return R.ok().put("result",PermissionCodeEnum.ONE.getStatus()).put("msg",PermissionCodeEnum.ONE.getDesc());
+        }else if(status== 2){
+            return R.ok().put("result",PermissionCodeEnum.TWO.getStatus()).put("msg",PermissionCodeEnum.TWO.getDesc());
+        }else if(status== 3) {
+            if (creditStatus == 0) {
+
+                return R.ok().put("result", PermissionCodeEnum.FOUR.getStatus()).put("msg", PermissionCodeEnum.FOUR.getDesc());
+            } else if (creditStatus == 1) {
+                return R.ok().put("result", PermissionCodeEnum.FIVE.getStatus()).put("msg", PermissionCodeEnum.FIVE.getDesc());
+            } else if (creditStatus == 2) {
+                return R.ok().put("result", PermissionCodeEnum.SIX.getStatus()).put("msg", PermissionCodeEnum.SIX.getDesc());
+            } else {
+                return R.ok().put("result", PermissionCodeEnum.SEVER.getStatus()).put("msg", PermissionCodeEnum.SEVER.getDesc());
+            }
+        }
+        return R.error("参数错误");
     }
 
 

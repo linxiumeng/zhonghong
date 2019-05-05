@@ -11,10 +11,10 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class GoodsStatusForm {
-    @NotNull
+    //  @NotNull
     private Long id;
-    @NotNull
+    //  @NotNull
     private GoodsStatusEnum status;
-    @NotBlank
-    private String code;
+    //   @NotBlank
+    private int code;
 }

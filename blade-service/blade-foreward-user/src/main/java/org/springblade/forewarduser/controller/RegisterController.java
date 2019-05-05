@@ -93,13 +93,7 @@ public class RegisterController {
     @PostMapping("isregister")
     @ApiOperation("判断是否注册")
     public R isRegister(@RequestBody RegisterCheckCodeForm registerCheckCodeForm) {
-        UserEntity user = userService.queryByMobile(registerCheckCodeForm.getMobile());
-        //获取缓存中的验证码
-        String verifyCode = redisUtils.get("anonymous::"+registerCheckCodeForm.getMarkCode());
-
-        if(StringUtils.isBlank(verifyCode) || !verifyCode.equalsIgnoreCase(registerCheckCodeForm.getCaptcha())){
-            throw new RRException("验证码错误");
-        }
+        UserEntity user = getUserByMobile(registerCheckCodeForm);
 
         if (user != null) {
             return R.error(501, "用户已存在！");
@@ -149,23 +143,27 @@ public class RegisterController {
     }
 
 
-    @PostMapping("checkUser")
+    @PostMapping("isNotRegister")
     @ApiOperation("判断是否注册")
-    public R checkUser(@RequestBody RegisterCheckCodeForm registerCheckCodeForm) {
-        UserEntity user = userService.queryByMobile(registerCheckCodeForm.getMobile());
+    public R isNotRegister(@RequestBody RegisterCheckCodeForm registerCheckCodeForm) {
+        UserEntity user = getUserByMobile(registerCheckCodeForm);
 
-        if(user == null){
-            throw new RRException("用户未注册");
+        if (user != null) {
+            return R.ok("此号码已注册");
         }
+        return R.error(500,"此号码未注册");
+    }
 
+
+    private UserEntity getUserByMobile(RegisterCheckCodeForm registerCheckCodeForm){
+        UserEntity user = userService.queryByMobile(registerCheckCodeForm.getMobile());
         //获取缓存中的验证码
         String verifyCode = redisUtils.get("anonymous::"+registerCheckCodeForm.getMarkCode());
 
         if(StringUtils.isBlank(verifyCode) || !verifyCode.equalsIgnoreCase(registerCheckCodeForm.getCaptcha())){
             throw new RRException("验证码错误");
         }
-
-        return R.ok();
+        return user;
     }
 
 

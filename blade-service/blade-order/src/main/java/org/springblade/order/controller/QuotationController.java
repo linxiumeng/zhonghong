@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.entity.Quotation;
@@ -54,19 +55,25 @@ public class QuotationController {
     @ApiOperation(value = "提交报价单接口")
     @PostMapping("insert")
     @Login
+    @HasPermission(needVerifyUser = true)
     public R insert(@RequestBody QuotationForm param, @LoginUser UserEntity userEntity) {
 
         if (!smsCheckUtils.check(userEntity.getMobile(), param.getCode())) {
-            return R.error("请重新获取短信验证码");
+            return R.error("验证码错误");
         }
 
-        param.setUserId(userEntity.getUserId());
-        return quotationService.save((Quotation) param) ? R.ok() : R.error();
+        if(userEntity.getUserId().toString().equals(demandService.getById(param.getDemandId()).getCreatUserid())){
+            return R.error("不能给自己的需求单报价");
+        }else{
+            param.setUserId(userEntity.getUserId());
+            return quotationService.save((Quotation) param) ? R.ok() : R.error();
+        }
     }
 
     @ApiOperation(value = "分页查询自己报价单列表接口")
     @PostMapping("selectPage")
     @Login
+    @HasPermission(needVerifyUser = true)
     public R selectPage(@RequestBody PageForm param, @LoginUser UserEntity userEntity) {
         Page<Quotation> page = new Page<>(param.getPage(), param.getSize());
         Page<Quotation> quotationPage = quotationService.listQuotationsWithDemand(page, userEntity.getUserId());
@@ -77,6 +84,7 @@ public class QuotationController {
     @ApiOperation(value = "根据需求单id查询报价单列表接口")
     @PostMapping("selectPageByDemandId")
     @Login
+    @HasPermission(needVerifyCredit = true)
     public R selectPageByDemandId(@RequestBody QuotationForm param, @LoginUser UserEntity userEntity) {
         List<Quotation> quotationList = quotationService.listQuotationsByDemandIdWithDemand(param.getDemandId().longValue(),userEntity.getUserId());
         return R.ok().put("result", quotationList);
@@ -86,6 +94,7 @@ public class QuotationController {
     @ApiOperation(value = "分页查询供应商报价单列表接口")
     @PostMapping("demandPage")
     @Login
+    @HasPermission(needVerifyCredit = true)
     public R demandPage(@RequestBody PageForm param, @LoginUser UserEntity userEntity) {
         QueryWrapper<Quotation> wrapper = new QueryWrapper<>();
         wrapper.eq("demand_id", param);

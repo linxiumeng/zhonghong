@@ -83,9 +83,10 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
         QueryWrapper<Account> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", user.getUserId());
         Account account = getOne(wrapper);
-        /**
-         * @TODO缺少校验
-         * */
+        if(account.getCreditLimit().subtract(bd).signum() < 0){
+            throw new RRException("额度不足");
+        }
+
         AccountRepayment ar = new AccountRepayment();
         ar.setUserId(user.getUserId());
         ar.setOrderId(param.getId());

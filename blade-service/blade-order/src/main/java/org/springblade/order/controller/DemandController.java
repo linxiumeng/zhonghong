@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.constant.FeignResultCodeConstant;
@@ -53,6 +54,7 @@ public class DemandController {
     @PostMapping("creat")
     @Login
     @ApiOperation(value = "创建需求接口")
+    @HasPermission(needVerifyUser = true)
     public R creatDemand(@RequestBody DemandForm param, @LoginUser UserEntity user) {
         param.setCreatUserid(user.getUserId().toString());
         demandService.save(param);
@@ -76,6 +78,7 @@ public class DemandController {
     @PostMapping("updateDemand")
     @Login
     @ApiOperation(value = "编辑自己需求接口")
+    @HasPermission(needVerifyUser = true)
     public R updateDemand(@RequestBody DemandForm param, @LoginUser UserEntity user) {
         //更新自己的接口
         boolean update = demandService.updateDemandByMyself(param,user.getUserId());

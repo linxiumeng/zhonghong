@@ -3,6 +3,7 @@ package org.springblade.information.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.entity.Goods;
@@ -49,6 +50,8 @@ public class GoodsController {
 
     @ApiOperation(value = "查询单个商品表(TbGoods)数据")
     @PostMapping("selectone")
+    @Login
+    @HasPermission(needVerifyUser = true)
     public R selectOne(@RequestParam String id) {
         Goods row = this.goodsService.getGoodsFromCache(Long.valueOf(id));
         UserEntity userEntity = null;
@@ -71,6 +74,8 @@ public class GoodsController {
 
     @ApiOperation(value = "查询商品状态")
     @PostMapping("selectStatus")
+    @Login
+    @HasPermission(needVerifyCredit = true)
     public R selectStatus(@RequestBody @Validated(SelectDetailGroup.class) Goods param) {
         QueryWrapper<Goods> wrapper = new QueryWrapper<>();
         wrapper.eq("id", param.getId());
@@ -91,11 +96,12 @@ public class GoodsController {
     @ApiOperation(value = "新增商品表(TbGoods)数据")
     @PostMapping("insert")
     @Login
+    @HasPermission(needVerifyUser = true)
     public R insert(@RequestBody @Validated(InsertGroup.class) GoodsCheckCodeForm param, @LoginUser UserEntity user) {
 
         //修改校验方式 ， 避免重复代码
         if (!smsCheckUtils.check(user.getMobile(), param.getCode())) {
-            return R.error("请重新获取短信验证码");
+            return R.error("验证码错误");
         }
         param.setUserId(user.getUserId());
         param.setGoodsCompany(user.getCompanyName());
@@ -107,10 +113,11 @@ public class GoodsController {
     @ApiOperation(value = "编辑商品数据")
     @PostMapping("update")
     @Login
+    @HasPermission(needVerifyUser = true)
     public R update(@RequestBody @Validated(UpdateGroup.class) GoodsCheckCodeForm param, @LoginUser UserEntity user) {
 
         if (!smsCheckUtils.check(user.getMobile(), param.getCode())) {
-            return R.error("请重新获取短信验证码");
+            return R.error("验证码错误");
         }
         //这里设置只能拥有者修改
         return R.ok().put("row", goodsService.updateGoodsByIdAndUserId(param, user.getUserId()));
@@ -120,10 +127,11 @@ public class GoodsController {
     @ApiOperation(value = "更改商品状态")
     @PostMapping("changestatus")
     @Login
+    @HasPermission(needVerifyUser = true)
     public R up(@RequestBody GoodsStatusForm param, @LoginUser UserEntity user) {
 
         if (!smsCheckUtils.check(user.getMobile(), String.valueOf(param.getCode()))) {
-            return R.error("请重新获取短信验证码");
+            return R.error("验证码错误");
         }
         return R.ok().put("row", goodsService.updateGoodsStatusByIdAndUserId(param.getStatus(), param.getId(), user.getUserId()));
     }
@@ -131,6 +139,7 @@ public class GoodsController {
     @ApiOperation(value = "分页查询供应商发布的商品表(TbGoods)数据")
     @PostMapping("provider_goods_page")
     @Login
+    @HasPermission(needVerifyUser = true)
     public R selectPage(@RequestBody PageForm pageForm, @LoginUser UserEntity userEntity) {
         return R.ok().put("row", goodsService.listGoodsByUserId(pageForm, userEntity.getUserId()));
     }

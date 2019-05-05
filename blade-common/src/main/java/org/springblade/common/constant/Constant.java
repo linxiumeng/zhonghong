@@ -12,4 +12,5 @@ public interface Constant {
 
     String TOKEN_EXPIRE_DESC = "token失效";
 
+
 }

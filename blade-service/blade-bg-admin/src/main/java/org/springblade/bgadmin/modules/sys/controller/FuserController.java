@@ -225,7 +225,7 @@ public class FuserController {
         if(userForm.getCreditStatus() != null){
             entityWrapper.eq("credit_status",userForm.getCreditStatus().getCode());
         }else {
-            entityWrapper.in("credit_status",new Object[]{0,1,2});
+            entityWrapper.in("credit_status",new Object[]{0,1,2,3});
         }
 
         if (StringUtils.isNotBlank(userForm.getKeywords())) {

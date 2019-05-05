@@ -89,7 +89,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         String key = String.format("%s_%s", USER_REGISTER_KEY, form.getMobile());
         String code = redisUtils.get(key);
         if (!(code != null && form.getCode().equals(code))) {
-            return R.error("请重新获取短信验证码");
+            return R.error("验证码错误");
         }
         user = new UserEntity();
         user.setMobile(form.getMobile());
