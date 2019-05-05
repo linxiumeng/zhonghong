@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>采购单表</title>
+        <#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <#if shiro.hasPermission("sys:order:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            </#if>
+            <#if shiro.hasPermission("sys:order:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            </#if>
+            <#if shiro.hasPermission("sys:order:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+                                                                            <div class="form-group">
+                        <div class="col-sm-2 control-label">买方id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.buyerId"
+                                   placeholder="买方id"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">买方公司</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.buyerCompany"
+                                   placeholder="买方公司"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">买方联系人</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.buyerLinkman"
+                                   placeholder="买方联系人"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">买方电话</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.buyerPhone"
+                                   placeholder="买方电话"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">买方邮箱</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.buyerEmail"
+                                   placeholder="买方邮箱"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">卖方id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.providerId"
+                                   placeholder="卖方id"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">卖方公司</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.providerCompany"
+                                   placeholder="卖方公司"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">卖方联系人</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.providerLinkman"
+                                   placeholder="卖方联系人"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">卖方电话</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.providerPhone"
+                                   placeholder="卖方电话"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">卖方邮箱</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.providerEmail"
+                                   placeholder="卖方邮箱"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">商品id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.goodsId"
+                                   placeholder="商品id"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">报价单id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.quotationId"
+                                   placeholder="报价单id"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">商品名</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.goodsName"
+                                   placeholder="商品名"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">商品类型</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.goodsType"
+                                   placeholder="商品类型"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">贸易条款</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.tradeClause"
+                                   placeholder="贸易条款"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">信用方式</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.paymentBy"
+                                   placeholder="信用方式"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">商品单价</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.goodsPrice"
+                                   placeholder="商品单价"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">最终报价，浮动价格确认后填入</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.finalQuotation"
+                                   placeholder="最终报价，浮动价格确认后填入"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">计价基准</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.pricingManner"
+                                   placeholder="计价基准"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">计价日期</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.contractualValueDate"
+                                   placeholder="计价日期"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">升贴水</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.premiumsDiscounts"
+                                   placeholder="升贴水"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">支付日</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.payDay"
+                                   placeholder="支付日"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">买方备注</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.buyerRemark"
+                                   placeholder="买方备注"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">油产地</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.placeOfOrigin"
+                                   placeholder="油产地"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">油种类</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.oilType"
+                                   placeholder="油种类"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">api度</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.api"
+                                   placeholder="api度"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">含硫量%</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.sulphurContent"
+                                   placeholder="含硫量%"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">酸值mgkoh/g</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.acidValue"
+                                   placeholder="酸值mgkoh/g"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">残炭%</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.carbonResidue"
+                                   placeholder="残炭%"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">镍ppm</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.nickel"
+                                   placeholder="镍ppm"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">钒ppm</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.vanadium"
+                                   placeholder="钒ppm"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">>350摄氏度质量收缩率（%）</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.shrink"
+                                   placeholder=">350摄氏度质量收缩率（%）"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">订单状态0为初始化</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.status"
+                                   placeholder="订单状态0为初始化"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.creatTime"
+                                   placeholder="创建时间"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">修改时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="order.updateTime"
+                                   placeholder="修改时间"/>
+                        </div>
+                    </div>
+                                        <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/sys/order.js?_${.now?long}"></script>
+</body>
+</html>

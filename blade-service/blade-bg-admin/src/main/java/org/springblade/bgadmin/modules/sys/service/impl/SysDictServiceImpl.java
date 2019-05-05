@@ -16,15 +16,15 @@
 
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.Query;
-import io.finepetro.modules.sys.dao.SysDictDao;
-import io.finepetro.modules.sys.entity.SysDictEntity;
-import io.finepetro.modules.sys.service.SysDictService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.bgadmin.common.utils.Query;
+import org.springblade.bgadmin.modules.sys.mapper.SysDictDao;
+import org.springblade.bgadmin.modules.sys.entity.SysDictEntity;
+import org.springblade.bgadmin.modules.sys.service.SysDictService;
+import org.springblade.common.utils.PageUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -37,9 +37,9 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDictEntity> i
     public PageUtils queryPage(Map<String, Object> params) {
         String name = (String)params.get("name");
 
-        Page<SysDictEntity> page = this.selectPage(
+        IPage<SysDictEntity> page = this.page(
                 new Query<SysDictEntity>(params).getPage(),
-                new EntityWrapper<SysDictEntity>()
+                new QueryWrapper<SysDictEntity>()
                     .like(StringUtils.isNotBlank(name),"name", name)
         );
 

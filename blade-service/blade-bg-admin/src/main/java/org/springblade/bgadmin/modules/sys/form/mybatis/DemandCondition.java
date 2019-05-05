@@ -1,8 +1,8 @@
 package org.springblade.bgadmin.modules.sys.form.mybatis;
 
-import io.finepetro.modules.sys.enums.DemandStatusEnum;
-import io.finepetro.modules.sys.enums.OrdersFormEnum;
 import lombok.Data;
+import org.springblade.bgadmin.modules.sys.enums.DemandStatusEnum;
+import org.springblade.bgadmin.modules.sys.enums.OrdersFormEnum;
 
 import java.util.Date;
 

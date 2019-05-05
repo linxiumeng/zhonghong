@@ -17,20 +17,17 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import io.finepetro.common.annotation.SysLog;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.Assert;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.common.validator.group.AddGroup;
-import io.finepetro.modules.sys.entity.SysUserEntity;
-import io.finepetro.modules.sys.form.BaseForm;
-import io.finepetro.modules.sys.service.*;
-import io.finepetro.modules.sys.shiro.ShiroTag;
-import io.finepetro.modules.sys.shiro.ShiroUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.springblade.bgadmin.modules.sys.entity.*;
+import org.springblade.bgadmin.modules.sys.form.BaseForm;
+import org.springblade.bgadmin.modules.sys.service.*;
+import org.springblade.bgadmin.modules.sys.shiro.ShiroTag;
+import org.springblade.bgadmin.modules.sys.shiro.ShiroUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,8 +76,8 @@ public class SysUserController extends AbstractController {
 
 	//	return R.ok().put("page", page);
 
-		Page page = new Page(baseForm.getPage(),baseForm.getSize());
-		page = sysUserService.listSysUser(page,new EntityWrapper());
+		IPage page = new Page(baseForm.getPage(),baseForm.getSize());
+		page = sysUserService.listSysUser(page,new QueryWrapper());
 
 		return R.ok().put("page",page);
 
@@ -98,10 +95,10 @@ public class SysUserController extends AbstractController {
 	/**
 	 * 修改登录用户密码
 	 */
-	@SysLog("修改密码")
+	//@SysLog("修改密码")
 	@RequestMapping("/password")
 	public R password(String password, String newPassword){
-		Assert.isBlank(newPassword, "新密码不为能空");
+	//	Assert.isBlank(newPassword, "新密码不为能空");
 
 		//原密码
 		password = ShiroUtils.sha256(password, getUser().getSalt());
@@ -123,7 +120,7 @@ public class SysUserController extends AbstractController {
 	@RequestMapping("/info/{userId}")
 	//@RequiresPermissions("sys:user:info")
 	public R info(@PathVariable("userId") Long userId){
-		SysUserEntity user = sysUserService.selectById(userId);
+		SysUserEntity user = sysUserService.getById(userId);
 		
 		//获取用户所属的角色列表
 		List<Long> roleIdList = sysUserRoleService.queryRoleIdList(userId);
@@ -139,7 +136,7 @@ public class SysUserController extends AbstractController {
 	@RequestMapping("/save")
 	//@RequiresPermissions("sys:user:save")
 	public R save(@RequestBody SysUserEntity user){
-		ValidatorUtils.validateEntity(user, AddGroup.class);
+	//	ValidatorUtils.validateEntity(user, AddGroup.class);
 		
 		sysUserService.save(user);
 		
@@ -165,7 +162,7 @@ public class SysUserController extends AbstractController {
 	/**
 	 * 删除用户
 	 */
-	@SysLog("删除用户")
+//	@SysLog("删除用户")
 	@RequestMapping("/delete")
 	//@RequiresPermissions("sys:user:delete")
 	public R delete(@RequestBody Long[] userIds){
@@ -177,7 +174,7 @@ public class SysUserController extends AbstractController {
 			return R.error("当前用户不能删除");
 		}
 
-		sysUserService.deleteBatchIds(Arrays.asList(userIds));
+		sysUserService.removeByIds(Arrays.asList(userIds));
 		
 		return R.ok();
 	}
@@ -192,40 +189,40 @@ public class SysUserController extends AbstractController {
 		Map<String,Integer> statisticsMap = new HashMap<>(8);
 		if(collection.contains("sys:shanghushenhe:verify")) {
 			//企业待认证个数
-			// 过滤了身份状态不是1的用户
-			int companyWaitVerificationCount = userService.selectCount(new EntityWrapper().notIn("status", 1));
+			// 过滤了身份状态不是0,1的用户an
+			int companyWaitVerificationCount = userService.count(new QueryWrapper<FuserEntity>().notIn("status",2,3));
 			statisticsMap.put("companyWaitVerificationCount", companyWaitVerificationCount);
 		}
 
 		if(collection.contains("sys:shanghushouxin:credit")) {
 			//采购商待授信个数
 			// 过滤了授信状态是0 ，并且是采购商的用户
-			int purcharesWaitCreditCount = userService.selectCount(new EntityWrapper().eq("credit_status", 0));
+			int purcharesWaitCreditCount = userService.count(new QueryWrapper<FuserEntity>().eq("status",3).notIn("credit_status", 3));
 			statisticsMap.put("purchaesWaitCreditCount", purcharesWaitCreditCount);
 		}
 
 		if(collection.contains("sys:chanpinshenhe:verify")) {
 			//商品待审核个数
 			// 直接过滤状态是待审核的商品
-			int goodsWaitVerificationCount = goodsService.selectCount(new EntityWrapper().eq("audit_status", 0));
+		int goodsWaitVerificationCount = goodsService.count(new QueryWrapper<GoodsEntity>().eq("audit_status", 0));
 			statisticsMap.put("goodsWaitVerificationCount", goodsWaitVerificationCount);
 		}
 
 		if(collection.contains("sys:huankuanliushui:list")) {
 			//还款已逾期笔数
-			int moneyWaitBackOverDateCount = accountRepaymentStepService.selectCount(new EntityWrapper().eq("status", 2));
+			int moneyWaitBackOverDateCount = accountRepaymentStepService.count(new QueryWrapper<AccountRepaymentStepEntity>().eq("status", 2));
 			statisticsMap.put("moneyWaitBackOverDateCount", moneyWaitBackOverDateCount);
 		}
 
 		if(collection.contains("sys:chongzhishenpi:verify")) {
 			//充值待审核笔数
-			int rechargeWaitVerificationCount = accountRechargeService.selectCount(new EntityWrapper().eq("status", 0));
+			int rechargeWaitVerificationCount = accountRechargeService.count(new QueryWrapper<AccountRechargeEntity>().eq("status", 0));
 			statisticsMap.put("rechargeWaitVerificationCount", rechargeWaitVerificationCount);
 		}
 
 		if(collection.contains("sys:tixianshenpi:verify")) {
 			//提现待审批个数
-			int withDrawVerificationCount = accountWithdrawService.selectCount(new EntityWrapper().eq("status", 0));
+			int withDrawVerificationCount = accountWithdrawService.count(new QueryWrapper<AccountWithdrawEntity>().eq("status", 0));
 			statisticsMap.put("withDrawVerificationCount", withDrawVerificationCount);
 		}
 

@@ -17,8 +17,8 @@
 package org.springblade.bgadmin.modules.oss.dao;
 
 
-
-import io.finepetro.modules.oss.entity.SysOssEntity;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springblade.bgadmin.modules.oss.entity.SysOssEntity;
 
 /**
  * 文件上传

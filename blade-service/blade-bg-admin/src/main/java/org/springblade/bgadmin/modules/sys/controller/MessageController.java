@@ -1,11 +1,9 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.MessageEntity;
-import io.finepetro.modules.sys.service.MessageService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springblade.bgadmin.modules.sys.entity.MessageEntity;
+import org.springblade.bgadmin.modules.sys.service.MessageService;
+import org.springblade.common.utils.PageUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +28,7 @@ public class MessageController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:message:list")
+    //@RequiresPermissions("sys:message:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = messageService.queryPage(params);
 
@@ -42,9 +40,9 @@ public class MessageController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:message:info")
+   // @RequiresPermissions("sys:message:info")
     public R info(@PathVariable("id") Integer id) {
-            MessageEntity message = messageService.selectById(id);
+            MessageEntity message = messageService.getById(id);
 
         return R.ok().put("message", message);
     }
@@ -53,9 +51,9 @@ public class MessageController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:message:save")
+    //@RequiresPermissions("sys:message:save")
     public R save(@RequestBody MessageEntity message) {
-            messageService.insert(message);
+            messageService.save(message);
 
         return R.ok();
     }
@@ -64,10 +62,10 @@ public class MessageController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:message:update")
+    //@RequiresPermissions("sys:message:update")
     public R update(@RequestBody MessageEntity message) {
-        ValidatorUtils.validateEntity(message);
-            messageService.updateAllColumnById(message);//全部更新
+        //ValidatorUtils.validateEntity(message);
+            messageService.updateById(message);//全部更新
 
         return R.ok();
     }
@@ -76,9 +74,9 @@ public class MessageController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:message:delete")
+   // @RequiresPermissions("sys:message:delete")
     public R delete(@RequestBody Integer[] ids) {
-            messageService.deleteBatchIds(Arrays.asList(ids));
+            messageService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

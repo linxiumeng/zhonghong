@@ -1,13 +1,13 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.Query;
-import io.finepetro.modules.sys.dao.NewsDao;
-import io.finepetro.modules.sys.entity.NewsEntity;
-import io.finepetro.modules.sys.service.NewsService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.bgadmin.common.utils.Query;
+import org.springblade.bgadmin.modules.sys.mapper.NewsDao;
+import org.springblade.bgadmin.modules.sys.entity.NewsEntity;
+import org.springblade.bgadmin.modules.sys.service.NewsService;
+import org.springblade.common.utils.PageUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -18,9 +18,9 @@ public class NewsServiceImpl extends ServiceImpl<NewsDao, NewsEntity> implements
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<NewsEntity> page = this.selectPage(
+        IPage<NewsEntity> page = this.page(
                 new Query<NewsEntity>(params).getPage(),
-                new EntityWrapper<NewsEntity>()
+                new QueryWrapper<NewsEntity>()
         );
 
         return new PageUtils(page);

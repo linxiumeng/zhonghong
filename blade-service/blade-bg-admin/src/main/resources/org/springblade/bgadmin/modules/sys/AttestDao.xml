@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springblade.bgadmin.modules.sys.mapper.AttestDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.AttestEntity" id="attestMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="cnName" column="cn_name"/>
+        <result property="enName" column="en_name"/>
+        <result property="area" column="area"/>
+        <result property="legalPerson" column="legal_person"/>
+        <result property="unifiedSocialCreditCode" column="unified_social_credit_code"/>
+        <result property="telephone" column="telephone"/>
+        <result property="linkman" column="linkman"/>
+        <result property="email" column="email"/>
+        <result property="phoneNum" column="phone_num"/>
+        <result property="address" column="address"/>
+        <result property="licensePic1" column="license_pic1"/>
+        <result property="licensePic2" column="license_pic2"/>
+        <result property="idcardPic1" column="idcard_pic1"/>
+        <result property="idcardPic2" column="idcard_pic2"/>
+        <result property="status" column="status"/>
+        <result property="type" column="type"/>
+        <result property="creatTime" column="creat_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+    <select id="selectByUserId" resultMap="attestMap" parameterType="int">
+        select * from tb_attest where user_id = #{user_id} order by creat_time desc limit 1
+    </select>
+
+
+</mapper>

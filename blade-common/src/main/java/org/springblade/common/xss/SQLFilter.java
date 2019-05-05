@@ -16,8 +16,8 @@
 
 package org.springblade.common.xss;
 
-import io.finepetro.common.exception.RRException;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.common.exception.RRException;
 
 /**
  * SQL过滤

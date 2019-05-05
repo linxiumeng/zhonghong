@@ -16,7 +16,7 @@
 
 package org.springblade.bgadmin.common.config;
 
-import io.finepetro.modules.sys.shiro.ShiroTag;
+import org.springblade.bgadmin.modules.sys.shiro.ShiroTag;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;

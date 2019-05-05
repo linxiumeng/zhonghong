@@ -16,14 +16,14 @@
 
 package org.springblade.bgadmin.modules.sys.controller;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.SysRoleEntity;
-import io.finepetro.modules.sys.form.BaseForm;
-import io.finepetro.modules.sys.service.SysRoleDeptService;
-import io.finepetro.modules.sys.service.SysRoleMenuService;
-import io.finepetro.modules.sys.service.SysRoleService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springblade.bgadmin.modules.sys.entity.SysRoleEntity;
+import org.springblade.bgadmin.modules.sys.form.BaseForm;
+import org.springblade.bgadmin.modules.sys.service.SysRoleDeptService;
+import org.springblade.bgadmin.modules.sys.service.SysRoleMenuService;
+import org.springblade.bgadmin.modules.sys.service.SysRoleService;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,8 +57,8 @@ public class SysRoleController extends AbstractController {
 	public R list(@RequestBody BaseForm baseForm){
 	//	PageUtils page = sysRoleService.queryPage(params);
 
-		Page page = new Page(baseForm.getPage(),baseForm.getSize());
-		return R.ok().put("page", sysRoleService.selectPage(page));
+		IPage page = new Page(baseForm.getPage(),baseForm.getSize());
+		return R.ok().put("page", sysRoleService.page(page));
 	}
 	
 	/**
@@ -67,7 +67,7 @@ public class SysRoleController extends AbstractController {
 	@RequestMapping("/select")
 	//@RequiresPermissions("sys:role:select")
 	public R select(){
-		List<SysRoleEntity> list = sysRoleService.selectList(null);
+		List<SysRoleEntity> list = sysRoleService.list(null);
 		
 		return R.ok().put("list", list);
 	}
@@ -78,7 +78,7 @@ public class SysRoleController extends AbstractController {
 	@RequestMapping("/info/{roleId}")
 	//@RequiresPermissions("sys:role:info")
 	public R info(@PathVariable("roleId") Long roleId){
-		SysRoleEntity role = sysRoleService.selectById(roleId);
+		SysRoleEntity role = sysRoleService.getById(roleId);
 		
 		//查询角色对应的菜单
 		List<Long> menuIdList = sysRoleMenuService.queryMenuIdList(roleId);
@@ -98,7 +98,7 @@ public class SysRoleController extends AbstractController {
 	@RequestMapping("/save")
 	//@RequiresPermissions("sys:role:save")
 	public R save(@RequestBody SysRoleEntity role){
-		ValidatorUtils.validateEntity(role);
+		//ValidatorUtils.validateEntity(role);
 		
 		sysRoleService.save(role);
 		
@@ -112,7 +112,7 @@ public class SysRoleController extends AbstractController {
 	@RequestMapping("/update")
 	//@RequiresPermissions("sys:role:update")
 	public R update(@RequestBody SysRoleEntity role){
-		ValidatorUtils.validateEntity(role);
+		//ValidatorUtils.validateEntity(role);
 		
 	//	sysRoleService.updateById(role);
 		sysRoleService.update(role);

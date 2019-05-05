@@ -1,8 +1,6 @@
+/*
 package org.springblade.bgadmin.datasources.aspect;
 
-import io.finepetro.datasources.DataSourceNames;
-import io.finepetro.datasources.DynamicDataSource;
-import io.finepetro.datasources.annotation.DataSource;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,23 +8,28 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springblade.bgadmin.datasources.DataSourceNames;
+import org.springblade.bgadmin.datasources.DynamicDataSource;
+import org.springblade.bgadmin.datasources.annotation.DataSource;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
+*/
 /**
  * 多数据源，切面处理类
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2017/9/16 22:20
- */
+ *//*
+
 @Aspect
 @Component
 public class DataSourceAspect implements Ordered {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Pointcut("@annotation(io.finepetro.datasources.annotation.DataSource)")
+    @Pointcut("@annotation(org.springblade.bgadmin.datasources.annotation.DataSource)")
     public void dataSourcePointCut() {
 
     }
@@ -58,3 +61,4 @@ public class DataSourceAspect implements Ordered {
         return 1;
     }
 }
+*/

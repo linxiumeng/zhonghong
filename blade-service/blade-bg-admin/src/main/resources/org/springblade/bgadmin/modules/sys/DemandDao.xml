@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springblade.bgadmin.modules.sys.mapper.DemandDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.DemandOrderUserEntity" id="demandMap">
+        <result property="id" column="id"/>
+        <result property="creatUserid" column="creat_userid"/>
+        <result property="fType" column="f_type"/>
+        <result property="fName" column="f_name"/>
+        <result property="fUnit" column="f_unit"/>
+        <result property="num" column="num"/>
+        <result property="tradeClause" column="trade_clause"/>
+        <result property="paymentBy" column="payment_by"/>
+        <result property="pricingManner" column="pricing_manner"/>
+        <result property="contractualValueDate" column="contractual_value_date"/>
+        <result property="premiumsDiscounts" column="premiums_discounts"/>
+        <result property="payDay" column="pay_day"/>
+        <result property="deadline" column="deadline"/>
+        <result property="remark" column="remark"/>
+        <result property="placeOfOrigin" column="place_of_origin"/>
+        <result property="oilType" column="oil_type"/>
+        <result property="api" column="api"/>
+        <result property="sulphurContent" column="sulphur_content"/>
+        <result property="acidValue" column="acid_value"/>
+        <result property="carbonResidue" column="carbon_residue"/>
+        <result property="nickel" column="nickel"/>
+        <result property="vanadium" column="vanadium"/>
+        <result property="shrink" column="shrink"/>
+        <result property="status" column="status"/>
+        <result property="creatTime" column="creat_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="fRemark" column="f_remark"/>
+
+        <association property="userEntity" column="creat_userid"
+                     select="org.springblade.bgadmin.modules.sys.mapper.FuserDao.selectByUserId"/>
+        <association property="purchaseOrdersEntity" column="purchase_id"
+                     select="org.springblade.bgadmin.modules.sys.mapper.PurchaseOrdersDao.selectByOrderId"/>
+
+        <association property="quotationCount" column="id" select="org.springblade.bgadmin.modules.sys.mapper.QuotationDao.selectQuotationCountByDemandId"/>
+
+    </resultMap>
+
+    <!-- 这是第二套解决方案 可大大提高性能 但是书写麻烦  暂时不用他 -->
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.DemandOrderUserEntity" id="demandMapImprove">
+        <id property="id" column="demand_id"/>
+        <result property="creatUserid" column="demand_creat_userid"/>
+        <result property="fType" column="demand_f_type"/>
+        <result property="fName" column="demand_f_name"/>
+        <result property="fUnit" column="demand_f_unit"/>
+        <result property="num" column="demand_num"/>
+        <result property="tradeClause" column="demand_trade_clause"/>
+        <result property="paymentBy" column="demand_payment_by"/>
+        <result property="pricingManner" column="demand_pricing_manner"/>
+        <result property="contractualValueDate" column="demand_contractual_value_date"/>
+        <result property="premiumsDiscounts" column="demand_premiums_discounts"/>
+        <result property="payDay" column="demand_pay_day"/>
+        <result property="deadline" column="demand_deadline"/>
+        <result property="remark" column="demand_remark"/>
+        <result property="placeOfOrigin" column="demand_place_of_origin"/>
+        <result property="oilType" column="demand_oil_type"/>
+        <result property="api" column="demand_api"/>
+        <result property="sulphurContent" column="demand_sulphur_content"/>
+        <result property="acidValue" column="demand_acid_value"/>
+        <result property="carbonResidue" column="demand_carbon_residue"/>
+        <result property="nickel" column="demand_nickel"/>
+        <result property="vanadium" column="demand_vanadium"/>
+        <result property="shrink" column="demand_shrink"/>
+        <result property="status" column="demand_status"/>
+        <result property="creatTime" column="demand_creat_time"/>
+        <result property="updateTime" column="demand_update_time"/>
+        <result property="fRemark" column="demand_f_remark"/>
+
+        <association property="userEntity" javaType="org.springblade.bgadmin.modules.sys.entity.FuserEntity">
+            <id column="users.user_id" property="userId"/>
+            <result property="mobile" column="users_mobile"/>
+            <result property="unifiedSocialCode" column="unified_social_code"/>
+            <result property="legalPerson" column="legal_person"/>
+            <result property="card1" column="card1"/>
+            <result property="card2" column="card2"/>
+            <result property="businessLicence" column="business_licence"/>
+            <result property="contacts" column="users_contacts"/>
+            <result property="contactNumber" column="users_contact_number"/>
+            <result property="contactAddress" column="users_contact_address"/>
+            <result property="creditStatus" column="users_credit_status" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
+            <result property="status" column="users_status" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
+            <result property="registerDate" column="users_register_date"/>
+            <result property="type" column="users_type"/>
+            <result property="companyName" column="users_company_name"/>
+            <result property="mail" column="users_mail"/>
+            <result property="providerStatus" column="users_provider_status"/>
+        </association>
+        <association property="purchaseOrdersEntity" javaType="org.springblade.bgadmin.modules.sys.entity.PurchaseOrdersEntity">
+            <id property="id" column="purchase_id"/>
+            <result property="buyerId" column="purchase_buyer_id"/>
+            <result property="buyerCompany" column="purchase_buyer_company"/>
+            <result property="buyerLinkman" column="purchase_buyer_linkman"/>
+            <result property="buyerPhone" column="purchase_buyer_phone"/>
+            <result property="buyerEmail" column="purchase_buyer_email"/>
+            <result property="providerId" column="purchase_provider_id"/>
+            <result property="providerCompany" column="purchase_provider_company"/>
+            <result property="providerLinkman" column="purchase_provider_linkman"/>
+            <result property="providerPhone" column="purchase_provider_phone"/>
+            <result property="providerEmail" column="purchase_provider_email"/>
+            <result property="goodsId" column="purchase_goods_id"/>
+            <result property="goodsPic" column="purchase_goods_pic"/>
+            <result property="quotationId" column="purchase_quotation_id"/>
+            <result property="goodsName" column="purchase_goods_name"/>
+            <result property="goodsType" column="purchase_goods_type"/>
+            <result property="tradeClause" column="purchase_trade_clause"/>
+            <result property="paymentBy" column="purchase_payment_by"/>
+            <result property="goodsUnit" column="purchase_goods_unit"/>
+            <result property="goodsPrice" column="purchase_goods_price"/>
+            <result property="finalQuotation" column="purchase_final_quotation"/>
+            <result property="pricingManner" column="purchase_pricing_manner"/>
+            <result property="contractualValueDate" column="purchase_contractual_value_date"/>
+            <result property="premiumsDiscounts" column="purchase_premiums_discounts"/>
+            <result property="payDay" column="purchase_pay_day"/>
+            <result property="buyerRemark" column="purchase_buyer_remark"/>
+            <result property="placeOfOrigin" column="purchase_place_of_origin"/>
+            <result property="oilType" column="purchase_oil_type"/>
+            <result property="api" column="purchase_api"/>
+            <result property="sulphurContent" column="purchase_sulphur_content"/>
+            <result property="acidValue" column="purchase_acid_value"/>
+            <result property="carbonResidue" column="purchase_carbon_residue"/>
+            <result property="nickel" column="purchase_nickel"/>
+            <result property="vanadium" column="purchase_vanadium"/>
+            <result property="shrink" column="purchase_shrink"/>
+            <result property="status" column="purchase_status"/>
+            <result property="goodsAmount" column="purchase_goods_amount"/>
+            <result property="shipAddress" column="purchase_ship_address"/>
+            <result property="loadDate" column="purchase_load_date"/>
+            <result property="creatTime" column="purchase_creat_time"/>
+            <result property="updateTime" column="purchase_update_time"/>
+            <result property="goodsRemark" column="purchase_goods_remark"/>
+            <result property="buyerAddress" column="purchase_buyer_address"/>
+            <result property="contract" column="purchase_contract"/>
+            <result property="refuseCause" column="purchase_refuse_cause"/>
+            <result property="settleBill" column="purchase_settle_bill"/>
+
+        </association>
+
+    </resultMap>
+
+    <select id="selectDemandList" resultMap="demandMap"
+            parameterType="org.springblade.bgadmin.modules.sys.form.mybatis.DemandCondition">
+        select *,purchase.id as purchase_id from tb_demand demand
+
+
+        join tb_fuser users on demand.creat_userid = users.user_id
+        left join tb_quotation quotation on quotation.demand_id = demand.id
+        left join tb_purchase_orders purchase on purchase.quotation_id = quotation.id
+
+        where 1=1
+
+        <if test="condition.keywords != null and condition.keywords != ''">
+            and (users.company_name = #{condition.keywords} or users.mobile = #{condition.keywords})
+        </if>
+
+        <!-- 未下单 -->
+        <if test="condition.ordersFormStatus != null">
+            <choose>
+                <!-- 未下单 -->
+                <when test="condition.ordersFormStatus.code == 0">
+                    and purchase.id is null
+                </when >
+                <!-- 下单成功 -->
+                <when test="condition.ordersFormStatus.code == 1">
+                    and purchase.id is not null and purchase.status != 1
+                </when >
+                <!-- 下单失败 -->
+                <when test="condition.ordersFormStatus.code == 2">
+                    and purchase.id is not null and purchase.status = 1
+                </when >
+                <otherwise>
+                </otherwise>
+            </choose>
+        </if>
+
+        <if test="condition.demandStatus != null">
+            and demand.status = #{condition.demandStatus.code}
+        </if>
+
+        <if test="condition.demandStartDate != null">
+            and demand.creat_time &gt; #{condition.demandStartDate}
+        </if>
+
+        <if test="condition.demandEndDate != null">
+            and demand.creat_time &lt; #{condition.demandEndDate}
+        </if>
+
+        <if test="condition.demandDeadLineStartDate != null">
+            and str_to_date(demand.deadline,'%Y-%m-%d %H:%i:%s') &gt; #{condition.demandDeadLineStartDate}
+        </if>
+
+        <if test="condition.demandDeadLineEndDate != null">
+            and str_to_date(demand.deadline,'%Y-%m-%d %H:%i:%s') &lt; #{condition.demandDeadLineEndDate}
+        </if>
+
+        order by purchase.creat_time desc
+
+    </select>
+
+
+</mapper>

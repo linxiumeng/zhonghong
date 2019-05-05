@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springblade.bgadmin.modules.sys.mapper.AccountDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.springblade.bgadmin.modules.sys.entity.AccountEntity" id="accountMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="account" column="account"/>
+        <result property="total" column="total"/>
+        <result property="freezeAmount" column="freeze_amount"/>
+        <result property="cashFund" column="cash_fund"/>
+        <result property="creditLimit" column="credit_limit"/>
+        <result property="creditUnit" column="credit_unit"/>
+        <result property="creditHigh" column="credit_high"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+
+
+    <select id="selectByUserId" parameterType="int" resultMap="accountMap">
+        select * from tb_account where user_id = #{userId}
+    </select>
+
+
+</mapper>

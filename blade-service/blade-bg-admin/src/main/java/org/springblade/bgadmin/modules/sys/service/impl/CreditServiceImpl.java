@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.bgadmin.common.utils.Query;
-import org.springblade.bgadmin.modules.sys.dao.CreditDao;
+import org.springblade.bgadmin.modules.sys.mapper.CreditDao;
 import org.springblade.bgadmin.modules.sys.entity.CreditEntity;
 import org.springblade.bgadmin.modules.sys.service.CreditService;
 import org.springblade.common.utils.PageUtils;

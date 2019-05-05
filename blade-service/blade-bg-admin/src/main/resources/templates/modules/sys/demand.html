@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>需求表</title>
+        <#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <#if shiro.hasPermission("sys:demand:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            </#if>
+            <#if shiro.hasPermission("sys:demand:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            </#if>
+            <#if shiro.hasPermission("sys:demand:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+                                                                            <div class="form-group">
+                        <div class="col-sm-2 control-label">创建用户id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.creatUserid"
+                                   placeholder="创建用户id"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">产品类型</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.fType"
+                                   placeholder="产品类型"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">产品名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.fName"
+                                   placeholder="产品名称"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">产品单位</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.fUnit"
+                                   placeholder="产品单位"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">采购数量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.num"
+                                   placeholder="采购数量"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">贸易条款</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.tradeClause"
+                                   placeholder="贸易条款"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">信用方式</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.paymentBy"
+                                   placeholder="信用方式"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">计价基准</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.pricingManner"
+                                   placeholder="计价基准"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">计价日期</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.contractualValueDate"
+                                   placeholder="计价日期"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">升贴水</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.premiumsDiscounts"
+                                   placeholder="升贴水"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">支付日</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.payDay"
+                                   placeholder="支付日"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">截止时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.deadline"
+                                   placeholder="截止时间"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">备注</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.remark"
+                                   placeholder="备注"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">油产地</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.placeOfOrigin"
+                                   placeholder="油产地"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">油种类</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.oilType"
+                                   placeholder="油种类"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">api度</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.api"
+                                   placeholder="api度"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">含硫量%</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.sulphurContent"
+                                   placeholder="含硫量%"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">酸值mgkoh/g</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.acidValue"
+                                   placeholder="酸值mgkoh/g"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">残炭%</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.carbonResidue"
+                                   placeholder="残炭%"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">镍ppm</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.nickel"
+                                   placeholder="镍ppm"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">钒ppm</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.vanadium"
+                                   placeholder="钒ppm"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">>350摄氏度质量收缩率（%）</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.shrink"
+                                   placeholder=">350摄氏度质量收缩率（%）"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">需求单状态0为初始化，1为招标中，2为暂停招标，3为停止招标</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.status"
+                                   placeholder="需求单状态0为初始化，1为招标中，2为暂停招标，3为停止招标"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.creatTime"
+                                   placeholder="创建时间"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">修改时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.updateTime"
+                                   placeholder="修改时间"/>
+                        </div>
+                    </div>
+                                                                <div class="form-group">
+                        <div class="col-sm-2 control-label">商品备注</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="demand.fRemark"
+                                   placeholder="商品备注"/>
+                        </div>
+                    </div>
+                                        <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/sys/demand.js?_${.now?long}"></script>
+</body>
+</html>

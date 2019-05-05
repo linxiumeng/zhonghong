@@ -16,7 +16,7 @@
 
 package org.springblade.bgadmin.common.config;
 
-import io.finepetro.modules.sys.shiro.UserRealm;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -26,6 +26,7 @@ import org.apache.shiro.web.servlet.ShiroHttpSession;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.apache.shiro.web.session.mgt.ServletContainerSessionManager;
+import org.springblade.bgadmin.modules.sys.shiro.UserRealm;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -93,6 +94,7 @@ public class ShiroConfig {
         filterMap.put("/swagger-ui.html", "anon");
         filterMap.put("/webjars/**", "anon");
         filterMap.put("/swagger-resources/**", "anon");
+       // filterMap.put("/","anon");
 
         filterMap.put("/static/**", "anon");
         filterMap.put("/login.html", "anon");

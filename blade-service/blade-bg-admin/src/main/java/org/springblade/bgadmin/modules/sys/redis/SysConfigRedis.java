@@ -17,9 +17,9 @@
 package org.springblade.bgadmin.modules.sys.redis;
 
 
-import io.finepetro.common.utils.RedisKeys;
-import io.finepetro.common.utils.RedisUtils;
-import io.finepetro.modules.sys.entity.SysConfigEntity;
+import org.springblade.bgadmin.common.utils.RedisKeys;
+import org.springblade.bgadmin.modules.sys.entity.SysConfigEntity;
+import org.springblade.common.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,10 +1,10 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import io.finepetro.common.utils.R;
-import io.finepetro.modules.sys.entity.FaqEntity;
-import io.finepetro.modules.sys.form.FaqForm;
-import io.finepetro.modules.sys.service.FaqService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springblade.bgadmin.modules.sys.entity.FaqEntity;
+import org.springblade.bgadmin.modules.sys.form.FaqForm;
+import org.springblade.bgadmin.modules.sys.service.FaqService;
+import org.springblade.common.utils.R;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +30,7 @@ public class FaqController {
         if(id == null){
             return R.error("id参数缺失");
         }
-        return R.ok().put("result",faqService.selectById(id));
+        return R.ok().put("result",faqService.getById(id));
     }
 
     @PostMapping("list")
@@ -69,7 +69,7 @@ public class FaqController {
         if(id == null){
             return R.error("ID 缺失");
         }
-        return R.ok().put("result",faqService.deleteById(id));
+        return R.ok().put("result",faqService.removeById(id));
     }
 
     @PostMapping("save")
@@ -78,7 +78,7 @@ public class FaqController {
         FaqEntity faqEntity = new FaqEntity();
         BeanUtils.copyProperties(faqForm,faqEntity);
 
-        return R.ok().put("result",faqService.insert(faqEntity));
+        return R.ok().put("result",faqService.save(faqEntity));
     }
 
 

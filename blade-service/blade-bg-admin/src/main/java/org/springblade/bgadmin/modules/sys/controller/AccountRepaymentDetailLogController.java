@@ -1,11 +1,13 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import io.finepetro.common.utils.R;
-import io.finepetro.modules.sys.form.AccountRepaymentDetailLogForm;
-import io.finepetro.modules.sys.service.AccountRepaymentDetailLogService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.bgadmin.modules.sys.form.AccountRepaymentDetailLogForm;
+import org.springblade.bgadmin.modules.sys.service.AccountRepaymentDetailLogService;
+import org.springblade.common.entity.AccountRepayment;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +34,8 @@ public class AccountRepaymentDetailLogController {
    // @RequiresPermissions("sys:accountrepayment:list")
     public R list(@RequestBody AccountRepaymentDetailLogForm accountRepaymentDetailLogForm) {
 
-        Page page = new Page(accountRepaymentDetailLogForm.getPage(),accountRepaymentDetailLogForm.getSize());
-        EntityWrapper wrapper = new EntityWrapper();
+        IPage page = new Page(accountRepaymentDetailLogForm.getPage(),accountRepaymentDetailLogForm.getSize());
+        QueryWrapper<AccountRepayment> wrapper = new QueryWrapper();
 
         if(accountRepaymentDetailLogForm.getStatus() != null){
             wrapper.eq("log.status",accountRepaymentDetailLogForm.getStatus());
@@ -48,7 +50,8 @@ public class AccountRepaymentDetailLogController {
         }
 
         if(StringUtils.isNotBlank(accountRepaymentDetailLogForm.getKeywords())){
-            wrapper.andNew().eq("users.company_name",accountRepaymentDetailLogForm.getKeywords()).or().eq("users.mobile",accountRepaymentDetailLogForm.getKeywords());
+            //wrapper.andNew().eq("users.company_name",accountRepaymentDetailLogForm.getKeywords()).or().eq("users.mobile",accountRepaymentDetailLogForm.getKeywords());
+            wrapper.and(i->i.eq("users.company_name",accountRepaymentDetailLogForm.getKeywords()).or().eq("users.mobile",accountRepaymentDetailLogForm.getKeywords()));
         }
 
 

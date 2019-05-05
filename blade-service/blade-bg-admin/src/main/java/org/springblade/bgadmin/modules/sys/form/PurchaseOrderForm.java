@@ -1,9 +1,9 @@
 package org.springblade.bgadmin.modules.sys.form;
 
-import io.finepetro.modules.sys.enums.OrdersEnum;
-import io.finepetro.modules.sys.enums.PaymentEnum;
-import io.finepetro.modules.sys.enums.RepaymentOrderEnum;
 import lombok.Data;
+import org.springblade.bgadmin.modules.sys.enums.OrdersEnum;
+import org.springblade.bgadmin.modules.sys.enums.PaymentEnum;
+import org.springblade.bgadmin.modules.sys.enums.RepaymentOrderEnum;
 
 /**
  * @author hanbin

@@ -16,23 +16,22 @@
 
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
-import io.finepetro.common.exception.RRException;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.Query;
-import io.finepetro.modules.sys.dao.SysConfigDao;
-import io.finepetro.modules.sys.entity.SysConfigEntity;
-import io.finepetro.modules.sys.redis.SysConfigRedis;
-import io.finepetro.modules.sys.service.SysConfigService;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.bgadmin.common.utils.Query;
+import org.springblade.bgadmin.modules.sys.mapper.SysConfigDao;
+import org.springblade.bgadmin.modules.sys.entity.SysConfigEntity;
+import org.springblade.bgadmin.modules.sys.redis.SysConfigRedis;
+import org.springblade.bgadmin.modules.sys.service.SysConfigService;
+import org.springblade.common.exception.RRException;
+import org.springblade.common.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Map;
 
 @Service("sysConfigService")
@@ -44,9 +43,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 	public PageUtils queryPage(Map<String, Object> params) {
 		String paramKey = (String)params.get("paramKey");
 
-		Page<SysConfigEntity> page = this.selectPage(
+		IPage<SysConfigEntity> page = this.page(
 				new Query<SysConfigEntity>(params).getPage(),
-				new EntityWrapper<SysConfigEntity>()
+				new QueryWrapper<SysConfigEntity>()
 					.like(StringUtils.isNotBlank(paramKey),"param_key", paramKey)
 					.eq("status", 1)
 		);
@@ -55,15 +54,15 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 	}
 	
 	@Override
-	public void save(SysConfigEntity config) {
-		this.insert(config);
+	public boolean save(SysConfigEntity config) {
 		sysConfigRedis.saveOrUpdate(config);
+		return super.save(config);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void update(SysConfigEntity config) {
-		this.updateAllColumnById(config);
+		super.updateById(config);
 		sysConfigRedis.saveOrUpdate(config);
 	}
 
@@ -78,11 +77,11 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteBatch(Long[] ids) {
 		for(Long id : ids){
-			SysConfigEntity config = this.selectById(id);
+			SysConfigEntity config = this.getById(id);
 			sysConfigRedis.delete(config.getParamKey());
 		}
 
-		this.deleteBatchIds(Arrays.asList(ids));
+		this.deleteBatch(ids);
 	}
 
 	@Override

@@ -17,23 +17,19 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.SqlHelper;
-
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.annotation.DataFilter;
-import io.finepetro.common.utils.Constant;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.Query;
-import io.finepetro.modules.sys.dao.SysUserDao;
-import io.finepetro.modules.sys.entity.SysUserEntity;
-import io.finepetro.modules.sys.service.SysDeptService;
-import io.finepetro.modules.sys.service.SysUserRoleService;
-import io.finepetro.modules.sys.service.SysUserService;
-import io.finepetro.modules.sys.shiro.ShiroUtils;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.bgadmin.common.annotation.DataFilter;
+import org.springblade.bgadmin.common.utils.Query;
+import org.springblade.bgadmin.modules.sys.mapper.SysUserDao;
+import org.springblade.bgadmin.modules.sys.entity.SysUserEntity;
+import org.springblade.bgadmin.modules.sys.service.SysUserRoleService;
+import org.springblade.bgadmin.modules.sys.service.SysUserService;
+import org.springblade.common.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,8 +50,6 @@ import java.util.Map;
 public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
-	@Autowired
-	private SysDeptService sysDeptService;
 
 	@Override
 	public List<Long> queryAllMenuId(Long userId) {
@@ -67,11 +61,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	public PageUtils queryPage(Map<String, Object> params) {
 		String username = (String)params.get("username");
 
-		Page<SysUserEntity> page = this.selectPage(
+		IPage<SysUserEntity> page = this.page(
 			new Query<SysUserEntity>(params).getPage(),
-			new EntityWrapper<SysUserEntity>()
+			new QueryWrapper<SysUserEntity>()
 				.like(StringUtils.isNotBlank(username),"username", username)
-				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
+				//.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
 		);
 
 		return new PageUtils(page);
@@ -79,16 +73,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void save(SysUserEntity user) {
+	public boolean save(SysUserEntity user) {
 		user.setCreateTime(new Date());
 		//sha256加密
 		String salt = RandomStringUtils.randomAlphanumeric(20);
 		user.setSalt(salt);
-		user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
-		this.insert(user);
+		//user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
+
 		
 		//保存用户与角色关系
 		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+
+		return super.save(user);
 	}
 
 	@Override
@@ -97,8 +93,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		if(StringUtils.isBlank(user.getPassword())){
 			user.setPassword(null);
 		}else{
-			SysUserEntity userEntity = this.selectById(user.getUserId());
-			user.setPassword(ShiroUtils.sha256(user.getPassword(), userEntity.getSalt()));
+			SysUserEntity userEntity = this.getById(user.getUserId());
+			//user.setPassword(ShiroUtils.sha256(user.getPassword(), userEntity.getSalt()));
 		}
 		this.updateById(user);
 
@@ -115,12 +111,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         SysUserEntity userEntity = new SysUserEntity();
         userEntity.setPassword(newPassword);
         return this.update(userEntity,
-                new EntityWrapper<SysUserEntity>().eq("user_id", userId).eq("password", password));
+                new QueryWrapper<SysUserEntity>().eq("user_id", userId).eq("password", password));
     }
 
 	@Override
-	public Page listSysUser(Page page, Wrapper wrapper) {
-		wrapper = SqlHelper.fillWrapper(page,wrapper);
+	public IPage listSysUser(IPage page, Wrapper wrapper) {
+		//wrapper = SqlHelper.fillWrapper(page,wrapper);
 		page.setRecords(baseMapper.selectListWithRoleIdList(page,wrapper));
 		return page;
 	}

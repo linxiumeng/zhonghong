@@ -16,13 +16,13 @@
 
 package org.springblade.bgadmin.modules.oss.service.impl;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.Query;
-import io.finepetro.modules.oss.dao.SysOssDao;
-import io.finepetro.modules.oss.entity.SysOssEntity;
-import io.finepetro.modules.oss.service.SysOssService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.bgadmin.common.utils.Query;
+import org.springblade.bgadmin.modules.oss.dao.SysOssDao;
+import org.springblade.bgadmin.modules.oss.entity.SysOssEntity;
+import org.springblade.bgadmin.modules.oss.service.SysOssService;
+import org.springblade.common.utils.PageUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -33,7 +33,7 @@ public class SysOssServiceImpl extends ServiceImpl<SysOssDao, SysOssEntity> impl
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
-		Page<SysOssEntity> page = this.selectPage(
+		IPage<SysOssEntity> page = this.page(
 				new Query<SysOssEntity>(params).getPage()
 		);
 

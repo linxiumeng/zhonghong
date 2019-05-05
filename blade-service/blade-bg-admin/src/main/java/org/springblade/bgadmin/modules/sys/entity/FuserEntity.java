@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springblade.bgadmin.modules.sys.enums.UserCreditStatusEnum;
+import org.springblade.bgadmin.modules.sys.enums.UserLoginStatusEnum;
 import org.springblade.bgadmin.modules.sys.enums.UserStatusEnum;
-import org.springblade.common.enums.UserLoginStatusEnum;
+
 
 import java.io.Serializable;
 import java.util.Date;

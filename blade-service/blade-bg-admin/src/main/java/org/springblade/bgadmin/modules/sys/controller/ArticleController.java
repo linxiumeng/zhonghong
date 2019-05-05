@@ -1,11 +1,9 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.ArticleEntity;
-import io.finepetro.modules.sys.service.ArticleService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springblade.bgadmin.modules.sys.entity.ArticleEntity;
+import org.springblade.bgadmin.modules.sys.service.ArticleService;
+import org.springblade.common.utils.PageUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +28,7 @@ public class ArticleController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:article:list")
+    //@RequiresPermissions("sys:article:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = articleService.queryPage(params);
 
@@ -42,9 +40,9 @@ public class ArticleController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:article:info")
+    //@RequiresPermissions("sys:article:info")
     public R info(@PathVariable("id") Integer id) {
-            ArticleEntity article = articleService.selectById(id);
+            ArticleEntity article = articleService.getById(id);
 
         return R.ok().put("article", article);
     }
@@ -53,9 +51,9 @@ public class ArticleController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:article:save")
+    //@RequiresPermissions("sys:article:save")
     public R save(@RequestBody ArticleEntity article) {
-            articleService.insert(article);
+            articleService.save(article);
 
         return R.ok();
     }
@@ -64,10 +62,10 @@ public class ArticleController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:article:update")
+    //@RequiresPermissions("sys:article:update")
     public R update(@RequestBody ArticleEntity article) {
-        ValidatorUtils.validateEntity(article);
-            articleService.updateAllColumnById(article);//全部更新
+        //ValidatorUtils.validateEntity(article);
+            articleService.updateById(article);//全部更新
 
         return R.ok();
     }
@@ -76,9 +74,9 @@ public class ArticleController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:article:delete")
+    //@RequiresPermissions("sys:article:delete")
     public R delete(@RequestBody Integer[] ids) {
-            articleService.deleteBatchIds(Arrays.asList(ids));
+            articleService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

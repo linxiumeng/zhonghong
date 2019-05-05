@@ -1,17 +1,16 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.CheckBGListUtils;
-import io.finepetro.modules.sys.entity.AccountRepaymentWithStepEntity;
-import io.finepetro.modules.sys.entity.PurchaseOrdersEntity;
-import io.finepetro.modules.sys.entity.PurchaseOrdersRepaymentEntity;
-import io.finepetro.modules.sys.form.PurchaseOrderForm;
-import io.finepetro.modules.sys.service.PurchaseOrdersService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springblade.bgadmin.modules.sys.CheckBGListUtils;
+import org.springblade.bgadmin.modules.sys.entity.AccountRepaymentWithStepEntity;
+import org.springblade.bgadmin.modules.sys.entity.PurchaseOrdersEntity;
+import org.springblade.bgadmin.modules.sys.entity.PurchaseOrdersRepaymentEntity;
+import org.springblade.bgadmin.modules.sys.form.PurchaseOrderForm;
+import org.springblade.bgadmin.modules.sys.service.PurchaseOrdersService;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,9 +40,9 @@ public class PurchaseOrdersController {
     @RequestMapping("/list")
     //   @RequiresPermissions("sys:purchaseorders:list")
     public R list(@RequestBody PurchaseOrderForm purchaseOrderForm) {
-        Page page = new Page(purchaseOrderForm.getPage(),purchaseOrderForm.getSize());
+        IPage page = new Page(purchaseOrderForm.getPage(),purchaseOrderForm.getSize());
 
-        EntityWrapper wrapper = new EntityWrapper();
+        QueryWrapper wrapper = new QueryWrapper();
 
         if(purchaseOrderForm.getOrdersStatus()!=null){
             wrapper.eq("status",purchaseOrderForm.getOrdersStatus());
@@ -53,7 +52,7 @@ public class PurchaseOrdersController {
 
         //todo 问题
 
-        return R.ok().put("page", purchaseOrdersService.selectPage(page,wrapper));
+        return R.ok().put("page", purchaseOrdersService.page(page,wrapper));
     }
 
     @RequestMapping("/order_repayment_list")
@@ -61,7 +60,7 @@ public class PurchaseOrdersController {
     public R orderRepaymentList(@RequestBody PurchaseOrderForm purchaseOrderForm) {
         Page page = new Page(purchaseOrderForm.getPage(),purchaseOrderForm.getSize());
 
-        EntityWrapper wrapper = new EntityWrapper();
+        QueryWrapper wrapper = new QueryWrapper();
 
         wrapper.in("status",purchaseOrderForm.getOrderStatusArr());
 
@@ -108,9 +107,9 @@ public class PurchaseOrdersController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:purchaseorders:save")
+    //@RequiresPermissions("sys:purchaseorders:save")
     public R save(@RequestBody PurchaseOrdersEntity purchaseOrders) {
-        purchaseOrdersService.insert(purchaseOrders);
+        purchaseOrdersService.save(purchaseOrders);
 
         return R.ok();
     }
@@ -119,10 +118,10 @@ public class PurchaseOrdersController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:purchaseorders:update")
+    //@RequiresPermissions("sys:purchaseorders:update")
     public R update(@RequestBody PurchaseOrdersEntity purchaseOrders) {
-        ValidatorUtils.validateEntity(purchaseOrders);
-        purchaseOrdersService.updateAllColumnById(purchaseOrders);//全部更新
+        //ValidatorUtils.validateEntity(purchaseOrders);
+        purchaseOrdersService.updateById(purchaseOrders);//全部更新
 
         return R.ok();
     }
@@ -131,9 +130,9 @@ public class PurchaseOrdersController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:purchaseorders:delete")
+    //@RequiresPermissions("sys:purchaseorders:delete")
     public R delete(@RequestBody Integer[] ids) {
-        purchaseOrdersService.deleteBatchIds(Arrays.asList(ids));
+        purchaseOrdersService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

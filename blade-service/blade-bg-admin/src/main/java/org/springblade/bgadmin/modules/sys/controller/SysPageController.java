@@ -19,6 +19,7 @@ package org.springblade.bgadmin.modules.sys.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 系统页面视图
@@ -37,6 +38,7 @@ public class SysPageController {
 
 	@RequestMapping(value = {"/", "templates/index.html"})
 	public String index(){
+		System.out.println("////");
 		return "index";
 	}
 

@@ -19,21 +19,19 @@ package org.springblade.bgadmin.modules.sys.controller;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
-import io.finepetro.common.utils.R;
-import io.finepetro.modules.sys.entity.SysMenuEntity;
-import io.finepetro.modules.sys.entity.SysUserEntity;
-import io.finepetro.modules.sys.service.SysMenuService;
-import io.finepetro.modules.sys.shiro.ShiroTag;
-import io.finepetro.modules.sys.shiro.ShiroUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import org.springblade.bgadmin.modules.sys.entity.SysMenuEntity;
+import org.springblade.bgadmin.modules.sys.entity.SysUserEntity;
+import org.springblade.bgadmin.modules.sys.service.SysMenuService;
+import org.springblade.bgadmin.modules.sys.shiro.ShiroUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -56,9 +54,6 @@ public class SysLoginController {
 	@Autowired
 	SysMenuService sysMenuService;
 
-	@Resource
-	ShiroTag shiroTag;
-	
 	@RequestMapping("captcha.jpg")
 	public void captcha(HttpServletResponse response)throws IOException {
         response.setHeader("Cache-Control", "no-store, no-cache");
@@ -70,11 +65,11 @@ public class SysLoginController {
         BufferedImage image = producer.createImage(text);
         //保存到shiro session
         ShiroUtils.setSessionAttribute(Constants.KAPTCHA_SESSION_KEY, text);
-        
+
         ServletOutputStream out = response.getOutputStream();
         ImageIO.write(image, "jpg", out);
 	}
-	
+
 	/**
 	 * 登录
 	 */
@@ -102,11 +97,13 @@ public class SysLoginController {
 			return R.error("账号已被锁定,请联系管理员");
 		}catch (AuthenticationException e) {
 			return R.error("账户验证失败");
+		} catch (Exception e){
+			System.out.println(e.getMessage());
 		}
 
 		return R.ok().put("result",menuList);
 	}
-	
+
 	/**
 	 * 退出
 	 */
@@ -126,5 +123,4 @@ public class SysLoginController {
 	public R notsession() {
 		return R.error(3000,"session失效或者您未登陆");
 	}
-
 }

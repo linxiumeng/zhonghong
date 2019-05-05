@@ -16,9 +16,9 @@
 
 package org.springblade.bgadmin.modules.sys.controller;
 
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.R;
-import io.finepetro.modules.sys.service.SysLogService;
+import org.springblade.bgadmin.modules.sys.service.SysLogService;
+import org.springblade.common.utils.PageUtils;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

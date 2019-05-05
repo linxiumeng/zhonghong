@@ -17,11 +17,7 @@
 package org.springblade.bgadmin.modules.sys.shiro;
 
 
-import io.finepetro.common.utils.Constant;
-import io.finepetro.modules.sys.dao.SysMenuDao;
-import io.finepetro.modules.sys.dao.SysUserDao;
-import io.finepetro.modules.sys.entity.SysMenuEntity;
-import io.finepetro.modules.sys.entity.SysUserEntity;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -31,6 +27,11 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.springblade.bgadmin.common.utils.Constant;
+import org.springblade.bgadmin.modules.sys.entity.SysMenuEntity;
+import org.springblade.bgadmin.modules.sys.entity.SysUserEntity;
+import org.springblade.bgadmin.modules.sys.mapper.SysMenuDao;
+import org.springblade.bgadmin.modules.sys.mapper.SysUserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -96,7 +97,8 @@ public class UserRealm extends AuthorizingRealm {
 		//查询用户信息
 		SysUserEntity user = new SysUserEntity();
 		user.setUsername(token.getUsername());
-		user = sysUserDao.selectOne(user);
+		QueryWrapper<SysUserEntity> wrapper = new QueryWrapper<>(user);
+		user = sysUserDao.selectOne(wrapper);
 
 		//账号不存在
 		if(user == null) {

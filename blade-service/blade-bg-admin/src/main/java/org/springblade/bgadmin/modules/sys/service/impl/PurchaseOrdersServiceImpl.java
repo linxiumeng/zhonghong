@@ -1,16 +1,15 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.SqlHelper;
-
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.Query;
-import io.finepetro.modules.sys.dao.PurchaseOrdersDao;
-import io.finepetro.modules.sys.entity.PurchaseOrdersEntity;
-import io.finepetro.modules.sys.entity.PurchaseOrdersRepaymentEntity;
-import io.finepetro.modules.sys.service.PurchaseOrdersService;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.bgadmin.common.utils.Query;
+import org.springblade.bgadmin.modules.sys.mapper.PurchaseOrdersDao;
+import org.springblade.bgadmin.modules.sys.entity.PurchaseOrdersEntity;
+import org.springblade.bgadmin.modules.sys.entity.PurchaseOrdersRepaymentEntity;
+import org.springblade.bgadmin.modules.sys.service.PurchaseOrdersService;
+import org.springblade.common.utils.PageUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -21,9 +20,9 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<PurchaseOrdersEntity> page = this.selectPage(
+        IPage<PurchaseOrdersEntity> page = this.page(
                 new Query<PurchaseOrdersEntity>(params).getPage(),
-                new EntityWrapper<PurchaseOrdersEntity>()
+                new QueryWrapper<PurchaseOrdersEntity>()
         );
 
         return new PageUtils(page);
@@ -35,9 +34,9 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
     }
 
     @Override
-    public Page listOrderWithRepayment(Page page, Wrapper wrapper) {
+    public IPage listOrderWithRepayment(IPage page, Wrapper wrapper) {
 
-        wrapper = SqlHelper.fillWrapper(page,wrapper);
+        //wrapper = SqlHelper.fillWrapper(page,wrapper);
         page.setRecords(baseMapper.selectPurchaseOrderWithRepaymentList(page,wrapper));
         return page;
     }

@@ -12,7 +12,8 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- */
+ *//*
+
 
 package org.springblade.bgadmin.common.config;
 
@@ -27,12 +28,14 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+*/
 /**
  * Swagger配置
  *
  * @author Mark sunlightcs@gmail.com
  * @since 3.0.0 2018-01-16
- */
+ *//*
+
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig{
@@ -59,4 +62,4 @@ public class SwaggerConfig{
             .build();
     }
 
-}
+}*/

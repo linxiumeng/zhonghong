@@ -3,10 +3,9 @@ package org.springblade.bgadmin.modules.sys.service.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.bgadmin.common.utils.Query;
-import org.springblade.bgadmin.modules.sys.dao.AccountRepaymentDao;
+import org.springblade.bgadmin.modules.sys.mapper.AccountRepaymentDao;
 import org.springblade.bgadmin.modules.sys.entity.AccountRepaymentEntity;
 import org.springblade.bgadmin.modules.sys.service.AccountRepaymentService;
 import org.springblade.common.utils.PageUtils;
@@ -29,7 +28,7 @@ public class AccountRepaymentServiceImpl extends ServiceImpl<AccountRepaymentDao
     }
 
     @Override
-    public Page listAccountRepayment(Page page, Wrapper wrapper) {
+    public IPage listAccountRepayment(IPage page, Wrapper wrapper) {
         page.setRecords(baseMapper.selectByOrderIdWithStepList(page,wrapper));
         return page;
     }

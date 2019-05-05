@@ -1,16 +1,15 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.Query;
-import io.finepetro.modules.sys.dao.DemandDao;
-import io.finepetro.modules.sys.entity.DemandEntity;
-import io.finepetro.modules.sys.entity.DemandOrderUserEntity;
-import io.finepetro.modules.sys.form.mybatis.DemandCondition;
-import io.finepetro.modules.sys.service.DemandService;
-import org.springblade.bgadmin.modules.sys.dao.DemandDao;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.bgadmin.common.utils.Query;
+import org.springblade.bgadmin.modules.sys.mapper.DemandDao;
+import org.springblade.bgadmin.modules.sys.entity.DemandEntity;
+import org.springblade.bgadmin.modules.sys.entity.DemandOrderUserEntity;
+import org.springblade.bgadmin.modules.sys.form.mybatis.DemandCondition;
+import org.springblade.bgadmin.modules.sys.service.DemandService;
+import org.springblade.common.utils.PageUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,16 +21,16 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, DemandEntity> impl
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<DemandEntity> page = this.selectPage(
+        IPage<DemandEntity> page = this.page(
                 new Query<DemandEntity>(params).getPage(),
-                new EntityWrapper<DemandEntity>()
+                new QueryWrapper<>()
         );
 
         return new PageUtils(page);
     }
 
     @Override
-    public Page listDemandOrderUsers(Page page, DemandCondition condition) {
+    public IPage listDemandOrderUsers(IPage page, DemandCondition condition) {
         List<DemandOrderUserEntity> records = baseMapper.selectDemandList(page,condition);
         page.setRecords(records);
         return page;

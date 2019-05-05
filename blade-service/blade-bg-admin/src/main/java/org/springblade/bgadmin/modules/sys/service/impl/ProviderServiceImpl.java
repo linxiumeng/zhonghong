@@ -1,13 +1,13 @@
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.common.utils.PageUtils;
-import io.finepetro.common.utils.Query;
-import io.finepetro.modules.sys.dao.ProviderDao;
-import io.finepetro.modules.sys.entity.ProviderEntity;
-import io.finepetro.modules.sys.service.ProviderService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.bgadmin.common.utils.Query;
+import org.springblade.bgadmin.modules.sys.mapper.ProviderDao;
+import org.springblade.bgadmin.modules.sys.entity.ProviderEntity;
+import org.springblade.bgadmin.modules.sys.service.ProviderService;
+import org.springblade.common.utils.PageUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -18,9 +18,9 @@ public class ProviderServiceImpl extends ServiceImpl<ProviderDao, ProviderEntity
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<ProviderEntity> page = this.selectPage(
+        IPage<ProviderEntity> page = this.page(
                 new Query<ProviderEntity>(params).getPage(),
-                new EntityWrapper<ProviderEntity>()
+                new QueryWrapper<ProviderEntity>()
         );
 
         return new PageUtils(page);

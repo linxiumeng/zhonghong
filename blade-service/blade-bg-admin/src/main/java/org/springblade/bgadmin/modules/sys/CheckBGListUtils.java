@@ -1,12 +1,13 @@
 package org.springblade.bgadmin.modules.sys;
 
 
-import io.finepetro.modules.sys.form.BaseForm;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.bgadmin.modules.sys.form.BaseForm;
 
 public class CheckBGListUtils {
 
-    public static void check(Wrapper wrapper ,BaseForm baseForm, String dateString, String... keywords){
+    public static <T> void check(QueryWrapper<T> wrapper , BaseForm baseForm, String dateString, String... keywords){
 
         if (baseForm.getStartDate() != null) {
             wrapper.gt(dateString, baseForm.getStartDate());
@@ -17,7 +18,8 @@ public class CheckBGListUtils {
         }
 
         if (StringUtils.isNotBlank(baseForm.getKeywords())) {
-            wrapper.andNew().eq(keywords[0], baseForm.getKeywords()).or().eq(keywords[1], baseForm.getKeywords());
+        //    wrapper.andNew().eq(keywords[0], baseForm.getKeywords()).or().eq(keywords[1], baseForm.getKeywords());
+            wrapper.and(i->i.eq(keywords[0], baseForm.getKeywords()).or().eq(keywords[1], baseForm.getKeywords()));
         }
     }
 }

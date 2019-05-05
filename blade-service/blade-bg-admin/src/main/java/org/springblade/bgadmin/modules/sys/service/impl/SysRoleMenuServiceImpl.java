@@ -16,10 +16,10 @@
 
 package org.springblade.bgadmin.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.finepetro.modules.sys.dao.SysRoleMenuDao;
-import io.finepetro.modules.sys.entity.SysRoleMenuEntity;
-import io.finepetro.modules.sys.service.SysRoleMenuService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.bgadmin.modules.sys.mapper.SysRoleMenuDao;
+import org.springblade.bgadmin.modules.sys.entity.SysRoleMenuEntity;
+import org.springblade.bgadmin.modules.sys.service.SysRoleMenuService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +56,7 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuDao, SysRoleM
 
 			list.add(sysRoleMenuEntity);
 		}
-		this.insertBatch(list);
+		this.saveBatch(list);
 	}
 
 	@Override

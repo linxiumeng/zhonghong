@@ -1,10 +1,9 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import io.finepetro.common.utils.R;
-import io.finepetro.common.validator.ValidatorUtils;
-import io.finepetro.modules.sys.entity.GoodsTypeEntity;
-import io.finepetro.modules.sys.service.GoodsTypeService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springblade.bgadmin.modules.sys.entity.GoodsTypeEntity;
+import org.springblade.bgadmin.modules.sys.service.GoodsTypeService;
+import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +32,8 @@ public class GoodsTypeController {
     //  @RequiresPermissions("sys:goods:list")
     public R list(@RequestBody GoodsTypeEntity goodsTypeEntity) {
 
-        EntityWrapper<GoodsTypeEntity> wrapper = new EntityWrapper<>(goodsTypeEntity);
-        return R.ok().put("result", goodsTypeService.selectList(wrapper));
+        QueryWrapper<GoodsTypeEntity> wrapper = new QueryWrapper<>(goodsTypeEntity);
+        return R.ok().put("result", goodsTypeService.list(wrapper));
     }
 
 
@@ -44,7 +43,7 @@ public class GoodsTypeController {
     @RequestMapping("/save")
     // @RequiresPermissions("sys:goods:save")
     public R save(@RequestBody GoodsTypeEntity goodsTypeEntity) {
-        goodsTypeService.insert(goodsTypeEntity);
+        goodsTypeService.save(goodsTypeEntity);
         return R.ok();
     }
 
@@ -54,7 +53,7 @@ public class GoodsTypeController {
     @RequestMapping("/update")
   //  @RequiresPermissions("sys:goods:update")
     public R update(@RequestBody GoodsTypeEntity goodsTypeEntity) {
-        ValidatorUtils.validateEntity(goodsTypeEntity);
+        //ValidatorUtils.validateEntity(goodsTypeEntity);
         goodsTypeService.updateById(goodsTypeEntity);//全部更新
 
         return R.ok();
@@ -66,7 +65,7 @@ public class GoodsTypeController {
     @RequestMapping("/delete")
   //  @RequiresPermissions("sys:goods:delete")
     public R delete(@RequestBody Integer[] ids) {
-        goodsTypeService.deleteBatchIds(Arrays.asList(ids));
+        goodsTypeService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }
