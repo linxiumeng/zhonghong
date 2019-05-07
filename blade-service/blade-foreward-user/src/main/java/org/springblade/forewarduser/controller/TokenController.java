@@ -42,7 +42,7 @@ public class TokenController {
 
     }
 
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.USE_DEFAULTS);
         R r = R.status(true);
@@ -50,6 +50,6 @@ public class TokenController {
         System.out.println(text);
         R r1 = objectMapper.readValue(text,R.class);
         System.out.println(r1);
-    }
+    }*/
 
 }

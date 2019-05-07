@@ -1,3 +1,4 @@
+/*
 package org.springblade.information.controller;
 
 import org.apache.ibatis.session.SqlSession;
@@ -47,9 +48,11 @@ import java.util.Map;
 public abstract class BaseServiceTest {
 
     private static final String USER_REGISTER_KEY = "market:user:register";
-    /**
+    */
+/**
      * 获取factorybean
-     */
+     *//*
+
     @Resource
     SqlSessionFactory factory;
 
@@ -181,9 +184,11 @@ public abstract class BaseServiceTest {
         goodsService.save(goods);
     }
 
-    /**
+    */
+/**
      * 创建需求单
-     */
+     *//*
+
     protected void createDemand(){
 
         userRegister();
@@ -196,9 +201,11 @@ public abstract class BaseServiceTest {
      //   demandService.save(demand);
     }
 
-    /**
+    */
+/**
      * 注册用户
-     */
+     *//*
+
     protected void userRegister(){
         String mobile = "123456";
         String code = "testCode";
@@ -221,9 +228,11 @@ public abstract class BaseServiceTest {
     }
 
 
-    /**
+    */
+/**
      * 创建公告
-     */
+     *//*
+
     protected void createAnnounce(){
 
         Announcement announcement = new Announcement();
@@ -234,9 +243,11 @@ public abstract class BaseServiceTest {
 
     }
 
-    /**
+    */
+/**
      * 创建banner
-     */
+     *//*
+
     protected void createBanner(){
 
         Banner banner = new Banner();
@@ -246,9 +257,11 @@ public abstract class BaseServiceTest {
         bannerService.save(banner);
 
     }
-    /**
+    */
+/**
      * 创建新闻
-     */
+     *//*
+
     protected void createNews(){
 
         News news = new News();
@@ -263,3 +276,4 @@ public abstract class BaseServiceTest {
     }
 
 }
+*/

@@ -15,6 +15,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author linxiumeng
@@ -39,6 +42,14 @@ public class FApiUserController {
             r.setCode(FeignResultCodeConstant.ENTITY_NOT_EXISTS);
         }
 
+        return r;
+    }
+
+    @GetMapping("batchGetByIds")
+    public org.springblade.core.tool.api.R batchGetWithApi(@RequestParam("userIds") List<Long> userids){
+        Collection<UserEntity> userEntities = userService.listByIds(userids);
+        R r = R.status(true);
+        r.setData(userEntities);
         return r;
     }
 

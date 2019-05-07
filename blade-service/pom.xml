@@ -32,7 +32,7 @@
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-common</artifactId>
-            <version>${blade.project.version}</version>
+            <version>2.2.1</version>
         </dependency>
     </dependencies>
 
@@ -53,7 +53,7 @@
                             <include>${project.build.finalName}.jar</include>
                         </resource>
                     </resources>
-                    <registryUrl>${docker.registry.url}</registryUrl>
+                    <registryUrl>http://${docker.registry.url}/v2/</registryUrl>
                     <serverId>${docker.registry.url}</serverId>
                     <pushImage>true</pushImage>
                 </configuration>

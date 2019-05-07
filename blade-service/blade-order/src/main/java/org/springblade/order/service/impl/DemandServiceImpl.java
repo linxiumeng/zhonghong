@@ -18,10 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -112,6 +109,7 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
     public IPage<Demand> listCanQuotationDemand(Page page, Long userId) {
         QueryWrapper<Demand> wrapper = new QueryWrapper<>();
 
+        List<Long> userIds = new ArrayList<>(16);
         // status 为 1 是报价中
         wrapper.eq("status", 1).orderBy(true,false,"creat_time");
         IPage<Demand> resultPage = this.page(page, wrapper);
@@ -120,10 +118,16 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
             //循环遍历，获取user todo 需要优化
             for (Demand demand : demandList) {
                 Long createUserid = Long.valueOf(demand.getCreatUserid());
+                userIds.add(createUserid);
                 //调用用户服务(修改成batch)
             //    UserEntity userEntity = null;
-                UserEntity userEntity = userService.getUserById(createUserid).getData();
-                demand.setCreateUser(userEntity);
+            //    UserEntity userEntity = userService.getUserById(createUserid).getData();
+            //    demand.setCreateUser(userEntity);
+            }
+            int cursor = 0;
+            Collection<UserEntity> userEntityCollection = userService.batchGetUserByIds(userIds).getData();
+            for(UserEntity userEntity : userEntityCollection){
+                demandList.get(cursor++).setCreateUser(userEntity);
             }
         } catch (NumberFormatException e) {
             throw new RRException("系统出现错误");

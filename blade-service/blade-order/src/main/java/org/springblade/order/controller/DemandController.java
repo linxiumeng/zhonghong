@@ -101,7 +101,10 @@ public class DemandController {
     @PostMapping("can_quotate_list")
     @ApiOperation(value = "查看所有可报价的需求单")
     public R getCanQuotateList(@RequestBody PageForm param) {
+        long startTime = System.currentTimeMillis();
+        System.out.println();
         IPage resultPage = demandService.listCanQuotationDemand(new Page(param.getPage(),param.getSize()),null);
+        System.out.println("run can_quotate_list spend "+(System.currentTimeMillis() - startTime));
         return R.ok().put("result", resultPage);
     }
 

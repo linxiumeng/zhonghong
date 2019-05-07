@@ -15,10 +15,13 @@
  */
 package org.springblade.information;
 
+import org.springblade.common.utils.SpringContextUtils;
 import org.springblade.core.launch.BladeApplication;
 import org.springblade.core.launch.constant.AppConstant;
+import org.springblade.information.controller.FinePetroWebSocket;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -36,7 +39,12 @@ import static org.springblade.common.constant.ApplicationNameConstant.INFORMATIO
 public class InformationApplication {
 
 	public static void main(String[] args) {
-		BladeApplication.run(INFORMATION_MODULE, InformationApplication.class, args);
+		ApplicationContext context = BladeApplication.run(INFORMATION_MODULE, InformationApplication.class, args);
+
+		FinePetroWebSocket.setApplicationContext(context);
+
+		SpringContextUtils springContextUtils = new SpringContextUtils();
+		springContextUtils.setApplicationContext(context);
 	}
 
 }

@@ -1,3 +1,4 @@
+/*
 package org.springblade.information.controller;
 
 import com.alibaba.fastjson.JSONObject;
@@ -24,16 +25,19 @@ import java.util.UUID;
 
 public class GoodsControllerTest extends BaseControllerTest {
 
-  /*  @Resource
+  */
+/*  @Resource
     GoodsService goodsService;
 
     @Resource
     UserService userService;
 
     @Resource
-    RedisUtils redisUtils;*/
+    RedisUtils redisUtils;*//*
 
-  /*  private void createUser() {
+
+  */
+/*  private void createUser() {
 
 
         String mobile = "123456";
@@ -58,7 +62,8 @@ public class GoodsControllerTest extends BaseControllerTest {
         goods.setAuditStatus(GoodsAuditStatusEnum.DEFAULT);
         goods.setGoodsStatus(GoodsStatusEnum.DOWN);
         goodsService.insert(goods);
-    }*/
+    }*//*
+
 
     @Resource
     SqlSessionFactory sqlSessionFactory;
@@ -253,9 +258,11 @@ public class GoodsControllerTest extends BaseControllerTest {
 
         //
         Goods goods = new Goods();
-        /*goods.setId(1L);
+        */
+/*goods.setId(1L);
         goods.setGoodsStatus(GoodsStatusEnum.ON);
-        goods.setAuditStatus(GoodsAuditStatusEnum.OK);*/
+        goods.setAuditStatus(GoodsAuditStatusEnum.OK);*//*
+
         goods.setUserId(1L);
         goodsService.updateById(goods);
 
@@ -277,4 +284,4 @@ public class GoodsControllerTest extends BaseControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.row.records[0].userId").value("1"));
 
     }
-}
+}*/

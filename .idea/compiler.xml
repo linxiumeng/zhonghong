@@ -2,42 +2,35 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="blade-admin" />
-        <module name="blade-auth" />
-        <module name="blade-common" />
-        <module name="blade-desk" />
-        <module name="blade-desk-api" />
-        <module name="blade-develop" />
         <module name="blade-dict-api" />
-        <module name="blade-gateway" />
+        <module name="blade-foreward-user-api" />
+        <module name="blade-foreward-user" />
         <module name="blade-log" />
         <module name="blade-system" />
+        <module name="blade-common" />
+        <module name="blade-admin" />
+        <module name="blade-bg-admin" />
+        <module name="blade-desk-api" />
+        <module name="blade-auth" />
         <module name="blade-system-api" />
+        <module name="blade-desk" />
+        <module name="blade-pay" />
+        <module name="blade-order" />
         <module name="blade-user" />
+        <module name="blade-gateway" />
         <module name="blade-user-api" />
+        <module name="blade-information-api" />
+        <module name="blade-infomation" />
+        <module name="blade-develop" />
+        <module name="blade-order-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="blade-admin" target="1.8" />
-      <module name="blade-auth" target="1.8" />
-      <module name="blade-common" target="1.8" />
-      <module name="blade-desk" target="1.8" />
-      <module name="blade-desk-api" target="1.8" />
-      <module name="blade-develop" target="1.8" />
-      <module name="blade-dict-api" target="1.8" />
-      <module name="blade-gateway" target="1.8" />
-      <module name="blade-log" target="1.8" />
-      <module name="blade-ops" target="1.8" />
-      <module name="blade-service" target="1.8" />
-      <module name="blade-service-api" target="1.8" />
-      <module name="blade-system" target="1.8" />
-      <module name="blade-system-api" target="1.8" />
-      <module name="blade-user" target="1.8" />
-      <module name="blade-user-api" target="1.8" />
       <module name="zhonghong4" target="1.8" />
     </bytecodeTargetLevel>
   </component>
@@ -45,13 +38,21 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="blade-admin" options="-parameters" />
       <module name="blade-auth" options="-parameters" />
+      <module name="blade-bg-admin" options="-parameters" />
       <module name="blade-common" options="-parameters" />
       <module name="blade-desk" options="-parameters" />
       <module name="blade-desk-api" options="-parameters" />
       <module name="blade-develop" options="-parameters" />
       <module name="blade-dict-api" options="-parameters" />
+      <module name="blade-foreward-user" options="-parameters" />
+      <module name="blade-foreward-user-api" options="-parameters" />
       <module name="blade-gateway" options="-parameters" />
+      <module name="blade-infomation" options="-parameters" />
+      <module name="blade-information-api" options="-parameters" />
       <module name="blade-log" options="-parameters" />
+      <module name="blade-order" options="-parameters" />
+      <module name="blade-order-api" options="-parameters" />
+      <module name="blade-pay" options="-parameters" />
       <module name="blade-system" options="-parameters" />
       <module name="blade-system-api" options="-parameters" />
       <module name="blade-user" options="-parameters" />

@@ -1,3 +1,4 @@
+/*
 package org.springblade.information.controller;
 
 import com.alibaba.fastjson.JSONObject;
@@ -28,4 +29,4 @@ public class BannerControllerTest extends BaseControllerTest {
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result[0].path").value("这是banner路径"));
     }
-}
+}*/

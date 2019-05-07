@@ -1,3 +1,4 @@
+/*
 package org.springblade.information.controller;
 
 import com.alibaba.fastjson.JSONObject;
@@ -46,4 +47,4 @@ public class NewsControllerTest extends BaseControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.records[0].title").value("这是新闻标题"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.records[0].editor").value("hhb"));
     }
-}
+}*/

@@ -13,7 +13,7 @@
 
     <artifactId>blade-develop</artifactId>
     <name>${project.artifactId}</name>
-    <version>${blade.project.version}</version>
+    <version>2.2.1</version>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-common</artifactId>
-            <version>${blade.project.version}</version>
+            <version>2.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.springblade</groupId>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-dict-api</artifactId>
-            <version>${blade.project.version}</version>
+            <version>2.2.1</version>
         </dependency>
     </dependencies>
 
