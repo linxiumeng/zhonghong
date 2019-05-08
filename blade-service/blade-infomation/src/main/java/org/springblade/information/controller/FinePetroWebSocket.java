@@ -155,6 +155,7 @@ public class FinePetroWebSocket {
                     sendMessage(toParentSession, JSON.toJSONString(chatMessage));
                 }
 
+
                 ObjectMapper objectMapper = (ObjectMapper) applicationContext.getBean(ObjectMapper.class);
                 session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.ok()));
 
@@ -167,9 +168,12 @@ public class FinePetroWebSocket {
             ObjectMapper objectMapper = (ObjectMapper) applicationContext.getBean(ObjectMapper.class);
             try {
                 session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.error()));
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+
         }
     }
 
@@ -267,6 +271,19 @@ public class FinePetroWebSocket {
             toSession.setUpdateDate(new Date());
             chatSessionService.updateById(toSession);
         }
+
+
+        //对to进行发送websocket消息
+        Session toParentSession = userSessionParentMap.get(to);
+        if(toParentSession != null){
+            ObjectMapper objectMapper = (ObjectMapper) applicationContext.getBean(ObjectMapper.class);
+            try {
+                toParentSession.getBasicRemote().sendText(objectMapper.writeValueAsString(toSession));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 

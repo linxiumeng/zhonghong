@@ -20,7 +20,7 @@ package org.springblade.forewarduser.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import org.springblade.common.entity.UserEntity;
-import org.springblade.common.form.ChangePassworld;
+import org.springblade.common.form.ChangePassword;
 import org.springblade.common.form.LoginForm;
 import org.springblade.common.form.RegisterForm;
 import org.springblade.common.utils.R;
@@ -62,7 +62,7 @@ public interface UserService extends IService<UserEntity> {
      * @param user 用户
      * @return 返回影响行数
      */
-    Integer changePw(ChangePassworld pw, UserEntity user);
+    Integer changePw(ChangePassword pw, UserEntity user);
 
 
     /**

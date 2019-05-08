@@ -19,11 +19,13 @@ import org.springblade.common.form.AccountPayForm;
 import org.springblade.common.form.AccountRechargeForm;
 import org.springblade.common.respond.AccountDto;
 import org.springblade.common.utils.R;
+import org.springblade.common.validation.group.InsertGroup;
 import org.springblade.forewarduser.feign.AccountRechargeServiceFeign;
 import org.springblade.forewarduser.service.AccountService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -67,7 +69,7 @@ public class AccountController {
     @PostMapping("recharge")
     @ApiOperation("充值余额")
     @Login
-    public R recharge(@RequestBody AccountRechargeForm form, @LoginUser UserEntity user) {
+    public R recharge(@RequestBody @Validated(InsertGroup.class) AccountRechargeForm form, @LoginUser UserEntity user) {
         AccountRecharge accountRecharge = new AccountRecharge();
         BeanUtils.copyProperties(form, accountRecharge);
         accountRecharge.setType(0);

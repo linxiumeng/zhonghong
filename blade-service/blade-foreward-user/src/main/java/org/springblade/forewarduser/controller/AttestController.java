@@ -8,10 +8,12 @@ import org.springblade.common.entity.Attest;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.form.AttestForm;
 import org.springblade.common.utils.R;
+import org.springblade.common.validation.group.InsertGroup;
 import org.springblade.forewarduser.service.AttestService;
 import org.springblade.forewarduser.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +40,7 @@ public class AttestController {
     @ApiOperation(value = "采购商认证接口")
     @Login
     @PostMapping("creat")
-    public R creat(@RequestBody AttestForm param, @LoginUser UserEntity user){
+    public R creat(@RequestBody @Validated(InsertGroup.class) AttestForm param, @LoginUser UserEntity user){
         param.setUserId(user.getUserId());
         Attest attest = new Attest();
         BeanUtils.copyProperties(param,attest);

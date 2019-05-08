@@ -20,12 +20,10 @@ import java.util.List;
 @RestController
 @RequestMapping("api/banner")
 public class BannerController {
-    private BannerService bannerService;
-    
+
     @Autowired
-    public BannerController(BannerService bannerService) {
-        this.bannerService = bannerService;
-    }
+    private BannerService bannerService;
+
 
     @PostMapping("getBanner")
     public R getBanner(){

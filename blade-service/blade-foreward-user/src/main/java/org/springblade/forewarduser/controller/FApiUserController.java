@@ -6,7 +6,7 @@ import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.UserEntity;
-import org.springblade.common.form.ChangePassworld;
+import org.springblade.common.form.ChangePassword;
 import org.springblade.common.form.UserForm;
 import org.springblade.common.respond.UserDto;
 import org.springblade.core.tool.api.R;

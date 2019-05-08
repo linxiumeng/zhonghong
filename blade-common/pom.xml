@@ -89,6 +89,13 @@
             <artifactId>guava</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/io.swagger/swagger-annotations -->
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.5.22</version>
+        </dependency>
+
 
         <dependency>
             <groupId>cn.jpush.api</groupId>

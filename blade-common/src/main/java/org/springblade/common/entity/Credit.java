@@ -5,6 +5,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.springblade.common.validation.group.InsertGroup;
+import org.springblade.common.validation.group.UpdateGroup;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 /**
  * 授信表(Credit) 实体类
@@ -18,6 +23,8 @@ public class Credit {
 
     /***/
     @TableId(type = IdType.INPUT)
+    @Null(groups = {InsertGroup.class})
+    @NotNull(groups = {UpdateGroup.class})
     private Integer id;
     /**
      * 用户id

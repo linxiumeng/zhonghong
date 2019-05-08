@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.*;
  * @author linxiumeng
  * @since 2019-03-12 10:46:58
  */
-@Api(tags = "(Announcement)表操作控制器",description = " * @author linxiumeng")
+@Api(tags = "公告控制器（announcement）",description = "没啥可说的，难受")
 @RestController
 @RequestMapping("api/announcement")
 public class AnnouncementController {
     private AnnouncementService announcementService;
-    
+
     @Autowired
     public AnnouncementController(AnnouncementService announcementService) {
         this.announcementService = announcementService;
@@ -32,7 +32,7 @@ public class AnnouncementController {
      * @return
      */
     @PostMapping("detail")
-    @ApiOperation(value = "获取公告详情", response = AnnouncementService.class)
+    @ApiOperation(value = "获取公告详情")
     public R getAnnouncementById(@RequestParam("id")Integer id) {
 
         if(id == null){
@@ -48,7 +48,7 @@ public class AnnouncementController {
      * @return
      */
     @PostMapping("list")
-    @ApiOperation(value = "获取公告列表", response = AnnouncementService.class)
+    @ApiOperation(value = "获取公告列表")
     public R listAnnouncementByPage(@RequestBody PageForm pageForm) {
         Page<Announcement> page = new Page<>(pageForm.getPage(),pageForm.getSize());
         IPage<Announcement> resultPage = announcementService.listAnnouncements(page);

@@ -53,6 +53,15 @@ public class ChatMessageController {
         List<ChatMessage> messageList = resultPage.getRecords();
         Collections.reverse(messageList);
 
+        List<ChatMessage> list = new LinkedList<>();
+
+        for(ChatMessage message:messageList){
+            message.setRead(true);
+        }
+
+        chatMessageService.updateBatchById(list);
+
+
         return R.ok().put("result",resultPage);
     }
 
@@ -82,6 +91,7 @@ public class ChatMessageController {
         QueryWrapper<ChatSession> wrapper = new QueryWrapper<>();
         wrapper.eq("`to`",user.getUserId()).orderBy(true,false,"`status`").orderBy(true,false,"update_date");
         List<ChatSession> sessions = chatSessionService.list(wrapper);
+        sessions = chatMessageService.batchGetUnreadMessage(user.getUserId(),sessions);
         return R.ok().put("result",sessions);
     }
 

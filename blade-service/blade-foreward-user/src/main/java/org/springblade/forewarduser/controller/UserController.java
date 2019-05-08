@@ -7,7 +7,7 @@ import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.enums.PermissionCodeEnum;
-import org.springblade.common.form.ChangePassworld;
+import org.springblade.common.form.ChangePassword;
 import org.springblade.common.form.UserForm;
 import org.springblade.common.respond.UserDto;
 import org.springblade.common.utils.R;
@@ -75,7 +75,7 @@ public class UserController {
     @ApiOperation(value = "修改用户密码")
     @PostMapping("changepw")
     @Login
-    public R changepw(@RequestBody ChangePassworld pw, @LoginUser UserEntity currentUser) {
+    public R changepw(@RequestBody ChangePassword pw, @LoginUser UserEntity currentUser) {
         this.userService.changePw(pw, currentUser);
         return R.ok();
     }

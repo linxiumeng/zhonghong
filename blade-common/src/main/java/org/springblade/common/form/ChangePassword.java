@@ -5,11 +5,11 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class ChangePassworld {
+public class ChangePassword {
 
     @NotBlank
-    private String oldPassworld;
+    private String oldPassword;
 
     @NotBlank
-    private String newPassworld;
+    private String newPassword;
 }

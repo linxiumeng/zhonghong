@@ -28,7 +28,7 @@ import org.springblade.common.entity.UserEntity;
 import org.springblade.common.enums.ErrorEnum;
 import org.springblade.common.enums.UserLoginStatusEnum;
 import org.springblade.common.exception.RRException;
-import org.springblade.common.form.ChangePassworld;
+import org.springblade.common.form.ChangePassword;
 import org.springblade.common.form.LoginForm;
 import org.springblade.common.form.RegisterForm;
 import org.springblade.common.utils.R;
@@ -182,13 +182,13 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
      */
     @Override
   //  @CacheEvict(value = "user", key = "#user.userId")
-    public Integer changePw(ChangePassworld pw, UserEntity user) {
+    public Integer changePw(ChangePassword pw, UserEntity user) {
      //   Assert.isNull(user, ErrorEnum.用户不存在.getDesc());
         //密码错误
-        if (!user.getPassword().equals(DigestUtils.sha256Hex(pw.getOldPassworld()))) {
+        if (!user.getPassword().equals(DigestUtils.sha256Hex(pw.getOldPassword()))) {
             throw new RRException(ErrorEnum.用户密码错误.getDesc(), ErrorEnum.用户密码错误.getCode());
         }
-        user.setPassword(DigestUtils.sha256Hex(pw.getNewPassworld()));
+        user.setPassword(DigestUtils.sha256Hex(pw.getNewPassword()));
         return userDao.updateById(user);
     }
 

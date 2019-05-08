@@ -1,6 +1,7 @@
 package org.springblade.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -25,11 +26,13 @@ public class ChatSession {
     /**
      * 创建者
      */
+    @TableField(value = "`from`")
     private Integer from;
 
     /**
      * 接受者
      */
+    @TableField(value = "`to`")
     private Integer to;
 
     /**
@@ -47,8 +50,21 @@ public class ChatSession {
     /**
      * 暂时就两个状态 0 - 普通 ， 1 - 置顶
      */
+    @TableField(value = "`status`")
     private Integer status;
 
+
+    /**
+     * 未读数
+     */
+    @TableField(exist = false)
+    private int unread;
+
+    /**
+     * 最后一条消息
+     */
+    @TableField(exist = false)
+    private ChatMessage lastMessage;
 
 
 }

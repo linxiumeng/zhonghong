@@ -19,6 +19,8 @@ import org.springblade.common.utils.SpringContextUtils;
 import org.springblade.core.launch.BladeApplication;
 import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.information.controller.FinePetroWebSocket;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
@@ -46,5 +48,6 @@ public class InformationApplication {
 		SpringContextUtils springContextUtils = new SpringContextUtils();
 		springContextUtils.setApplicationContext(context);
 	}
+
 
 }
