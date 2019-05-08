@@ -25,8 +25,8 @@ public class AccountRechargeForm {
      * id
      */
     @ApiModelProperty(value = "id",example = "1")
-    @NotBlank(groups = {UpdateGroup.class})
-    @Null(groups = {InsertGroup.class})
+    @NotNull(groups = {UpdateGroup.class},message = "id不能为空")
+    @Null(groups = {InsertGroup.class},message = "id需为空")
     private Long id;
 
     /**

@@ -66,5 +66,11 @@ public class ChatSession {
     @TableField(exist = false)
     private ChatMessage lastMessage;
 
+    /**
+     * 接受者
+     */
+    @TableField(exist = false)
+    private UserEntity fromUser;
+
 
 }

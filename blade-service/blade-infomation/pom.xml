@@ -25,6 +25,8 @@
     </properties>
 
     <dependencies>
+
+        <!--这里将undertow替换成tomcat-->
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-core-boot</artifactId>

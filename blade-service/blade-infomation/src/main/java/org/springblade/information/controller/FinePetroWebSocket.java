@@ -2,9 +2,11 @@ package org.springblade.information.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.commons.lang.StringUtils;
 import org.springblade.common.entity.ChatMessage;
 import org.springblade.common.entity.ChatSession;
 import org.springblade.common.utils.R;
@@ -95,11 +97,12 @@ public class FinePetroWebSocket {
         }
         try {
             // 判断连接的形式 是只有 from 还是from to都有
-            if (paramArr[1] != null) {
+            if (paramArr[0] != null) {
                 //单个聊天窗口
                 sessionMap.put(paramArr[0] + "," + paramArr[1], session);
+            }else{
                 //总窗口负责收总消息
-                userSessionParentMap.put(paramArr[0], session);
+                userSessionParentMap.put(paramArr[1], session);
             }
             sendMessage(session, "聊天服务器连接成功");
         } catch (NumberFormatException | IOException e) {
@@ -125,7 +128,34 @@ public class FinePetroWebSocket {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
+
+        ObjectMapper objectMapper = (ObjectMapper) applicationContext.getBean(ObjectMapper.class);
+
         System.out.println("来自客户端的消息:" + message);
+
+        JSONObject messageJson = null;
+
+        try {
+            messageJson = JSON.parseObject(message);
+        }catch (JSONException e){
+            try {
+                session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.error(e.getMessage())));
+                return ;
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        String checkStr = messageJson.getString("timeId");
+        if(StringUtils.isBlank(checkStr)){
+            try {
+                session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.error("timeId不存在")));
+                return ;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         //session后面代表的连接
         String queryString = session.getQueryString();
         //获取要发送到的session
@@ -135,8 +165,19 @@ public class FinePetroWebSocket {
             return;
         }
 
-        //存储消息
-        ChatMessage chatMessage = saveMessage(paramArr[0], paramArr[1], message);
+        ChatMessage chatMessage = null;
+
+        try {
+            //存储消息
+            chatMessage = saveMessage(paramArr[0], paramArr[1], message);
+        }catch (Exception e){
+            try {
+                session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.error(e.getMessage())));
+                return ;
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
 
         if (chatMessage != null) {
             //获取去的session
@@ -154,10 +195,7 @@ public class FinePetroWebSocket {
                 if (toParentSession != null) {
                     sendMessage(toParentSession, JSON.toJSONString(chatMessage));
                 }
-
-
-                ObjectMapper objectMapper = (ObjectMapper) applicationContext.getBean(ObjectMapper.class);
-                session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.ok()));
+                session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.ok().put("timeId",checkStr)));
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -165,7 +203,7 @@ public class FinePetroWebSocket {
 
 
         }else{
-            ObjectMapper objectMapper = (ObjectMapper) applicationContext.getBean(ObjectMapper.class);
+
             try {
                 session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.error()));
 

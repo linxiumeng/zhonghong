@@ -16,6 +16,8 @@
 
 package org.springblade.common.form;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -28,14 +30,18 @@ import javax.validation.constraints.NotBlank;
  * @since 3.1.0 2018-01-25
  */
 @Data
+@ApiModel("注册校验表单")
 public class RegisterCheckCodeForm {
 
+    @ApiModelProperty(value = "手机号码",example = "1313213131321")
     @NotBlank(message = "手机号不能为空")
     private String mobile;
 
+    @ApiModelProperty(value = "标价码",example = "13246")
     @NotBlank(message = "标记码不能为空")
     private String markCode;
 
+    @ApiModelProperty(value = "验证码",example = "12138")
     @NotBlank(message = "验证码不能为空")
     private String captcha;
 

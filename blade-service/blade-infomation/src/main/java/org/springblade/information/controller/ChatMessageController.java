@@ -1,6 +1,7 @@
 package org.springblade.information.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,6 +18,7 @@ import org.springblade.information.service.ChatSessionService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,17 +37,19 @@ public class ChatMessageController {
     @Resource
     ChatSessionService chatSessionService;
 
+    @Login
     @PostMapping("list")
-    public R listChatMessage(@RequestBody ChatMessageForm param){
+    public R listChatMessage(@RequestBody ChatMessageForm param,@LoginUser UserEntity userEntity){
 
         IPage<ChatMessage> chatMessagePage = new Page<>(1,param.getSize());
 
         QueryWrapper<ChatMessage> wrapper = new QueryWrapper<>();
-        wrapper
-                .eq("from",param.getFrom())
-                .eq("to",param.getTo())
-                .lt("create_time",param.getFromDate())
-                .orderBy(true,false,"create_time");
+        wrapper.nested(j->j.nested(i->i.eq("`from`",param.getFrom())
+                            .eq("`to`",userEntity.getUserId()))
+                .or().nested(i->i.eq("`to`",param.getFrom())
+                            .eq("`from`",userEntity.getUserId())))
+                .lt("create_date",param.getFromDate())
+                .orderBy(true,false,"create_date");
 
         //todo 这里需要优化不需要查询总条数
         IPage<ChatMessage> resultPage = chatMessageService.page(chatMessagePage,wrapper);
@@ -53,13 +57,19 @@ public class ChatMessageController {
         List<ChatMessage> messageList = resultPage.getRecords();
         Collections.reverse(messageList);
 
-        List<ChatMessage> list = new LinkedList<>();
+        ArrayList<ChatMessage> batchExecuteList = new ArrayList<>(10);
 
+        // 把没有度过的消息更新成已读过，这里可以使batch的数据更少一些
         for(ChatMessage message:messageList){
-            message.setRead(true);
+            if(!message.getRead()){
+                message.setRead(true);
+                batchExecuteList.add(message);
+            }
         }
 
-        chatMessageService.updateBatchById(list);
+        if(batchExecuteList.size() > 0) {
+            chatMessageService.updateBatchById(batchExecuteList);
+        }
 
 
         return R.ok().put("result",resultPage);
@@ -86,7 +96,7 @@ public class ChatMessageController {
      * @return
      */
     @Login
-    @GetMapping("conversations")
+    @PostMapping("conversations")
     public R listSessions(@LoginUser UserEntity user){
         QueryWrapper<ChatSession> wrapper = new QueryWrapper<>();
         wrapper.eq("`to`",user.getUserId()).orderBy(true,false,"`status`").orderBy(true,false,"update_date");
@@ -94,6 +104,22 @@ public class ChatMessageController {
         sessions = chatMessageService.batchGetUnreadMessage(user.getUserId(),sessions);
         return R.ok().put("result",sessions);
     }
+
+
+    /**
+     * 未读条数
+     * @param user
+     * @return
+     */
+    @Login
+    @PostMapping("unread")
+    public R countUnread(@LoginUser UserEntity user){
+        QueryWrapper<ChatSession> wrapper = new QueryWrapper<>();
+        wrapper.eq("`to`",user.getUserId()).eq("`read`",false);
+        int unreadCount = chatMessageService.count((Wrapper) wrapper);
+        return R.ok().put("result",unreadCount);
+    }
+
 
     /**
      * 移除一个会话列表

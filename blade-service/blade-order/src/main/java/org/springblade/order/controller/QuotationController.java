@@ -15,9 +15,11 @@ import org.springblade.common.form.QuotationForm;
 import org.springblade.common.utils.R;
 import org.springblade.common.utils.RedisUtils;
 import org.springblade.common.utils.SmsCheckUtils;
+import org.springblade.common.validation.group.InsertGroup;
 import org.springblade.order.service.DemandService;
 import org.springblade.order.service.QuotationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +58,7 @@ public class QuotationController {
     @PostMapping("insert")
     @Login
     @HasPermission(needVerifyUser = true)
-    public R insert(@RequestBody QuotationForm param, @LoginUser UserEntity userEntity) {
+    public R insert(@RequestBody @Validated(InsertGroup.class) QuotationForm param, @LoginUser UserEntity userEntity) {
 
         if (!smsCheckUtils.check(userEntity.getMobile(), param.getCode())) {
             return R.error("验证码错误");

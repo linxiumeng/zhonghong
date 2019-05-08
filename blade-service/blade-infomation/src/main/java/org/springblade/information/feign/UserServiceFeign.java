@@ -7,6 +7,10 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author hanbin
  */
@@ -25,5 +29,14 @@ public interface UserServiceFeign {
      */
     @GetMapping(USER_API_PREFIX + "/detail")
     R<UserEntity> getUserById(@RequestParam("userId") Long id);
+
+    /**
+     * 批量获取
+     * @param ids
+     * @return
+     */
+    @GetMapping(USER_API_PREFIX + "/batchGetByIds")
+    R<Collection<UserEntity>> batchGetUserByIds(@RequestParam("userIds") Collection<Long> ids);
+
 
 }

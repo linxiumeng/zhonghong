@@ -19,21 +19,19 @@ public class ChatMessageForm extends PageForm{
     /**
      * 来源
      */
-    @NotNull
+    @NotNull(message = "来源不能为空")
     @ApiModelProperty(value = "来源",example = "12")
     private Integer from;
 
-    /**
-     * 去处
-     */
-    @NotNull
+
+    /*@NotNull(message = "去处不能为空")
     @ApiModelProperty(value = "去处",example = "21")
-    private Integer to;
+    private Integer to;*/
 
     /**
      * 日期
      */
-    @NotNull
+    @NotNull(message = "开始日期不能为空")
     @ApiModelProperty(value = "来源日期",example = "2019-12-01 12:23")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date fromDate;

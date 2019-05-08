@@ -19,21 +19,21 @@ public class AccountFinancingPayForm {
     /**
      * 订单
      */
-    @NotNull
+    @NotNull(message = "订单不能为空")
     @ApiModelProperty(value = "订单",example = "")
     PurchaseOrders purchaseOrders;
 
     /**
      * 用户
      */
-    @NotNull
+    @NotNull(message = "用户不能为空")
     @ApiModelProperty(value = "用户",example = "")
     UserEntity user;
 
     /**
      * 支付表单
      */
-    @NotNull
+    @NotNull(message = "支付表单不能为空")
     @ApiModelProperty(value = "支付表单",example = "")
     PayForm payForm;
 

@@ -1,6 +1,7 @@
 package org.springblade.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -24,11 +25,13 @@ public class ChatMessage {
     /**
      * 发送者
      */
+    @TableField(value = "`from`")
     private Integer from;
 
     /**
      * 接收者
      */
+    @TableField(value = "`to`")
     private Integer to;
 
     /**
@@ -54,6 +57,7 @@ public class ChatMessage {
     /**
      * 消息是否已讀
      */
+    @TableField(value = "`read`")
     private Boolean read;
 
 
