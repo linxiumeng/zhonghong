@@ -24,13 +24,15 @@ public class QuotationForm extends Quotation {
     private String code;
 
     /**
-     * 分页
+     * 当前页
      */
+    @ApiModelProperty(example = "1",value = "当前页")
     private int page;
 
     /**
-     * 分页
+     * 每页条数
      */
+    @ApiModelProperty(example = "10",value = "每页条数")
     private int size;
 
 }

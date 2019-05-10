@@ -16,6 +16,9 @@
 
 package org.springblade.common.form;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -28,8 +31,13 @@ import javax.validation.constraints.NotBlank;
  * @since 3.1.0 2018-01-25
  */
 @Data
+@TableName("tb_fuser")
+@ApiModel("注册表单")
 public class RegisterWithoutCaptchaForm {
-
+    /**
+     *手机号码
+     */
+    @ApiModelProperty(value = "手机号码",name="mobile",example = "13725698745")
     @NotBlank(message = "手机号不能为空")
     private String mobile;
 
