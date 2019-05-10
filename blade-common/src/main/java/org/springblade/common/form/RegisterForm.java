@@ -16,6 +16,11 @@
 
 package org.springblade.common.form;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
 import javax.validation.constraints.NotBlank;
 
 
@@ -25,50 +30,35 @@ import javax.validation.constraints.NotBlank;
  * @author Mark sunlightcs@gmail.com
  * @since 3.1.0 2018-01-25
  */
-
+@Data
+@TableName("tb_fuser")
+@ApiModel("注册表单")
 public class RegisterForm {
-
+    /**
+     *手机号码
+     */
+    @ApiModelProperty(value = "手机号码",name="mobile",example = "13725698745")
     @NotBlank(message = "手机号不能为空")
     private String mobile;
 
-
+    /**
+     * 验证码
+     */
+    @ApiModelProperty(value = "验证码",name="code",example = "12321")
     @NotBlank(message = "验证码不能为空")
     private String code;
 
+    /**
+     * 密码
+     */
+    @ApiModelProperty(value = "密码",name="password",example = "12321")
     @NotBlank(message = "密码不能为空")
     private String password;
 
+    /**
+     * 标价码
+     */
+    @ApiModelProperty(value = "标价码",name="markCode",example = "13246")
     private String markCode;
 
-    public String getMarkCode() {
-        return markCode;
-    }
-
-    public void setMarkCode(String markCode) {
-        this.markCode = markCode;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 }
