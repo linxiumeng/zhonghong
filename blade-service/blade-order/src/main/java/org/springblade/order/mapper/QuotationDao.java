@@ -39,7 +39,7 @@ public interface QuotationDao extends BaseMapper<Quotation> {
   * @return
   */
  @Select("<script>" +
-         "select * from tb_quotation a where create_date = (select max(create_date) from tb_quotation b where a.demand_id = b.demand_id and user_id = #{userId} )" +
+         "select * from tb_quotation a where create_date = (select max(create_date) from tb_quotation b where a.demand_id = b.demand_id and user_id = #{userId} ) order by create_date desc " +
          "<where>${ew.sqlSegment}</where></script>")
  List<Quotation> selectQuotationListByDemand(IPage rowBounds, @Param("ew") Wrapper wrapper, @Param("userId") Long userId);
 

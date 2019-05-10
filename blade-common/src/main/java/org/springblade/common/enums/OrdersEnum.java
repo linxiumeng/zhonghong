@@ -1,6 +1,10 @@
 package org.springblade.common.enums;
 
-public enum OrdersEnum {
+import com.baomidou.mybatisplus.core.enums.IEnum;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+public enum OrdersEnum implements IEnum<Integer> {
     ZERO(0,"采购商下单等待供应商确认"),
     ONE(1,"供应商打回订单，订单结束，后续有意向需重新下单"),
     TWO(2,"浮动价订单、需求订单，等待供应商发送订单金额；需要报价单"),
@@ -37,8 +41,28 @@ public enum OrdersEnum {
     public String getDesc(){
         return desc;
     }
-    public int getStatus(){
+
+    @JsonValue
+    public Integer getStatus(){
         return status;
     }
 
+    @JsonCreator
+    public static OrdersEnum getItem(Integer code){
+
+        if(code != null){
+            for(OrdersEnum item : values()){
+                if(item.getStatus() == code.intValue()){
+                    return item;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Integer getValue() {
+        return getStatus();
+    }
 }

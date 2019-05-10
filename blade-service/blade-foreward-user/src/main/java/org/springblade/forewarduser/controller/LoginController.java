@@ -4,12 +4,14 @@ package org.springblade.forewarduser.controller;
 import com.google.code.kaptcha.Producer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.RandomUtils;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.form.LoginForm;
 import org.springblade.common.utils.R;
 import org.springblade.common.utils.RedisUtils;
+import org.springblade.core.log.logger.BladeLogger;
 import org.springblade.forewarduser.service.TokenService;
 import org.springblade.forewarduser.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -49,17 +53,24 @@ public class LoginController {
     @Autowired
     private RedisUtils redisUtils;
 
+    @Resource
+    BladeLogger bladeLogger;
+
     @PostMapping("login")
     @ApiOperation("客户登录")
-    public R login(@RequestBody LoginForm form) {
+    public R login(@RequestBody LoginForm form, HttpServletRequest request) {
         //表单校验
       //  ValidatorUtils.validateEntity(form);
 /*        String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
         if(!form.getCaptcha().equalsIgnoreCase(kaptcha)){
             return R.error("验证码不正确");
         }*/
+
+
+        bladeLogger.info(System.currentTimeMillis() + ""+RandomUtils.nextInt()*100,"login");
         //用户登录
         Map<String, Object> map = userService.login(form);
+
         return R.ok(map);
     }
 

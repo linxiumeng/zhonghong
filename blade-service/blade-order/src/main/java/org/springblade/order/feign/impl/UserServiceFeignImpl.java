@@ -26,7 +26,7 @@ public class UserServiceFeignImpl implements UserServiceFeign {
 
     @Override
     @GetMapping(USER_API_PREFIX + "/fallback/batchGetByIds")
-    public R<Collection<UserEntity>> batchGetUserByIds(List<Long> ids) {
+    public R<Collection<UserEntity>> batchGetUserByIds(Collection<Long> ids) {
         R r = R.status(true);
         r.setData(null);
         return r;

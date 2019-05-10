@@ -31,6 +31,6 @@ public interface UserServiceFeign {
     R<UserEntity> getUserById(@RequestParam("userId") Long id);
 
     @GetMapping(USER_API_PREFIX + "/batchGetByIds")
-    R<Collection<UserEntity>> batchGetUserByIds(@RequestParam("userIds") List<Long> ids);
+    R<Collection<UserEntity>> batchGetUserByIds(@RequestParam("userIds") Collection<Long> ids);
 
 }

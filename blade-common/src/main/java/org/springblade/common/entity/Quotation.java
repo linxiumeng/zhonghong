@@ -151,5 +151,9 @@ public class Quotation implements Serializable {
     @TableField(exist = false)
     private Demand demand;
 
+    /**
+     * 原油指标文件
+     */
+    private String filePoint;
 
 }

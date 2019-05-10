@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springblade.common.enums.OrdersEnum;
 
 import java.util.Date;
 
@@ -163,7 +164,7 @@ public class PurchaseOrders {
      * 采购单状态0为初始化
      * @see org.springblade.common.enums.OrdersEnum
      */
-    private Integer status;
+    private OrdersEnum status;
     /**
      * 创建时间
      */
@@ -214,5 +215,10 @@ public class PurchaseOrders {
      * 结算单据
      */
     private String settleBill;
+
+    /**
+     * 原油指标文件
+     */
+    private String filePoint;
 
 }

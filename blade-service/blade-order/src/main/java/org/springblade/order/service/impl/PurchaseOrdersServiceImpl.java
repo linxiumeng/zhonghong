@@ -86,6 +86,8 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         param.setGoodsPic(goods.getPic());
         param.setCreatTime(null);
         param.setUpdateTime(null);
+        param.setId(null);
+        param.setStatus(OrdersEnum.ZERO);
         return this.save(param);
 
     }
@@ -107,6 +109,8 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         }
         setContact(param, buyer, provider);
         BeanUtils.copyProperties(goods,param);
+        param.setId(null);
+
         return param;
     }
 
@@ -159,13 +163,13 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
         wrapper.eq("id", purchaseOrders.getId()).eq("provider_id", userId);
         PurchaseOrders po = this.getOne(wrapper);
-        if (po.getStatus() == OrdersEnum.ZERO.getStatus()) {
+        if (po.getStatus() == OrdersEnum.ZERO) {
             PurchaseOrders purchaseOrdersUpdate = new PurchaseOrders();
             purchaseOrdersUpdate.setId(purchaseOrders.getId());
 
             //对状态做验证
-            Integer status = purchaseOrders.getStatus();
-            if (status == null || (status != 1 && status != 2)) {
+            OrdersEnum status = purchaseOrders.getStatus();
+            if (status == null || (status != OrdersEnum.ONE && status != OrdersEnum.TWO)) {
                 throw new RRException("状态值出错");
             }
 
@@ -210,7 +214,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         purchaseOrders.setGoodsPrice(String.valueOf(goods.getGoodsPrice()));
         purchaseOrders.setGoodsName(goods.getGoodsName());
         purchaseOrders.setGoodsId(goods.getId().intValue());
-
+        purchaseOrders.setFilePoint(goods.getFilePoint());
         purchaseOrders.setGoodsType(goods.getGoodsType());
         purchaseOrders.setGoodsUnit(goods.getGoodsUnit());
     }
@@ -219,5 +223,6 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         purchaseOrders.setGoodsName(quotation.getFName());
         purchaseOrders.setGoodsType(quotation.getFType());
         purchaseOrders.setGoodsUnit(quotation.getFUnit());
+        purchaseOrders.setFilePoint(quotation.getFilePoint());
     }
 }

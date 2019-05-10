@@ -97,7 +97,7 @@ public class PurchaseOrdersController {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
         wrapper.eq("id", param.getId()).eq("provider_id", user.getUserId());
         PurchaseOrders po = purchaseOrdersService.getOne(wrapper);
-        if (po.getStatus() == OrdersEnum.TWO.getStatus() || po.getStatus() == OrdersEnum.FOUR.getStatus()) {
+        if (po.getStatus() == OrdersEnum.TWO || po.getStatus() == OrdersEnum.FOUR) {
             PurchaseOrders purchaseOrders = new PurchaseOrders();
             purchaseOrders.setId(param.getId());
             purchaseOrders.setStatus(param.getStatus());
@@ -119,10 +119,10 @@ public class PurchaseOrdersController {
         if(po == null){
             throw new RRException("采购单不存在，请确认订单号");
         }
-        if (po.getStatus() == OrdersEnum.TEN.getStatus()) {
+        if (po.getStatus() == OrdersEnum.TEN) {
             PurchaseOrders purchaseOrders = new PurchaseOrders();
             purchaseOrders.setId(param.getId());
-            purchaseOrders.setStatus(OrdersEnum.ELEVEN.getStatus());
+            purchaseOrders.setStatus(OrdersEnum.ELEVEN);
             purchaseOrdersService.updateById(purchaseOrders);
             return R.ok();
         }
@@ -135,7 +135,7 @@ public class PurchaseOrdersController {
     @HasPermission(needVerifyUser = true)
     @Login
     public R confirmPrice(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
-        if (param.getStatus() == OrdersEnum.FIVE.getStatus() && param.getStatus() == OrdersEnum.FOUR.getStatus()) {
+        if (param.getStatus() == OrdersEnum.FIVE && param.getStatus() == OrdersEnum.FOUR) {
             return R.error("输入状态错误");
         }
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
@@ -146,7 +146,7 @@ public class PurchaseOrdersController {
             throw new RRException("订单不存在，请联系管理员");
         }
 
-        if (po.getStatus() == OrdersEnum.THREE.getStatus()) {
+        if (po.getStatus() == OrdersEnum.THREE) {
             PurchaseOrders purchaseOrders = new PurchaseOrders();
             purchaseOrders.setId(param.getId());
             purchaseOrders.setStatus(param.getStatus());
@@ -171,7 +171,7 @@ public class PurchaseOrdersController {
         if(r.getCode() == FeignResultCodeConstant.EXCEPTION_CODE){
             throw new RRException(r.getMsg());
         }
-        purchaseOrders.setStatus(OrdersEnum.SIX.getStatus());
+        purchaseOrders.setStatus(OrdersEnum.SIX);
         purchaseOrdersService.updateById(purchaseOrders);
         return R.ok();
     }
@@ -198,7 +198,7 @@ public class PurchaseOrdersController {
         if(r.getCode() == FeignResultCodeConstant.EXCEPTION_CODE){
             throw new RRException(r.getMsg());
         }
-        purchaseOrders.setStatus(OrdersEnum.FOURTEEN.getStatus());
+        purchaseOrders.setStatus(OrdersEnum.FOURTEEN);
         purchaseOrdersService.updateById(purchaseOrders);
         return R.ok();
     }
@@ -249,7 +249,7 @@ public class PurchaseOrdersController {
         if(po == null){
             throw new RRException("订单不存在，请联系管理员");
         }
-        if (po.getStatus() != OrdersEnum.FIVE.getStatus()) {
+        if (po.getStatus() != OrdersEnum.FIVE) {
             throw new RRException("订单状态异常", 502);
         }
         PurchaseOrders purchaseOrders = new PurchaseOrders();
