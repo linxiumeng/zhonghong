@@ -30,8 +30,8 @@ public class Demand implements Serializable {
      * 产品类型
      */
     @JsonProperty(value = "fType")
-    @NotBlank
-    private String fType;
+   // @NotBlank
+    private Long fType;
     /**
      * 需求单状态0为初始化，1为招标中，2为暂停招标，3为停止招标
      */
@@ -142,4 +142,7 @@ public class Demand implements Serializable {
      */
     @TableField(exist = false)
     private UserEntity createUser;
+
+    @TableField(exist = false)
+    private GoodsTypeEntity goodsTypeEntity;
 }

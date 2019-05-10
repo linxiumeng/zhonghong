@@ -7,8 +7,10 @@ import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.entity.Goods;
+import org.springblade.common.entity.GoodsTypeEntity;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.enums.GoodsStatusEnum;
+import org.springblade.common.exception.RRException;
 import org.springblade.common.form.GoodsCheckCodeForm;
 import org.springblade.common.form.GoodsStatusForm;
 import org.springblade.common.form.PageForm;
@@ -19,12 +21,15 @@ import org.springblade.common.validation.group.SelectDetailGroup;
 import org.springblade.common.validation.group.UpdateGroup;
 import org.springblade.information.feign.UserServiceFeign;
 import org.springblade.information.service.GoodsService;
+import org.springblade.information.service.GoodsTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Validation;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author linxiumeng
@@ -42,6 +47,9 @@ public class GoodsController {
 
     @Resource
     SmsCheckUtils smsCheckUtils;
+
+    @Resource
+    GoodsTypeService goodsTypeService;
 
     @Autowired
     public GoodsController(GoodsService goodsService) {
@@ -103,6 +111,19 @@ public class GoodsController {
         if (!smsCheckUtils.check(user.getMobile(), param.getCode())) {
             return R.error("验证码错误");
         }
+
+        //对于固定价格和浮动价格的参数校验
+        if(param.getGoodsPrice() == null){
+            if(param.getPricingManner() == null || param.getContractualValueDate() == null){
+                throw new RRException("确定浮动价格的同时，计价日期和计价基准需要确定");
+            }
+            param.setGoodsPrice(0D);
+        } else {
+            param.setPricingManner(null);
+            param.setContractualValueDate(null);
+        }
+
+
         param.setUserId(user.getUserId());
         param.setGoodsCompany(user.getCompanyName());
         Boolean row = this.goodsService.save(param);
@@ -144,6 +165,16 @@ public class GoodsController {
         return R.ok().put("row", goodsService.listGoodsByUserId(pageForm, userEntity.getUserId()));
     }
 
+
+    @PostMapping("typeList")
+    public R getGoodsDetail(){
+        QueryWrapper<GoodsTypeEntity> wrapper = new QueryWrapper<>();
+        wrapper.eq("is_open",1).orderByDesc("create_date");
+        return R.ok().put("result", goodsTypeService.list(wrapper));
+    }
+
+
+
     @GetMapping("/detail")
     public org.springblade.core.tool.api.R decrGoodsStock(@RequestParam("goodsId")Long goodsId){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
@@ -156,6 +187,14 @@ public class GoodsController {
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
         boolean flag = goodsService.decrGoodsStock(goodsId,count);
         r.setData(flag);
+        return r;
+    }
+
+    @GetMapping("batchGetListByIds")
+    public org.springblade.core.tool.api.R<Collection<GoodsTypeEntity>> batchGetTypeListByIds(@RequestParam("ids")Collection<Long> ids){
+        org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
+        Collection<GoodsTypeEntity> goodsTypeEntities = goodsTypeService.listByIds(ids);
+        r.setData(goodsTypeEntities);
         return r;
     }
 

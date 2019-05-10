@@ -14,4 +14,12 @@ import java.util.Date;
 public class DemandForm extends Demand {
 
 
+    private int page;
+
+    private int size;
+
+    private String key;
+
+
+
 }

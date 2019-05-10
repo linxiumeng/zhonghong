@@ -42,7 +42,7 @@ public class Quotation implements Serializable {
      * 产品类型
      */
     @JsonProperty(value = "fType")
-    private String fType;
+    private Long fType;
     /**
      * 产品名称
      */

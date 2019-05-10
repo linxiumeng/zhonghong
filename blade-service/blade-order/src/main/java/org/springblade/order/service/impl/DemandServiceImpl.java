@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang.StringUtils;
 import org.springblade.common.entity.Demand;
+import org.springblade.common.entity.GoodsTypeEntity;
 import org.springblade.common.entity.Quotation;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.respond.DemandResp;
 import org.springblade.common.respond.QuotationResp;
+import org.springblade.order.feign.GoodsServiceFeign;
 import org.springblade.order.feign.UserServiceFeign;
 import org.springblade.order.mapper.DemandDao;
 import org.springblade.order.service.DemandService;
@@ -38,11 +41,23 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
     @Resource
     UserServiceFeign userService;
 
+    @Resource
+    GoodsServiceFeign goodsService;
+
     @Override
-    public Page<DemandResp> listOwnDemandPage(Page page, Long id) {
+    public Page<DemandResp> listOwnDemandPage(Page page, Long id,String key,Integer status) {
 
         QueryWrapper<Demand> wrapper = new QueryWrapper<>();
+        if(StringUtils.isNotBlank(key)){
+            wrapper.eq("f_type",key);
+        }
+
+        if(status != null){
+            wrapper.eq("status",status);
+        }
+
         wrapper.eq("creat_userid", id).orderBy(true,false,"creat_time");
+
         IPage<Demand> demandPage = this.page(page, wrapper);
         Page<DemandResp> demandRespPage = new Page<>();
 
@@ -51,6 +66,8 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
         try {
             BeanUtils.copyProperties(demandPage, demandRespPage);
 
+            Set<Long> goodsTypeIds = new HashSet<>(8);
+
             List<DemandResp> demandRespList = new LinkedList<>();
             for (Demand demand : demandPage.getRecords()) {
                 List<Quotation> quotationList = quotationService.list(new QueryWrapper<Quotation>().eq("demand_id", demand.getId()));
@@ -58,7 +75,12 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
                 BeanUtils.copyProperties(demand, demandResp);
                 demandResp.setQuotationList(quotationList);
                 demandRespList.add(demandResp);
+                goodsTypeIds.add(demandResp.getFType());
             }
+
+            //插入demand的goodstype
+            setGoodsTypeInDemandList(goodsTypeIds,demandRespList);
+
             demandRespPage.setRecords(demandRespList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,6 +132,7 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
         QueryWrapper<Demand> wrapper = new QueryWrapper<>();
 
         List<Long> userIds = new ArrayList<>(16);
+        Set<Long> goodsTypeIds = new HashSet<>();
         // status 为 1 是报价中
         wrapper.eq("status", 1).orderBy(true,false,"creat_time");
         IPage<Demand> resultPage = this.page(page, wrapper);
@@ -119,16 +142,16 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
             for (Demand demand : demandList) {
                 Long createUserid = Long.valueOf(demand.getCreatUserid());
                 userIds.add(createUserid);
-                //调用用户服务(修改成batch)
-            //    UserEntity userEntity = null;
-            //    UserEntity userEntity = userService.getUserById(createUserid).getData();
-            //    demand.setCreateUser(userEntity);
+                goodsTypeIds.add(demand.getFType());
             }
             int cursor = 0;
             Collection<UserEntity> userEntityCollection = userService.batchGetUserByIds(userIds).getData();
             for(UserEntity userEntity : userEntityCollection){
                 demandList.get(cursor++).setCreateUser(userEntity);
             }
+
+            setGoodsTypeInDemandList(goodsTypeIds,demandList);
+
         } catch (NumberFormatException e) {
             throw new RRException("系统出现错误");
         }
@@ -141,6 +164,19 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
         page.setRecords(demandDao.selectDemandListWithQuotationList(page, wrapper));
         return page;
     }*/
+
+    private void setGoodsTypeInDemandList(Collection<Long> goodsTypeIds,List<? extends Demand> demandList){
+        //插入demand的goodstype
+        Collection<GoodsTypeEntity> goodsTypeEntities = goodsService.batchGetGoodsType(goodsTypeIds).getData();
+
+        for(GoodsTypeEntity goodsTypeEntity : goodsTypeEntities){
+            for(Demand demand : demandList){
+                if(demand.getFType().longValue() == goodsTypeEntity.getId().longValue()){
+                    demand.setGoodsTypeEntity(goodsTypeEntity);
+                }
+            }
+        }
+    }
 
 
 }

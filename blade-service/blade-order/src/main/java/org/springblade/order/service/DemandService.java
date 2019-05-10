@@ -26,7 +26,7 @@ public interface DemandService extends IService<Demand> {
      * @param id
      * @return
      */
-    Page<DemandResp> listOwnDemandPage(Page page, Long id);
+    Page<DemandResp> listOwnDemandPage(Page page, Long id,String key,Integer status);
 
     /**
      * 修改自己的需求单

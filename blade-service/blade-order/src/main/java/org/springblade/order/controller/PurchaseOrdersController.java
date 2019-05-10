@@ -12,10 +12,7 @@ import org.springblade.common.entity.PurchaseOrders;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.enums.OrdersEnum;
 import org.springblade.common.exception.RRException;
-import org.springblade.common.form.AccountFinancingPayForm;
-import org.springblade.common.form.AccountPayForm;
-import org.springblade.common.form.PageForm;
-import org.springblade.common.form.PayForm;
+import org.springblade.common.form.*;
 import org.springblade.common.utils.R;
 import org.springblade.order.feign.AccountDetailServiceFeign;
 import org.springblade.order.feign.AccountServiceFeign;
@@ -207,7 +204,7 @@ public class PurchaseOrdersController {
     @HasPermission(needVerifyUser = true)
     @PostMapping("/buyer/listpage")
     @Login
-    public R buyerlistpage(@RequestBody PageForm param, @LoginUser UserEntity user) {
+    public R buyerlistpage(@RequestBody PurchaseOrdersForm param, @LoginUser UserEntity user) {
         return R.ok().put("Orderpage", purchaseOrdersService.listPurchaseOrdersUseForPurchaser(new Page(param.getPage(), param.getSize()), user.getUserId()));
     }
 

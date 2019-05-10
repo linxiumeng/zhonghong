@@ -1,8 +1,6 @@
 #服务器端口
 server:
   port: 8200
-  servlet:
-    context-path: /finepetro-admin
 
 #数据源配置
 spring:

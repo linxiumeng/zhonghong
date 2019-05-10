@@ -10,6 +10,7 @@ blade:
     blade-foreward-user: blade-foreward-user
     blade-order: blade-order
     blade-pay: blade-pay
+    blade-bg-admin: blade-bg-admin
 
 
 spring:
@@ -57,6 +58,10 @@ spring:
         uri: lb://${blade.service.blade-order}
         predicates:
         - Path=/${blade.service.blade-order}/**
+      - id: ${blade.service.blade-bg-admin}
+        uri: lb://${blade.service.blade-bg-admin}
+        predicates:
+        - Path=/${blade.service.blade-bg-admin}/**
 
       discovery:
         locator:

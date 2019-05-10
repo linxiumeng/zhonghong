@@ -4,15 +4,22 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang.StringUtils;
 import org.springblade.common.entity.Goods;
+import org.springblade.common.entity.GoodsTypeEntity;
 import org.springblade.common.enums.GoodsAuditStatusEnum;
 import org.springblade.common.enums.GoodsStatusEnum;
 import org.springblade.common.form.PageForm;
 import org.springblade.information.mapper.GoodsDao;
+import org.springblade.information.mapper.GoodsTypeDao;
 import org.springblade.information.service.GoodsService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -26,6 +33,9 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDao, Goods> implements Go
 
     @Resource
     GoodsDao goodsDao;
+
+    @Resource
+    GoodsTypeDao goodsTypeDao;
 
     /**
      * 删减商品库存
@@ -52,7 +62,37 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDao, Goods> implements Go
         wrapper.eq(Goods.GOODS_STATUS_COLUMN, GoodsStatusEnum.ON.getCode()).
                 eq(Goods.GOODS_AUDIT_STATUS_COLUMN, GoodsAuditStatusEnum.OK.getCode()).
                 orderBy(true,false,Goods.CREATE_TIME_COLUMN);
+
+        if(StringUtils.isNotBlank(pageForm.getKey())){
+            wrapper.eq("goods_type",pageForm.getKey());
+        }
+
         Page<Goods> page = new Page<>(pageForm.getPage(), pageForm.getSize());
+
+        List<Goods> goodsList = page.getRecords();
+
+        List<GoodsTypeEntity> goodsTypeEntityList = null;
+
+        Set<Long> typeList = new HashSet<>(8);
+
+        if(StringUtils.isBlank(pageForm.getKey())) {
+            for (Goods goods : goodsList) {
+                typeList.add(goods.getGoodsType());
+            }
+            goodsTypeEntityList = goodsTypeDao.selectBatchIds(typeList);
+        }else{
+            goodsTypeEntityList = new ArrayList<>(1);
+            goodsTypeEntityList.add(goodsTypeDao.selectById(Long.valueOf(pageForm.getKey())));
+        }
+
+        for(GoodsTypeEntity goodsTypeEntity : goodsTypeEntityList){
+            for(Goods goods : goodsList){
+                if(goods.getGoodsType().longValue() == goodsTypeEntity.getId().longValue()){
+                    goods.setGoodsTypeEntity(goodsTypeEntity);
+                }
+            }
+        }
+
         return this.page(page, wrapper);
     }
 

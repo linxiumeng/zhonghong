@@ -2,6 +2,7 @@ package org.springblade.common.entity;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -86,7 +87,7 @@ public class PurchaseOrders {
     /**
      * 商品类型
      */
-    private String goodsType;
+    private Long goodsType;
     /**
      * 贸易条款
      */
@@ -220,5 +221,8 @@ public class PurchaseOrders {
      * 原油指标文件
      */
     private String filePoint;
+
+    @TableField(exist = false)
+    private GoodsTypeEntity goodsTypeEntity;
 
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.common.entity.PurchaseOrders;
 import org.springblade.common.entity.UserEntity;
+import org.springblade.common.enums.OrdersEnum;
 import org.springblade.common.respond.ProviderPurchaseOrderStatisticsResp;
 
 /**
@@ -64,7 +65,7 @@ public interface PurchaseOrdersService extends IService<PurchaseOrders> {
      * @param userId
      * @return
      */
-    IPage<PurchaseOrders> listPurchaseOrdersUseForPurchaser(Page page, Long userId);
+    IPage<PurchaseOrders> listPurchaseOrdersUseForPurchaser(Page page, Long userId, String key, OrdersEnum ordersEnum);
 
     /**
      * 为供应商查询订单列表
@@ -72,6 +73,6 @@ public interface PurchaseOrdersService extends IService<PurchaseOrders> {
      * @param userId
      * @return
      */
-    IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId);
+    IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId,String key,OrdersEnum ordersEnum);
     
 }

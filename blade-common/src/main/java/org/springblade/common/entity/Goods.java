@@ -43,7 +43,7 @@ public class Goods implements Serializable {
     /**
      * 产品类型
      */
-    private String goodsType;
+    private Long goodsType;
     /**
      * 产品名字
      */
@@ -56,7 +56,7 @@ public class Goods implements Serializable {
     /**
      * 产品单价
      */
-    @NotNull(groups = {InsertGroup.class})
+ //   @NotNull(groups = {InsertGroup.class})
     private Double goodsPrice;
     /**
      * 产品单位
@@ -75,7 +75,7 @@ public class Goods implements Serializable {
     /**
      * 图片地址
      */
-    @NotBlank(groups = {InsertGroup.class})
+  //  @NotBlank(groups = {InsertGroup.class})
     private String pic;
     /**
      * 审核状态0为默认状态,1为审核通过,2为审核失败
@@ -195,4 +195,6 @@ public class Goods implements Serializable {
     public static final String CREATE_TIME_COLUMN = "creat_time";
 
 
+    @TableField(exist = false)
+    private GoodsTypeEntity goodsTypeEntity;
 }

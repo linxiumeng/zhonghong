@@ -4,11 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang.StringUtils;
 import org.springblade.common.constant.FeignResultCodeConstant;
-import org.springblade.common.entity.Goods;
-import org.springblade.common.entity.PurchaseOrders;
-import org.springblade.common.entity.Quotation;
-import org.springblade.common.entity.UserEntity;
+import org.springblade.common.entity.*;
 import org.springblade.common.enums.ErrorEnum;
 import org.springblade.common.enums.OrdersEnum;
 import org.springblade.common.exception.RRException;
@@ -24,6 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -70,11 +72,11 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         }
 
         Long userId = goods.getUserId();
-       // UserEntity provider = userService.getUserById(userId).getData();
+        // UserEntity provider = userService.getUserById(userId).getData();
 
         R<UserEntity> r = userService.getUserById(userId);
         UserEntity provider = r.getData();
-        if(r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS){
+        if (r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS) {
             provider = null;
             throw new RRException("供应商不存在");
         }
@@ -95,20 +97,20 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
     @Override
     public PurchaseOrders generatePurchaseOrderModelByGoods(UserEntity buyer, PurchaseOrders param) {
 
-        if(buyer.getStatus()!=3) {
+        if (buyer.getStatus() != 3) {
             throw new RRException(ErrorEnum.用户未认证.getDesc());
         }
         Goods goods = goodsService.getGoodsById(param.getGoodsId().longValue()).getData();
-        Long userId =goods.getUserId();
-      //  UserEntity provider = userService.getUserById(userId).getData();
+        Long userId = goods.getUserId();
+        //  UserEntity provider = userService.getUserById(userId).getData();
         R<UserEntity> r = userService.getUserById(userId);
         UserEntity provider = r.getData();
-        if(r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS){
+        if (r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS) {
             provider = null;
             throw new RRException("供应商不存在");
         }
         setContact(param, buyer, provider);
-        BeanUtils.copyProperties(goods,param);
+        BeanUtils.copyProperties(goods, param);
         param.setId(null);
 
         return param;
@@ -118,47 +120,47 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
     @Transactional(rollbackFor = Exception.class)
     public boolean putPurchaseOrderByQuotation(UserEntity buyer, PurchaseOrders param) {
 
-        if(buyer.getStatus()!= 3) {
+        if (buyer.getStatus() != 3) {
             throw new RRException(ErrorEnum.用户未认证.getDesc());
         }
         Quotation quotation = quotationService.getById(param.getQuotationId());
-        if(quotation == null){
+        if (quotation == null) {
             throw new RRException("报价单不存在");
         }
         Long userId = quotation.getUserId();
         R<UserEntity> r = userService.getUserById(userId);
         UserEntity provider = r.getData();
-        if(r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS){
+        if (r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS) {
             provider = null;
             throw new RRException("供应商不存在");
         }
         setContact(param, buyer, provider);
-        BeanUtils.copyProperties(quotation,param);
-        copyQuotationPropertiestToOrders(quotation,param);
+        BeanUtils.copyProperties(quotation, param);
+        copyQuotationPropertiestToOrders(quotation, param);
         return this.save(param);
 
     }
 
     @Override
     public PurchaseOrders generatePurchaseOrderModelByQuotation(UserEntity buyer, PurchaseOrders param) {
-        if(buyer.getStatus()!=3) {
+        if (buyer.getStatus() != 3) {
             throw new RRException(ErrorEnum.用户未认证.getDesc());
         }
         Quotation quotation = quotationService.getById(param.getQuotationId());
         Long userId = quotation.getUserId();
         R<UserEntity> r = userService.getUserById(userId);
         UserEntity provider = r.getData();
-        if(r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS){
+        if (r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS) {
             provider = null;
             throw new RRException("供应商不存在");
         }
         setContact(param, buyer, provider);
-        BeanUtils.copyProperties(quotation,param);
+        BeanUtils.copyProperties(quotation, param);
         return param;
     }
 
     @Override
-    public boolean confirmPurchaseOrder(PurchaseOrders purchaseOrders,Long userId) {
+    public boolean confirmPurchaseOrder(PurchaseOrders purchaseOrders, Long userId) {
 
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
         wrapper.eq("id", purchaseOrders.getId()).eq("provider_id", userId);
@@ -182,21 +184,67 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
     }
 
     @Override
-    public IPage<PurchaseOrders> listPurchaseOrdersUseForPurchaser(Page page, Long userId) {
+    public IPage<PurchaseOrders> listPurchaseOrdersUseForPurchaser(Page page, Long userId, String key, OrdersEnum ordersEnum) {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
-        wrapper.eq("buyer_id", userId).orderBy(true,false,"creat_time");
+        buildSearchWrapper(wrapper, key, ordersEnum);
+        wrapper.eq("buyer_id", userId).orderBy(true, false, "creat_time");
         IPage<PurchaseOrders> po = this.page(page, wrapper);
+
+        setGoodsTypeInPurchaseOrdersList(po);
+
+
         return po;
     }
 
     @Override
-    public IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId) {
+    public IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId, String key, OrdersEnum ordersEnum) {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
-        wrapper.eq("provider_id", userId).orderBy(true,false,"creat_time");
+
+        buildSearchWrapper(wrapper, key, ordersEnum);
+
+        wrapper.eq("provider_id", userId).orderBy(true, false, "creat_time");
         IPage<PurchaseOrders> po = this.page(page, wrapper);
+
+        setGoodsTypeInPurchaseOrdersList(po);
+
         return po;
     }
 
+
+    /**
+     * 构造查询的wrapper
+     *
+     * @param wrapper
+     * @param key
+     * @param ordersEnum
+     */
+    private static void buildSearchWrapper(QueryWrapper<PurchaseOrders> wrapper, String key, OrdersEnum ordersEnum) {
+        if (StringUtils.isNotBlank(key)) {
+            wrapper.eq("goods_type", key);
+        }
+        if (ordersEnum != null) {
+            wrapper.eq("status", ordersEnum.getStatus());
+        }
+    }
+
+    private void setGoodsTypeInPurchaseOrdersList(IPage<PurchaseOrders> pages) {
+        List<PurchaseOrders> purchaseOrdersList = pages.getRecords();
+        Set<Long> goodsTypeIds = new HashSet<>();
+        for (PurchaseOrders po1 : purchaseOrdersList) {
+            goodsTypeIds.add(po1.getGoodsType());
+        }
+
+        //插入purchase的goodstype
+        Collection<GoodsTypeEntity> goodsTypeEntities = goodsService.batchGetGoodsType(goodsTypeIds).getData();
+
+        for (GoodsTypeEntity goodsTypeEntity : goodsTypeEntities) {
+            for (PurchaseOrders purchaseOrders : purchaseOrdersList) {
+                if (purchaseOrders.getGoodsType().longValue() == goodsTypeEntity.getId().longValue()) {
+                    purchaseOrders.setGoodsTypeEntity(goodsTypeEntity);
+                }
+            }
+        }
+    }
 
     private void setContact(PurchaseOrders param, UserEntity buyer, UserEntity provider) {
         param.setBuyerCompany(buyer.getCompanyName());
@@ -219,7 +267,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         purchaseOrders.setGoodsUnit(goods.getGoodsUnit());
     }
 
-    private void copyQuotationPropertiestToOrders(Quotation quotation,PurchaseOrders purchaseOrders){
+    private void copyQuotationPropertiestToOrders(Quotation quotation, PurchaseOrders purchaseOrders) {
         purchaseOrders.setGoodsName(quotation.getFName());
         purchaseOrders.setGoodsType(quotation.getFType());
         purchaseOrders.setGoodsUnit(quotation.getFUnit());

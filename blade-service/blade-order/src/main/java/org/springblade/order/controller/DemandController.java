@@ -65,9 +65,9 @@ public class DemandController {
     @PostMapping("queryList")
     @Login
     @ApiOperation(value = "查看自己需求接口")
-    public R creatDemand(@RequestBody PageForm pageForm, @LoginUser UserEntity user) {
+    public R listDemands(@RequestBody DemandForm demandForm, @LoginUser UserEntity user) {
 
-        Page<DemandResp> demandRespPage = demandService.listOwnDemandPage(new Page(pageForm.getPage(),pageForm.getSize()),user.getUserId());
+        Page<DemandResp> demandRespPage = demandService.listOwnDemandPage(new Page(demandForm.getPage(),demandForm.getSize()),user.getUserId(),demandForm.getKey());
 
         //优化版
         //  demandRespPage = demandService.selectDemandListWithQuotationList(page,wrapper);
