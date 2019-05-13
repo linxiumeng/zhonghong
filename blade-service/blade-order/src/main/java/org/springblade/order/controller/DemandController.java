@@ -67,7 +67,11 @@ public class DemandController {
     @ApiOperation(value = "查看自己需求接口")
     public R listDemands(@RequestBody DemandForm demandForm, @LoginUser UserEntity user) {
 
-        Page<DemandResp> demandRespPage = demandService.listOwnDemandPage(new Page(demandForm.getPage(),demandForm.getSize()),user.getUserId(),demandForm.getKey());
+        if(demandForm.getGoodsType() != null && demandForm.getGoodsType() == -1){
+            demandForm.setGoodsType(null);
+        }
+
+        Page<DemandResp> demandRespPage = demandService.listOwnDemandPage(new Page(demandForm.getPage(),demandForm.getSize()),user.getUserId(),demandForm.getGoodsType(),demandForm.getStatus());
 
         //优化版
         //  demandRespPage = demandService.selectDemandListWithQuotationList(page,wrapper);
@@ -100,10 +104,15 @@ public class DemandController {
 
     @PostMapping("can_quotate_list")
     @ApiOperation(value = "查看所有可报价的需求单")
-    public R getCanQuotateList(@RequestBody PageForm param) {
+    public R getCanQuotateList(@RequestBody DemandForm param) {
+
+        if(param.getGoodsType() != null && param.getGoodsType() == -1){
+            param.setGoodsType(null);
+        }
+
         long startTime = System.currentTimeMillis();
         System.out.println();
-        IPage resultPage = demandService.listCanQuotationDemand(new Page(param.getPage(),param.getSize()),null);
+        IPage resultPage = demandService.listCanQuotationDemand(new Page(param.getPage(),param.getSize()),null,param.getGoodsType());
         System.out.println("run can_quotate_list spend "+(System.currentTimeMillis() - startTime));
         return R.ok().put("result", resultPage);
     }

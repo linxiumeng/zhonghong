@@ -26,7 +26,7 @@ public interface DemandService extends IService<Demand> {
      * @param id
      * @return
      */
-    Page<DemandResp> listOwnDemandPage(Page page, Long id,String key,Integer status);
+    Page<DemandResp> listOwnDemandPage(Page page, Long id,Integer key,Integer status);
 
     /**
      * 修改自己的需求单
@@ -50,6 +50,6 @@ public interface DemandService extends IService<Demand> {
      * @param userId
      * @return
      */
-    IPage<Demand> listCanQuotationDemand(Page page, Long userId);
+    IPage<Demand> listCanQuotationDemand(Page page, Long userId,Integer goodsType);
 
 }

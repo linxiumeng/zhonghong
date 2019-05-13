@@ -29,4 +29,7 @@ public class PageForm {
      */
     @ApiModelProperty(example = "林秀栋董事长", value = "关键字")
     private String key;
+
+
+    private Integer type;
 }

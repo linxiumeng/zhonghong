@@ -18,7 +18,7 @@ import java.util.Date;
 @Service
 public class FaqServiceImpl extends ServiceImpl<FaqDao, FaqEntity> implements FaqService {
     @Override
-    public IPage<FaqEntity> listFaq(IPage page, Date startDate, Date endDate, String keywords) {
+    public IPage<FaqEntity> listFaq(IPage page, Date startDate, Date endDate, String keywords,Integer status) {
         QueryWrapper wrapper = new QueryWrapper();
         if (endDate != null) {
             wrapper.lt("create_date", endDate);
@@ -29,6 +29,11 @@ public class FaqServiceImpl extends ServiceImpl<FaqDao, FaqEntity> implements Fa
         if (StringUtils.isNotBlank(keywords)) {
             wrapper.like("title", keywords);
         }
+
+        if(status != null){
+            wrapper.eq("is_open",status);
+        }
+
         // 是否显示倒叙 + 序号倒叙 + 创建日期倒叙
         wrapper.orderBy(true,false,"is_open").orderBy(true,false,"`order`").orderBy(true,false,"create_date");
         return this.page(page, wrapper);

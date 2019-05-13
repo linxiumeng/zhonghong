@@ -16,10 +16,7 @@ import org.springblade.information.service.GoodsService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -49,6 +46,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDao, Goods> implements Go
         return amount > 0 && goodsDao.decrGoodsStock(goodsId, amount) > 0;
     }
 
+    @Override
+    public boolean incrGoodsStock(long goodsId, int amount) {
+        return goodsDao.incrGoodsStock(goodsId, amount) > 0;
+    }
+
     /**
      * 返回上线的产品分页
      *
@@ -63,26 +65,28 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDao, Goods> implements Go
                 eq(Goods.GOODS_AUDIT_STATUS_COLUMN, GoodsAuditStatusEnum.OK.getCode()).
                 orderBy(true,false,Goods.CREATE_TIME_COLUMN);
 
-        if(StringUtils.isNotBlank(pageForm.getKey())){
-            wrapper.eq("goods_type",pageForm.getKey());
+        if(pageForm.getType() != null){
+            wrapper.eq("goods_type",pageForm.getType());
         }
 
         Page<Goods> page = new Page<>(pageForm.getPage(), pageForm.getSize());
 
         List<Goods> goodsList = page.getRecords();
 
-        List<GoodsTypeEntity> goodsTypeEntityList = null;
+        List<GoodsTypeEntity> goodsTypeEntityList = Collections.EMPTY_LIST;
 
         Set<Long> typeList = new HashSet<>(8);
 
-        if(StringUtils.isBlank(pageForm.getKey())) {
+        if(pageForm.getType() == null) {
             for (Goods goods : goodsList) {
                 typeList.add(goods.getGoodsType());
             }
-            goodsTypeEntityList = goodsTypeDao.selectBatchIds(typeList);
+            if(typeList.size() > 0) {
+                goodsTypeEntityList = goodsTypeDao.selectBatchIds(typeList);
+            }
         }else{
             goodsTypeEntityList = new ArrayList<>(1);
-            goodsTypeEntityList.add(goodsTypeDao.selectById(Long.valueOf(pageForm.getKey())));
+            goodsTypeEntityList.add(goodsTypeDao.selectById(Long.valueOf(pageForm.getType())));
         }
 
         for(GoodsTypeEntity goodsTypeEntity : goodsTypeEntityList){

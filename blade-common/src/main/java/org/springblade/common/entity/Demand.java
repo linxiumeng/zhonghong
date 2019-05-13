@@ -35,7 +35,7 @@ public class Demand implements Serializable {
     /**
      * 需求单状态0为初始化，1为招标中，2为暂停招标，3为停止招标
      */
-    private String status;
+    private Integer status;
     /**
      * 产品名称
      */

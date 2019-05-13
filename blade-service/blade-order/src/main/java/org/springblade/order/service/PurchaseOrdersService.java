@@ -65,7 +65,7 @@ public interface PurchaseOrdersService extends IService<PurchaseOrders> {
      * @param userId
      * @return
      */
-    IPage<PurchaseOrders> listPurchaseOrdersUseForPurchaser(Page page, Long userId, String key, OrdersEnum ordersEnum);
+    IPage<PurchaseOrders> listPurchaseOrdersUseForPurchaser(Page page, Long userId, Integer key, OrdersEnum ordersEnum);
 
     /**
      * 为供应商查询订单列表
@@ -73,6 +73,6 @@ public interface PurchaseOrdersService extends IService<PurchaseOrders> {
      * @param userId
      * @return
      */
-    IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId,String key,OrdersEnum ordersEnum);
+    IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId,Integer key,OrdersEnum ordersEnum);
     
 }

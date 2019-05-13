@@ -13,6 +13,7 @@ import org.springblade.common.enums.GoodsStatusEnum;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.form.GoodsCheckCodeForm;
 import org.springblade.common.form.GoodsStatusForm;
+import org.springblade.common.form.GoodsTypeForm;
 import org.springblade.common.form.PageForm;
 import org.springblade.common.utils.R;
 import org.springblade.common.utils.SmsCheckUtils;
@@ -27,9 +28,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.Validation;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 /**
  * @author linxiumeng
@@ -77,6 +77,10 @@ public class GoodsController {
     @ApiOperation(value = "分页查询商品表(TbGoods)数据")
     @PostMapping("selectpage")
     public R selectpage(@RequestBody PageForm pageForm) {
+        //针对于前端select框做了特殊处理
+        if(pageForm.getType() != null && pageForm.getType() == -1){
+            pageForm.setType(null);
+        }
         return R.ok().put("row", goodsService.listGoodsByOnline(pageForm));
     }
 
@@ -167,11 +171,16 @@ public class GoodsController {
 
 
     @PostMapping("typeList")
-    public R getGoodsDetail(){
+    public R getGoodsDetail(@RequestBody GoodsTypeForm goodsTypeForm){
         QueryWrapper<GoodsTypeEntity> wrapper = new QueryWrapper<>();
-        wrapper.eq("is_open",1).orderByDesc("create_date");
+        if(goodsTypeForm.getIsOpen() != null && goodsTypeForm.getIsOpen() != -1) {
+            wrapper.eq("is_open", goodsTypeForm.getIsOpen());
+        }
+        wrapper.orderByDesc("create_date");
         return R.ok().put("result", goodsTypeService.list(wrapper));
     }
+
+
 
 
 
@@ -183,9 +192,17 @@ public class GoodsController {
     }
 
     @GetMapping("decr_goods_stock")
-    public org.springblade.core.tool.api.R getGoodsDetail(@RequestParam("goodsId")Long goodsId,@RequestParam("count")Integer count){
+    public org.springblade.core.tool.api.R decrGoodsStock(@RequestParam("goodsId")Long goodsId,@RequestParam("count")Integer count){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
         boolean flag = goodsService.decrGoodsStock(goodsId,count);
+        r.setData(flag);
+        return r;
+    }
+
+    @GetMapping("incr_goods_stock")
+    public org.springblade.core.tool.api.R incrGoodsStock(@RequestParam("goodsId")Long goodsId,@RequestParam("count")Integer count){
+        org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
+        boolean flag = goodsService.incrGoodsStock(goodsId,count);
         r.setData(flag);
         return r;
     }
@@ -193,7 +210,12 @@ public class GoodsController {
     @GetMapping("batchGetListByIds")
     public org.springblade.core.tool.api.R<Collection<GoodsTypeEntity>> batchGetTypeListByIds(@RequestParam("ids")Collection<Long> ids){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
-        Collection<GoodsTypeEntity> goodsTypeEntities = goodsTypeService.listByIds(ids);
+        Collection<GoodsTypeEntity> goodsTypeEntities = null;
+        if(ids.isEmpty()){
+            goodsTypeEntities = Collections.EMPTY_LIST;
+        }else{
+            goodsTypeEntities = goodsTypeService.listByIds(ids);
+        }
         r.setData(goodsTypeEntities);
         return r;
     }

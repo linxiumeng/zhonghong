@@ -28,9 +28,10 @@ public class GoodsForm extends BaseForm{
 
     GoodsFormEnum goodsFormStatus;
 
-
-    String goodsType;
-
+    /**
+     * 商品类型
+     */
+    Integer goodsType;
 
 
 

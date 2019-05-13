@@ -90,7 +90,16 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         param.setUpdateTime(null);
         param.setId(null);
         param.setStatus(OrdersEnum.ZERO);
-        return this.save(param);
+
+        boolean status = false;
+        try{
+            status = this.save(param);
+        }catch (Exception e){
+            //不确定这里一定正确执行
+            //补偿性事务 将库存加回去 todo 这里为保证正确性最好加mq或入库 确保最终一致性
+            goodsService.incrGoodsStock(goods.getId(), param.getGoodsAmount());
+        }
+        return status;
 
     }
 
@@ -184,7 +193,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
     }
 
     @Override
-    public IPage<PurchaseOrders> listPurchaseOrdersUseForPurchaser(Page page, Long userId, String key, OrdersEnum ordersEnum) {
+    public IPage<PurchaseOrders> listPurchaseOrdersUseForPurchaser(Page page, Long userId, Integer key, OrdersEnum ordersEnum) {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
         buildSearchWrapper(wrapper, key, ordersEnum);
         wrapper.eq("buyer_id", userId).orderBy(true, false, "creat_time");
@@ -197,7 +206,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
     }
 
     @Override
-    public IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId, String key, OrdersEnum ordersEnum) {
+    public IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId, Integer key, OrdersEnum ordersEnum) {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
 
         buildSearchWrapper(wrapper, key, ordersEnum);
@@ -218,8 +227,8 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
      * @param key
      * @param ordersEnum
      */
-    private static void buildSearchWrapper(QueryWrapper<PurchaseOrders> wrapper, String key, OrdersEnum ordersEnum) {
-        if (StringUtils.isNotBlank(key)) {
+    private static void buildSearchWrapper(QueryWrapper<PurchaseOrders> wrapper, Integer key, OrdersEnum ordersEnum) {
+        if (key != null) {
             wrapper.eq("goods_type", key);
         }
         if (ordersEnum != null) {
@@ -229,11 +238,17 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
 
     private void setGoodsTypeInPurchaseOrdersList(IPage<PurchaseOrders> pages) {
         List<PurchaseOrders> purchaseOrdersList = pages.getRecords();
+
         Set<Long> goodsTypeIds = new HashSet<>();
         for (PurchaseOrders po1 : purchaseOrdersList) {
-            goodsTypeIds.add(po1.getGoodsType());
+            if(po1 != null) {
+                goodsTypeIds.add(po1.getGoodsType());
+            }
         }
 
+        if(goodsTypeIds.isEmpty()){
+            return;
+        }
         //插入purchase的goodstype
         Collection<GoodsTypeEntity> goodsTypeEntities = goodsService.batchGetGoodsType(goodsTypeIds).getData();
 

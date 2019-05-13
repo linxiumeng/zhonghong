@@ -40,7 +40,7 @@ public class FaqController {
                 new Page(faqForm.getPage(),faqForm.getSize()),
                 faqForm.getStartDate(),
                 faqForm.getEndDate(),
-                faqForm.getKeywords()));
+                faqForm.getKeywords(),faqForm.getIsOpen()));
     }
 
     @PostMapping("update")

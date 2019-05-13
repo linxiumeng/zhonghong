@@ -120,6 +120,17 @@ public class FinePetroWebSocket {
      */
     @OnClose
     public void onClose() {
+
+        /*session.isOpen();
+
+        ObjectMapper objectMapper = (ObjectMapper) applicationContext.getBean(ObjectMapper.class);
+
+        try {
+            this.session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.error(3333,"您已于服务器断开连接")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
         //从set中删除
         webSocketSet.remove(this);
     }
@@ -136,13 +147,13 @@ public class FinePetroWebSocket {
 
         System.out.println("来自客户端的消息:" + message);
 
-        JSONObject messageJson = null;
+        JSONObject messageJson = new JSONObject();
 
         try {
             messageJson = JSON.parseObject(message);
         } catch (JSONException e) {
             try {
-                if(session != null && session.isOpen()) {
+                if (session != null && session.isOpen()) {
                     session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.error(e.getMessage())));
                 }
                 return;
@@ -151,10 +162,22 @@ public class FinePetroWebSocket {
             }
         }
 
+        Integer messageType = messageJson.getInteger("type");
+
+        if (messageType != null && messageType == 6) {
+            try {
+                session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.error(6666, "pong")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
+
         String checkStr = messageJson.getString("timeId");
         if (StringUtils.isBlank(checkStr)) {
             try {
-                if(session != null && session.isOpen()) {
+                if (session != null && session.isOpen()) {
                     session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.error("timeId不存在")));
                 }
                 return;
@@ -179,7 +202,7 @@ public class FinePetroWebSocket {
             chatMessage = saveMessage(paramArr[0], paramArr[1], message);
         } catch (Exception e) {
             try {
-                if(session != null && session.isOpen()) {
+                if (session != null && session.isOpen()) {
                     session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.error(e.getMessage())));
                 }
                 return;
@@ -204,7 +227,7 @@ public class FinePetroWebSocket {
                 if (toParentSession != null) {
                     sendMessage(toParentSession, JSON.toJSONString(chatMessage));
                 }
-                if(session != null && session.isOpen()) {
+                if (session != null && session.isOpen()) {
                     session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.ok().put("timeId", checkStr)));
                 }
             } catch (IOException e) {
@@ -215,7 +238,7 @@ public class FinePetroWebSocket {
         } else {
 
             try {
-                if(session != null && session.isOpen()) {
+                if (session != null && session.isOpen()) {
                     session.getBasicRemote().sendText(objectMapper.writeValueAsString(R.error()));
                 }
             } catch (IOException e) {
@@ -227,7 +250,7 @@ public class FinePetroWebSocket {
     }
 
     private void sendMessage(Session session, String message) throws IOException {
-        if(session != null && session.isOpen()) {
+        if (session != null && session.isOpen()) {
             session.getBasicRemote().sendText(message);
         }
     }

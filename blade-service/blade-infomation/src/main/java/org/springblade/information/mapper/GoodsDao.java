@@ -56,4 +56,13 @@ public interface GoodsDao extends BaseMapper<Goods> {
     @Update(" update tb_goods set goods_stock = goods_stock - #{amount} where id = #{goodsId} and (goods_stock - #{amount} ) >= 0 ")
     int decrGoodsStock(@Param("goodsId") long goodsId, @Param("amount") int amount);
 
+
+    /**
+     * 增加库存
+     * @param goodsId
+     * @param amount
+     * @return
+     */
+    @Update(" update tb_goods set goods_stock = goods_stock + #{amount} where id = #{goodsId} ")
+    int incrGoodsStock(@Param("goodsId") long goodsId, @Param("amount") int amount);
 }

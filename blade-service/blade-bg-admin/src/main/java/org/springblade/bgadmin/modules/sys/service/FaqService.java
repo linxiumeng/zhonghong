@@ -21,6 +21,6 @@ public interface FaqService extends IService<FaqEntity> {
      * @param keywords
      * @return
      */
-    IPage<FaqEntity> listFaq(IPage page, Date startDate, Date endDate, String keywords);
+    IPage<FaqEntity> listFaq(IPage page, Date startDate, Date endDate, String keywords,Integer status);
 
 }

@@ -47,4 +47,13 @@ public interface GoodsServiceFeign {
     @GetMapping(GOODS_API_PREFIX + "/batchGetListByIds")
     R<Collection<GoodsTypeEntity>> batchGetGoodsType(@RequestParam("ids") Collection<Long> typeIds);
 
+    /**
+     * 增加库存
+     * @param goodsId
+     * @param count
+     * @return
+     */
+    @GetMapping(GOODS_API_PREFIX+"/incr_goods_stock")
+    R<Boolean> incrGoodsStock(@RequestParam("goodsId")Long goodsId,@RequestParam("count")Integer count);
+
 }

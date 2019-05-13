@@ -20,6 +20,8 @@ public class DemandForm extends Demand {
 
     private String key;
 
+    private Integer goodsType;
+
 
 
 }

@@ -1,6 +1,8 @@
 package org.springblade.order.controller;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,6 +10,7 @@ import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.constant.FeignResultCodeConstant;
+import org.springblade.common.entity.LoadBill;
 import org.springblade.common.entity.PurchaseOrders;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.enums.OrdersEnum;
@@ -16,6 +19,7 @@ import org.springblade.common.form.*;
 import org.springblade.common.utils.R;
 import org.springblade.order.feign.AccountDetailServiceFeign;
 import org.springblade.order.feign.AccountServiceFeign;
+import org.springblade.order.service.LoadBillService;
 import org.springblade.order.service.PurchaseOrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +39,9 @@ public class PurchaseOrdersController {
 
     @Resource
     private PurchaseOrdersService purchaseOrdersService;
+
+    @Resource
+    private LoadBillService loadBillService;
 
 
     @ApiOperation(value = "商品下单接口")
@@ -205,15 +212,15 @@ public class PurchaseOrdersController {
     @PostMapping("/buyer/listpage")
     @Login
     public R buyerlistpage(@RequestBody PurchaseOrdersForm param, @LoginUser UserEntity user) {
-        return R.ok().put("Orderpage", purchaseOrdersService.listPurchaseOrdersUseForPurchaser(new Page(param.getPage(), param.getSize()), user.getUserId()));
+        return R.ok().put("Orderpage", purchaseOrdersService.listPurchaseOrdersUseForPurchaser(new Page(param.getPage(), param.getSize()), user.getUserId(),param.getGoodsType(),param.getStatus()));
     }
 
     @ApiOperation(value = "供应商查询采购单接口")
     @HasPermission(needVerifyUser = true)
     @PostMapping("/provider/listpage")
     @Login
-    public R providerlistpage(@RequestBody PageForm param, @LoginUser UserEntity user) {
-        return R.ok().put("Orderpage", purchaseOrdersService.listPurchaseOrderUseForProvider(new Page(param.getPage(), param.getSize()), user.getUserId()));
+    public R providerlistpage(@RequestBody PurchaseOrdersForm param, @LoginUser UserEntity user) {
+        return R.ok().put("Orderpage", purchaseOrdersService.listPurchaseOrderUseForProvider(new Page(param.getPage(), param.getSize()), user.getUserId(),param.getGoodsType(),param.getStatus()));
     }
 
     @ApiOperation(value = "订单详情")
@@ -232,6 +239,16 @@ public class PurchaseOrdersController {
     public R getProviderStatistics(@LoginUser UserEntity user) {
 
         return R.ok().put("row", purchaseOrdersService.getStatistics(user.getUserId().longValue()));
+    }
+
+    @ApiOperation(value = "根据订单id查询提货单详情")
+    @PostMapping("/loadBillList")
+    @Login
+    public R getLoadBill(@RequestBody LoadBillForm loadBill,@LoginUser UserEntity user) {
+        QueryWrapper<LoadBill> wrapper = Wrappers.query();
+        wrapper.eq("order_id",loadBill.getOrderId());
+        return R.ok().put("result",loadBillService.list(wrapper));
+
     }
 
 

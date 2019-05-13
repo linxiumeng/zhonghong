@@ -45,10 +45,10 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
     GoodsServiceFeign goodsService;
 
     @Override
-    public Page<DemandResp> listOwnDemandPage(Page page, Long id,String key,Integer status) {
+    public Page<DemandResp> listOwnDemandPage(Page page, Long id,Integer key,Integer status) {
 
         QueryWrapper<Demand> wrapper = new QueryWrapper<>();
-        if(StringUtils.isNotBlank(key)){
+        if(key != null){
             wrapper.eq("f_type",key);
         }
 
@@ -128,11 +128,16 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
     }
 
     @Override
-    public IPage<Demand> listCanQuotationDemand(Page page, Long userId) {
+    public IPage<Demand> listCanQuotationDemand(Page page, Long userId,Integer goodsType) {
         QueryWrapper<Demand> wrapper = new QueryWrapper<>();
 
         List<Long> userIds = new ArrayList<>(16);
         Set<Long> goodsTypeIds = new HashSet<>();
+
+        if(goodsType != null){
+            wrapper.eq("f_type",goodsType);
+        }
+
         // status 为 1 是报价中
         wrapper.eq("status", 1).orderBy(true,false,"creat_time");
         IPage<Demand> resultPage = this.page(page, wrapper);
@@ -166,13 +171,16 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
     }*/
 
     private void setGoodsTypeInDemandList(Collection<Long> goodsTypeIds,List<? extends Demand> demandList){
-        //插入demand的goodstype
-        Collection<GoodsTypeEntity> goodsTypeEntities = goodsService.batchGetGoodsType(goodsTypeIds).getData();
 
-        for(GoodsTypeEntity goodsTypeEntity : goodsTypeEntities){
-            for(Demand demand : demandList){
-                if(demand.getFType().longValue() == goodsTypeEntity.getId().longValue()){
-                    demand.setGoodsTypeEntity(goodsTypeEntity);
+        if(!goodsTypeIds.isEmpty()) {
+            //插入demand的goodstype
+            Collection<GoodsTypeEntity> goodsTypeEntities = goodsService.batchGetGoodsType(goodsTypeIds).getData();
+
+            for (GoodsTypeEntity goodsTypeEntity : goodsTypeEntities) {
+                for (Demand demand : demandList) {
+                    if (demand.getFType().longValue() == goodsTypeEntity.getId().longValue()) {
+                        demand.setGoodsTypeEntity(goodsTypeEntity);
+                    }
                 }
             }
         }

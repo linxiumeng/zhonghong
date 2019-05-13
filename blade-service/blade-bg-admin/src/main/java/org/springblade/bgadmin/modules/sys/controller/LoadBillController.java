@@ -60,11 +60,6 @@ public class LoadBillController {
             return R.error("订单不存在");
         }
 
-        if(loadBillService.selectByOrderId(orderId) != null){
-            return R.error("该订单已有提货单");
-        }
-
-
         BeanUtils.copyProperties(loadBillForm,loadBill);
 
         boolean flag = loadBillService.save(loadBill);

@@ -44,7 +44,7 @@ public class GoodsController {
 
         GoodsFormEnum goodsFormEnum = goodsForm.getGoodsFormStatus();
 
-        if(StringUtils.isNotBlank(goodsForm.getGoodsType())){
+        if(goodsForm.getGoodsType()!= null){
             entityWrapper.eq("goods_type",goodsForm.getGoodsType());
         }
 

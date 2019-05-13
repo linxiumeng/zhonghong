@@ -23,6 +23,14 @@ public interface GoodsService extends IService<Goods> {
     boolean decrGoodsStock(long goodsId, int amount);
 
     /**
+     * 增加库存
+     * @param goodsId
+     * @param amount
+     * @return
+     */
+    boolean incrGoodsStock(long goodsId, int amount);
+
+    /**
      * 返回上线的产品列表
      * @param pageForm
      * @return
