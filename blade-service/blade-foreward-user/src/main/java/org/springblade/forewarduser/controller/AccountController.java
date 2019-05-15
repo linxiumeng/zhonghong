@@ -10,10 +10,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.constant.FeignResultCodeConstant;
-import org.springblade.common.entity.Account;
-import org.springblade.common.entity.AccountRecharge;
-import org.springblade.common.entity.PurchaseOrders;
-import org.springblade.common.entity.UserEntity;
+import org.springblade.common.entity.*;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.form.AccountExtractForm;
 import org.springblade.common.form.AccountFinancingPayForm;
@@ -23,6 +20,7 @@ import org.springblade.common.respond.AccountDto;
 import org.springblade.common.utils.R;
 import org.springblade.common.validation.group.InsertGroup;
 import org.springblade.forewarduser.feign.AccountRechargeServiceFeign;
+import org.springblade.forewarduser.feign.AccountWithdrawServiceFeign;
 import org.springblade.forewarduser.service.AccountService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +29,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 
 /**
@@ -42,6 +41,9 @@ import javax.annotation.Resource;
 @RequestMapping("api/user/account")
 public class AccountController {
     private AccountService accountService;
+
+    @Resource
+    private AccountWithdrawServiceFeign accountWithdrawService;
 
 
     @Autowired
@@ -117,6 +119,15 @@ public class AccountController {
         if(r.getCode() == FeignResultCodeConstant.EXCEPTION_CODE){
             throw new RRException(r.getMsg());
         }
+
+        AccountWithdraw accountWithdraw = new AccountWithdraw();
+        accountWithdraw.setAmount(String.valueOf(form.getAccount()));
+        accountWithdraw.setWithdrawDate(new Date());
+        accountWithdraw.setUserId(user.getUserId().intValue());
+
+        //todo 做校验
+        accountWithdrawService.save(accountWithdraw);
+
         return R.ok();
     }
 
