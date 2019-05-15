@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springblade.common.enums.OrdersEnum;
 
@@ -20,7 +22,7 @@ import java.util.Date;
 @Data
 @TableName("tb_purchase_orders")
 @ApiModel("采购单表实体类")
-public class PurchaseOrders {
+
 public class PurchaseOrders implements Cloneable{
 
     /**
