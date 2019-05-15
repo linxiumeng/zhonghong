@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import io.swagger.annotations.*;
 import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.TokenEntity;
 import org.springblade.core.tool.api.IResultCode;
@@ -28,6 +29,7 @@ import java.util.TimeZone;
 
 @RestController
 @RequestMapping("/api/user/token")
+@Api(tags = "用户token")
 public class TokenController {
 
     @Resource
@@ -39,6 +41,10 @@ public class TokenController {
      * @return
      */
     @GetMapping("/detail")
+   /* @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "query", dataType = "string"),
+    })*/
+    @ApiOperation(value = "获取用户详情", notes = "传入token")
     R<TokenEntity> getTokenEntityByUserId(@RequestParam("token") String token){
 
         TokenEntity tokenEntity = tokenService.queryByToken(token);

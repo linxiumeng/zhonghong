@@ -1,5 +1,6 @@
 package org.springblade.information.controller;
 
+import io.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.common.entity.News;
 import org.springblade.common.utils.HttpClientUtils;
@@ -20,6 +21,7 @@ import java.util.regex.Pattern;
  * 新闻爬取的爬虫 使用java的版本
  */
 @Component
+@Api(tags ="新闻爬虫（java）")
 public class JavaMatcherNewsCrawlerTaskTimer extends BaseNewsCrawler {
 
     @Autowired

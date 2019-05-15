@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.common.entity.ChatMessage;
 import org.springblade.common.entity.ChatSession;
@@ -34,6 +35,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 @ServerEndpoint(value = "/websocket")
 @Component
+@Api(tags ="实例类（websocket）")
 public class FinePetroWebSocket {
 
     private static ApplicationContext applicationContext;

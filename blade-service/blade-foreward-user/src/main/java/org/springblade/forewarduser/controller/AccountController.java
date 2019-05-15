@@ -3,6 +3,8 @@ package org.springblade.forewarduser.controller;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springblade.common.annotation.Login;
@@ -51,7 +53,11 @@ public class AccountController {
     private AccountRechargeServiceFeign accountRechargeService;
 
     @PostMapping("query")
-    @ApiOperation("查询余额")
+    /*@ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "query", dataType = "integer")
+    })*/
+    @ApiOperation(value = "查询余额", notes = "传入token")
+  /*  @ApiOperation("查询余额")*/
     @Login
     public R query(@LoginUser UserEntity user) {
         QueryWrapper<Account> wrapper = new QueryWrapper<>();
@@ -67,7 +73,11 @@ public class AccountController {
     }
 
     @PostMapping("recharge")
-    @ApiOperation("充值余额")
+   /* @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "query", dataType = "integer")
+    })*/
+    @ApiOperation(value = "充值余额", notes = "传入token")
+    /*@ApiOperation("充值余额")*/
     @Login
     public R recharge(@RequestBody @Validated(InsertGroup.class) AccountRechargeForm form, @LoginUser UserEntity user) {
         AccountRecharge accountRecharge = new AccountRecharge();
@@ -83,7 +93,11 @@ public class AccountController {
     }
 
     @PostMapping("extract")
-    @ApiOperation("余额提现")
+    /*@ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "query", dataType = "integer")
+    })*/
+    @ApiOperation(value = "余额提现", notes = "传入token")
+    /*@ApiOperation("余额提现")*/
     @Login
     public R extract(@RequestBody AccountExtractForm form, @LoginUser UserEntity user) {
         AccountRecharge accountRecharge = new AccountRecharge();
@@ -117,7 +131,13 @@ public class AccountController {
         return R.ok();
     }
 
+    /**
+     * 支付接口
+     * @param accountPayForm
+     * @return
+     */
     @PostMapping("pay")
+    @ApiOperation(value = "付款", notes = "")
     public org.springblade.core.tool.api.R pay(@RequestBody AccountPayForm accountPayForm){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
         try {
@@ -132,7 +152,13 @@ public class AccountController {
         return r;
     }
 
+    /**
+     * 融资付款
+     * @param accountFinancingPayForm
+     * @return
+     */
     @PostMapping("financingPay")
+    @ApiOperation(value = "融资付款", notes = "")
     public org.springblade.core.tool.api.R financingPay(@RequestBody AccountFinancingPayForm accountFinancingPayForm){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
         try {
@@ -147,7 +173,13 @@ public class AccountController {
         return r;
     }
 
+    /**
+     * 获取用户实体
+     * @param userId
+     * @return
+     */
     @GetMapping("getByUserId")
+    @ApiOperation(value = "获取用户实体", notes = "")
     public org.springblade.core.tool.api.R getAccountByUserId(@RequestParam("userId")Long userId){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
         Wrapper wrapper = new QueryWrapper<>().eq("user_id",userId);
@@ -161,8 +193,13 @@ public class AccountController {
         return r;
     }
 
-
+    /**
+     * 修改意向
+     * @param account
+     * @return
+     */
     @GetMapping("updateBySelective")
+    @ApiOperation(value = "修改意向", notes = "")
     public org.springblade.core.tool.api.R getAccountByUserId(@RequestBody Account account){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
         r.setData(accountService.updateById(account));

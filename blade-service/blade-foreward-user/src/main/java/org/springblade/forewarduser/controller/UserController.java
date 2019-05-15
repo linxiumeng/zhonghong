@@ -1,6 +1,8 @@
 package org.springblade.forewarduser.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
@@ -39,6 +41,10 @@ public class UserController {
      * @param userForm 用户表单
      * @return 用户传输数据
      */
+    /*@ApiImplicitParams({
+            @ApiImplicitParam(name = "userForm", value = "用户表单", paramType = "query", dataType = "string",dataTypeClass = UserForm.class)
+    })*/
+    @ApiOperation(value = "查询用户实体", notes = "" )
     @PostMapping("selectbyid")
     @Login
     @HasPermission(needVerifyUser = true)
@@ -58,7 +64,10 @@ public class UserController {
      * @param currentUser 当前用户
      * @return 状态
      */
-    @ApiOperation(value = "判断用户状态")
+   /* @ApiImplicitParams({
+            @ApiImplicitParam(name = "UserEntity", value = "获取用户状态", paramType = "query", dataType = "string",dataTypeClass = UserEntity.class)
+    })*/
+    @ApiOperation(value = "判断用户状态", notes = "" )
     @PostMapping("selectStatus")
     @Login
     public R selectStatus(@LoginUser UserEntity currentUser) {
@@ -66,13 +75,16 @@ public class UserController {
     }
 
     /**
-     * 修改用户密码
+     *
      *
      * @param pw          新密码
      * @param currentUser 当前用户
      * @return 成功
      */
-    @ApiOperation(value = "修改用户密码")
+   /* @ApiImplicitParams({
+            @ApiImplicitParam(name = "UserEntity", value = "", paramType = "query", dataType = "string",dataTypeClass = UserEntity.class)
+    })*/
+    @ApiOperation(value = "修改用户密码", notes = "" )
     @PostMapping("changepw")
     @Login
     public R changepw(@RequestBody ChangePassword pw, @LoginUser UserEntity currentUser) {
@@ -88,7 +100,10 @@ public class UserController {
      * @param currentUser 登录用户
      * @return
      */
-    @ApiOperation(value = "修改用户表(user)数据")
+    /*@ApiImplicitParams({
+            @ApiImplicitParam(name = "UserForm", value = "这里增加了缓存", paramType = "query", dataType = "string",dataTypeClass = UserForm.class)
+    })*/
+    @ApiOperation(value = "修改用户表(user)数据", notes = "" )
     @PostMapping("updateUser")
     @Login
     public R update(@RequestBody UserForm userForm, @LoginUser UserEntity currentUser) {
@@ -103,8 +118,15 @@ public class UserController {
         return R.ok().put("row", this.userService.updateByIdWithCache(param2));
     }
 
-
-    @ApiOperation(value="判断页面跳转")
+    /**
+     * 判断页面跳转
+     * @param currentUser
+     * @return
+     */
+    /*@ApiImplicitParams({
+            @ApiImplicitParam(name = "UserEntity", value = "判断页面跳转", paramType = "query", dataType = "string",dataTypeClass = UserEntity.class)
+    })*/
+    @ApiOperation(value = "判断页面跳转", notes = "" )
     @PostMapping("userValidation")
     @Login
     public R userValidation(@LoginUser UserEntity currentUser){

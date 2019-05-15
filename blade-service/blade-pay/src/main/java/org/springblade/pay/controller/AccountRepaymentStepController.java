@@ -1,6 +1,8 @@
 package org.springblade.pay.controller;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.common.entity.AccountRepaymentStep;
 import org.springblade.core.tool.api.R;
 import org.springblade.pay.mapper.AccountRepaymentStepDao;
@@ -23,11 +25,13 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/accountRepaymentStep")
+@Api(value="分期还款详情表(AccountRepaymentStep)表服务实现类")
 public class AccountRepaymentStepController {
     @Resource
     private AccountRepaymentStepService accountRepaymentStepService;
 
     @PostMapping("/batchSave")
+    @ApiOperation("分批储存")
     public R batchSave(@RequestBody List<AccountRepaymentStep> accountRepaymentStepList){
         R r = R.status(true);
         accountRepaymentStepService.saveBatch(accountRepaymentStepList);

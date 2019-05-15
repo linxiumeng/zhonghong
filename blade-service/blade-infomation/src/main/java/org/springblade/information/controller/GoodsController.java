@@ -36,7 +36,7 @@ import java.util.Collections;
  * @author hanbin
  * @since 2019-02-13 15:23:01
  */
-@Api(tags = "商品表(TbGoods)表操作控制器", description = " * @author linxiumeng")
+@Api(tags = "商品表操作控制器(TbGoods)", description = " * @author linxiumeng")
 @RestController
 @RequestMapping("/api/goods")
 public class GoodsController {
@@ -173,6 +173,7 @@ public class GoodsController {
 
 
     @PostMapping("typeList")
+    @ApiOperation(value = "商品类别列表" )
     public R getGoodsDetail(@RequestBody GoodsTypeForm goodsTypeForm){
         QueryWrapper<GoodsTypeEntity> wrapper = new QueryWrapper<>();
         if(goodsTypeForm.getIsOpen() != null && goodsTypeForm.getIsOpen() != -1) {
@@ -185,14 +186,14 @@ public class GoodsController {
 
 
 
-
+    @ApiOperation(value = "获取商品详细信息" )
     @GetMapping("/detail")
     public org.springblade.core.tool.api.R decrGoodsStock(@RequestParam("goodsId")Long goodsId){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
         r.setData(goodsService.getById(goodsId));
         return r;
     }
-
+    @ApiOperation(value = "减少商品库存" )
     @GetMapping("decr_goods_stock")
     public org.springblade.core.tool.api.R decrGoodsStock(@RequestParam("goodsId")Long goodsId,@RequestParam("count")Integer count){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
@@ -200,7 +201,7 @@ public class GoodsController {
         r.setData(flag);
         return r;
     }
-
+    @ApiOperation(value = "增加商品库存" )
     @GetMapping("incr_goods_stock")
     public org.springblade.core.tool.api.R incrGoodsStock(@RequestParam("goodsId")Long goodsId,@RequestParam("count")Integer count){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
@@ -210,6 +211,7 @@ public class GoodsController {
     }
 
     @GetMapping("batchGetListByIds")
+    @ApiOperation(value = "批量获取商品列表" )
     public org.springblade.core.tool.api.R<Collection<GoodsTypeEntity>> batchGetTypeListByIds(@RequestParam("ids")Collection<Long> ids){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
         Collection<GoodsTypeEntity> goodsTypeEntities = null;

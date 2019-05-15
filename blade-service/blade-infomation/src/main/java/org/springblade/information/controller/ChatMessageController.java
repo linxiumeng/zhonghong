@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.entity.ChatMessage;
@@ -29,6 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/chat")
+@Api(tags = "聊天消息操作控制器（message）", description = "真的可以随便填吗")
 public class ChatMessageController {
 
     @Resource
@@ -39,6 +42,7 @@ public class ChatMessageController {
 
     @Login
     @PostMapping("list")
+    @ApiOperation(value = "消息列表", notes = "" )
     public R listChatMessage(@RequestBody ChatMessageForm param,@LoginUser UserEntity userEntity){
 
         IPage<ChatMessage> chatMessagePage = new Page<>(1,param.getSize());
@@ -76,6 +80,7 @@ public class ChatMessageController {
     }
 
     @PostMapping("read")
+    @ApiOperation(value = "已读消息", notes = "" )
     public boolean batchReadMessages(@RequestParam("ids")long[] ids){
 
         List<ChatMessage> list = new LinkedList<>();
@@ -97,6 +102,7 @@ public class ChatMessageController {
      */
     @Login
     @PostMapping("conversations")
+    @ApiOperation(value = "列出当前人的会话列表", notes = "" )
     public R listSessions(@LoginUser UserEntity user){
         QueryWrapper<ChatSession> wrapper = new QueryWrapper<>();
         wrapper.eq("`to`",user.getUserId()).orderBy(true,false,"`status`").orderBy(true,false,"update_date");
@@ -113,6 +119,7 @@ public class ChatMessageController {
      */
     @Login
     @PostMapping("unread")
+    @ApiOperation(value = "未读条数", notes = "" )
     public R countUnread(@LoginUser UserEntity user){
         QueryWrapper<ChatSession> wrapper = new QueryWrapper<>();
         wrapper.eq("`to`",user.getUserId()).eq("`read`",false);
@@ -127,6 +134,7 @@ public class ChatMessageController {
      * @return
      */
     @PostMapping("remove_conversation")
+    @ApiOperation(value = "移除一个会话列表", notes = "" )
     public R removeSession(@RequestParam("id") Long sessionId){
         chatSessionService.removeById(sessionId);
         return R.ok();

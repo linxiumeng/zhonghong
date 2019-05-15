@@ -1,6 +1,8 @@
 package org.springblade.forewarduser.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
@@ -33,6 +35,10 @@ public class FApiUserController {
 
 
     @GetMapping("detail")
+    /*@ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户userId", paramType = "query", dataType = "integer")
+    })*/
+    @ApiOperation(value = "", notes = "传入userID")
     public org.springblade.core.tool.api.R getUserWithApi(@RequestParam("userId")Long userId){
         UserEntity userEntity = userService.getById(userId);
         R r = R.status(true);
@@ -46,6 +52,10 @@ public class FApiUserController {
     }
 
     @GetMapping("batchGetByIds")
+    /*@ApiImplicitParams({
+            @ApiImplicitParam(name = "userIds", value = "用户userIds", paramType = "query", dataType = "list")
+    })*/
+    @ApiOperation(value = "批量获取用户Id", notes = "传入userIds")
     public org.springblade.core.tool.api.R batchGetWithApi(@RequestParam("userIds") List<Long> userids){
         Collection<UserEntity> userEntities = userService.listByIds(userids);
         R r = R.status(true);

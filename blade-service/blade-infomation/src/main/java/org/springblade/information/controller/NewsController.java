@@ -18,7 +18,7 @@ import javax.annotation.Resource;
  * @author hanbin
  * 新闻controller
  */
-@Api(tags = "新闻表控制器", description = " * @author hanbin")
+@Api(tags = "新闻表控制器（news）", description = " * @author hanbin")
 @RestController
 @RequestMapping("api/news")
 public class NewsController {

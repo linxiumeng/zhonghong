@@ -1,5 +1,6 @@
 package org.springblade.information.controller;
 
+import io.swagger.annotations.Api;
 import org.springblade.common.entity.News;
 import org.springblade.information.service.NewsService;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @author hanbin
  * 模板方法模式
  */
+@Api(tags = "新闻业务类")
 public abstract class BaseNewsCrawler {
 
     /**

@@ -1,5 +1,7 @@
 package org.springblade.pay.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.AccountRecharge;
 import org.springblade.core.tool.api.R;
@@ -20,12 +22,14 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/api/accountRecharge")
+@Api(value="充值记录表(TbAccountRecharge)表服务实现类")
 public class AccountRechargeController {
     @Resource
     private AccountRechargeService accountRechargeService;
     
 
     @PostMapping("insert")
+    @ApiOperation(value = "账户充值")
     public R save(@RequestBody AccountRecharge accountRecharge){
         R r = R.status(true);
         boolean flag = accountRechargeService.save(accountRecharge);

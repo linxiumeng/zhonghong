@@ -2,6 +2,7 @@ package org.springblade.information.controller;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.PutObjectResult;
+import io.swagger.annotations.Api;
 import org.springblade.common.config.CloudStorageConfig;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.utils.R;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("upload")
+@Api(tags ="文件上传（upload）")
 public class UploadController {
 
     @Resource

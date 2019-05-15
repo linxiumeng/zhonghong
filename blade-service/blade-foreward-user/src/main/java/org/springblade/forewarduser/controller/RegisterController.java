@@ -2,6 +2,8 @@ package org.springblade.forewarduser.controller;
 
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
@@ -58,8 +60,16 @@ public class RegisterController {
 
     public static final String USER_REGISTER_KEY = "market:user:register";
 
+    /**
+     * 获取短信注册验证码
+     * @param registerCheckCodeForm
+     * @return
+     */
     @PostMapping("getcode")
-    @ApiOperation("获取注册短信验证码")
+  /*  @ApiImplicitParams({
+            @ApiImplicitParam(name = "RegisterCheckCodeForm", value = "短信注册表单", paramType = "body", dataTypeClass = RegisterCheckCodeForm.class)
+    })*/
+    @ApiOperation(value = "获取注册短信验证码" ,notes = "")
     public R getRegisterCode(@RequestBody RegisterCheckCodeForm registerCheckCodeForm) {
 
         //获取缓存中的验证码
@@ -88,9 +98,16 @@ public class RegisterController {
         }
     }
 
-
+    /**
+     * 获取注册短信验证码
+     * @param registerCheckCodeForm
+     * @return
+     */
+    /*@ApiImplicitParams({
+            @ApiImplicitParam(name = "RegisterCheckCodeForm", value = "短信注册表单", paramType = "query", dataType = "string",dataTypeClass = RegisterCheckCodeForm.class)
+    })*/
+    @ApiOperation(value = "获取注册短信验证码", notes = "")
     @PostMapping("getcodenocheck")
-    @ApiOperation("获取注册短信验证码")
     public R getRegisterCodegetWithoutcaptcha(@RequestBody RegisterWithoutCaptchaForm registerCheckCodeForm) {
 
         String code = NumberUtils.getRandCode();
@@ -106,9 +123,16 @@ public class RegisterController {
         }
     }
 
-
+    /**
+     * 判断是否注册
+     * @param registerCheckCodeForm
+     * @return
+     */
+    /*@ApiImplicitParams({
+            @ApiImplicitParam(name = "RegisterCheckCodeForm", value = "短信注册表单", paramType = "query", dataType = "string",dataTypeClass = RegisterCheckCodeForm.class)
+    })*/
+    @ApiOperation(value = "判断是否注册", notes = "registerCheckCodeForm")
     @PostMapping("isregister")
-    @ApiOperation("判断是否注册")
     public R isRegister(@RequestBody RegisterCheckCodeForm registerCheckCodeForm) {
         UserEntity user = getUserByMobile(registerCheckCodeForm);
 
@@ -117,6 +141,12 @@ public class RegisterController {
         }
         return R.ok("此号码未注册");
     }
+
+    /**
+     * 注册
+     * @param form
+     * @return
+     */
 
     @PostMapping("register")
     @ApiOperation("注册")

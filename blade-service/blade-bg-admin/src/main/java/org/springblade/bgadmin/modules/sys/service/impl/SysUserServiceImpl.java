@@ -75,7 +75,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	@Transactional(rollbackFor = Exception.class)
 	public boolean save(SysUserEntity user) {
 		user.setCreateTime(new Date());
-		//sha256加密
+		//sha256
 		String salt = RandomStringUtils.randomAlphanumeric(20);
 		user.setSalt(salt);
 		//user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));

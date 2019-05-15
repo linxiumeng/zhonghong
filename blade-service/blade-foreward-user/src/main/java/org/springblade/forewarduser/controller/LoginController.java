@@ -3,6 +3,8 @@ package org.springblade.forewarduser.controller;
 
 import com.google.code.kaptcha.Producer;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.RandomUtils;
 import org.springblade.common.annotation.Login;
@@ -10,6 +12,7 @@ import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.constant.Constant;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.form.LoginForm;
+import org.springblade.common.form.UserForm;
 import org.springblade.common.utils.R;
 import org.springblade.common.utils.RedisUtils;
 import org.springblade.core.log.logger.BladeLogger;
@@ -63,7 +66,11 @@ public class LoginController {
     BladeLogger bladeLogger;
 
     @PostMapping("login")
-    @ApiOperation("客户登录")
+ /*   @ApiOperation("客户登录")*/
+   /* @ApiImplicitParams({
+            @ApiImplicitParam(name = "mobile", value = "15703807169",  dataTypeClass = String.class)
+    })*/
+    @ApiOperation(value = "客户登录", notes = "" )
     public R login(@RequestBody LoginForm form, HttpServletRequest request) {
         //表单校验
       //  ValidatorUtils.validateEntity(form);

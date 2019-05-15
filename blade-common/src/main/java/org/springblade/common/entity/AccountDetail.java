@@ -28,7 +28,7 @@ public class AccountDetail {
      * 主键 自增
      */
     @TableId(type = IdType.INPUT)
-    @ApiModelProperty(value = "自增id",name="id")
+    @ApiModelProperty(value = "自增id",name="id",example = "123")
     private Long id;
     /**
      * 用户id

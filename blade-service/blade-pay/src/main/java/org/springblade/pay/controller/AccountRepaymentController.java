@@ -116,6 +116,7 @@ public class AccountRepaymentController {
 
 
     @PostMapping("insertWithId")
+    @ApiOperation("添加支持")
     public org.springblade.core.tool.api.R<AccountRepayment> saveWithId(@RequestBody AccountRepayment accountRepayment){
         org.springblade.core.tool.api.R<AccountRepayment> r = org.springblade.core.tool.api.R.status(true);
         Integer i = accountRepaymentService.insertWithId(accountRepayment);

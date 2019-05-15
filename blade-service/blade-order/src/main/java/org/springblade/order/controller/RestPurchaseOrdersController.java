@@ -1,5 +1,7 @@
 package org.springblade.order.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.PurchaseOrders;
 import org.springblade.core.tool.api.R;
@@ -16,12 +18,14 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("api/purchase-order")
+@Api(tags = "进货订单", description = "帅泽泽")
 public class RestPurchaseOrdersController {
 
     @Resource
     PurchaseOrdersService purchaseOrdersService;
 
     @GetMapping("/detail")
+    @ApiOperation(value = "获取订单详情" )
     public R getDetailById(@RequestParam("id")Long id){
         R r = R.status(true);
         PurchaseOrders purchaseOrders = purchaseOrdersService.getById(id);

@@ -1,11 +1,14 @@
 package org.springblade.forewarduser.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.form.CreditForm;
+import org.springblade.common.form.UserForm;
 import org.springblade.common.utils.R;
 import org.springblade.forewarduser.service.CreditService;
 import org.springblade.forewarduser.service.UserService;
@@ -35,7 +38,11 @@ public class CreditController {
         this.userService = userService;
     }
 
-    @ApiOperation(value = "采购商申请授信接口")
+    /*@ApiOperation(value = "采购商申请授信接口")*/
+    /*@ApiImplicitParams({
+            @ApiImplicitParam(name = "param", value = "采购商申请授信", paramType = "query", dataType = "string",dataTypeClass = CreditForm.class)
+    })*/
+    @ApiOperation(value = "采购商申请授信接口", notes = "传入param" )
     @Login
     @PostMapping("creat")
     @Transactional(rollbackFor = Exception.class)

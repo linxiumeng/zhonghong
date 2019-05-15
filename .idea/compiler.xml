@@ -2,36 +2,59 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="blade-user" />
-        <module name="blade-user-api" />
-        <module name="blade-develop" />
+        <module name="blade-dict-api" />
         <module name="blade-foreward-user" />
         <module name="blade-log" />
+        <module name="blade-admin" />
         <module name="blade-system" />
         <module name="blade-common" />
         <module name="blade-bg-admin" />
         <module name="blade-desk-api" />
+        <module name="blade-auth" />
         <module name="blade-system-api" />
         <module name="blade-desk" />
         <module name="blade-pay" />
         <module name="blade-order" />
-        <module name="blade-auth" />
+        <module name="blade-user" />
         <module name="blade-information-api" />
         <module name="blade-gateway" />
-        <module name="blade-admin" />
+        <module name="blade-user-api" />
         <module name="blade-foreward-user-api" />
         <module name="blade-infomation" />
-        <module name="blade-dict-api" />
+        <module name="blade-develop" />
         <module name="blade-order-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="zhonghong4" target="1.8" />
+      <module name="blade-admin" target="1.8" />
+      <module name="blade-auth" target="1.8" />
+      <module name="blade-bg-admin" target="1.8" />
+      <module name="blade-common" target="1.8" />
+      <module name="blade-desk" target="1.8" />
+      <module name="blade-desk-api" target="1.8" />
+      <module name="blade-develop" target="1.8" />
+      <module name="blade-dict-api" target="1.8" />
+      <module name="blade-foreward-user" target="1.8" />
+      <module name="blade-foreward-user-api" target="1.8" />
+      <module name="blade-gateway" target="1.8" />
+      <module name="blade-infomation" target="1.8" />
+      <module name="blade-information-api" target="1.8" />
+      <module name="blade-log" target="1.8" />
+      <module name="blade-ops" target="1.8" />
+      <module name="blade-order" target="1.8" />
+      <module name="blade-order-api" target="1.8" />
+      <module name="blade-pay" target="1.8" />
+      <module name="blade-service" target="1.8" />
+      <module name="blade-service-api" target="1.8" />
+      <module name="blade-system" target="1.8" />
+      <module name="blade-system-api" target="1.8" />
+      <module name="blade-user" target="1.8" />
+      <module name="blade-user-api" target="1.8" />
+      <module name="SpringBlade" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

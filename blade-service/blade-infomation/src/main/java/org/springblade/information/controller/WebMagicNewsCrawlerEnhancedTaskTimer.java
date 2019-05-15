@@ -1,6 +1,7 @@
 package org.springblade.information.controller;
 
 
+import io.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.common.entity.News;
 import org.springblade.common.utils.CalendarUtils;
@@ -24,6 +25,7 @@ import java.util.Objects;
  */
 
 //@Component
+    @Api(tags ="新闻爬取的爬虫（webmagic）")
 public class WebMagicNewsCrawlerEnhancedTaskTimer extends BaseNewsCrawler {
 
     //@Autowired
