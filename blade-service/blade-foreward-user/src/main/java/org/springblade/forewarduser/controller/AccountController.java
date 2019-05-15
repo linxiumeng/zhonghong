@@ -71,6 +71,7 @@ public class AccountController {
     @Login
     public R recharge(@RequestBody @Validated(InsertGroup.class) AccountRechargeForm form, @LoginUser UserEntity user) {
         AccountRecharge accountRecharge = new AccountRecharge();
+        accountRecharge.setUserId(user.getUserId());
         BeanUtils.copyProperties(form, accountRecharge);
         accountRecharge.setType(0);
 

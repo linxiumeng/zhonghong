@@ -42,7 +42,7 @@
         <result property="creatTime" column="creat_time"/>
         <result property="updateTime" column="update_time"/>
 
-        <!--<association property="goodsTypeEntity" column="goods_type" select="org.springblade.bgadmin.modules.sys.mapper.GoodsTypeDao.selectByGoodsTypeId"/>-->
+        <association property="goodsTypeEntity" column="goods_type" select="org.springblade.bgadmin.modules.sys.mapper.GoodsTypeDao.selectByGoodsTypeId"/>
 
     </resultMap>
 

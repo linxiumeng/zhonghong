@@ -50,6 +50,8 @@ public class PurchaseOrdersController {
 
         CheckBGListUtils.check(wrapper,purchaseOrderForm,"creat_time","buyer_company","provider_company");
 
+        wrapper.orderByDesc("creat_time");
+
         //todo 问题
 
         return R.ok().put("page", purchaseOrdersService.page(page,wrapper));

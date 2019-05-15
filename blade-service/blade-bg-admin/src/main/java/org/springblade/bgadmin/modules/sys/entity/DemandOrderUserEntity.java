@@ -17,4 +17,6 @@ public class DemandOrderUserEntity extends DemandEntity {
      * 报价单个数
      */
     private Integer quotationCount;
+
+    private GoodsTypeEntity goodsTypeEntity;
 }

@@ -12,11 +12,13 @@ import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.Demand;
+import org.springblade.common.entity.GoodsTypeEntity;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.form.DemandForm;
 import org.springblade.common.form.PageForm;
 import org.springblade.common.respond.DemandResp;
 import org.springblade.common.utils.R;
+import org.springblade.order.feign.GoodsServiceFeign;
 import org.springblade.order.feign.UserServiceFeign;
 import org.springblade.order.service.DemandService;
 import org.springblade.order.service.QuotationService;
@@ -27,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -43,6 +48,9 @@ public class DemandController {
 
     @Resource
     UserServiceFeign userService;
+
+    @Resource
+    GoodsServiceFeign goodsService;
 
     @Autowired
     public DemandController(DemandService demandService, QuotationService quotationService) {
@@ -97,7 +105,8 @@ public class DemandController {
     @ApiOperation(value = "查看需求详情接口")
     public R getbyid(@RequestBody Demand param, @LoginUser UserEntity user) {
         R r = R.ok();
-        r.putAll(demandService.getDemandInfoAndQuotationListInfo(param.getId().longValue(),user.getUserId()));
+        Map<String,Object> map = demandService.getDemandInfoAndQuotationListInfo(param.getId().longValue(),user.getUserId());
+        r.putAll(map);
         return r;
     }
 
@@ -125,6 +134,10 @@ public class DemandController {
         Demand demand = demandService.getById(param.getId());
         UserEntity userEntity = null;
 
+        if(demand == null){
+            return R.error("需求单不存在");
+        }
+
         if (demand != null && demand.getCreatUserid() != null) {
         //    userEntity = userService.getUserById(Long.valueOf(demand.getCreatUserid())).getData();
             if(StringUtils.isNotBlank(demand.getCreatUserid())) {
@@ -136,6 +149,12 @@ public class DemandController {
                 }
             }
             demand.setCreateUser(userEntity);
+        }
+        if(demand.getFType() != null){
+            List<GoodsTypeEntity> goodsTypeEntities = (List<GoodsTypeEntity>)(goodsService.batchGetGoodsType(Arrays.asList(demand.getFType())).getData());
+            if(!goodsTypeEntities.isEmpty()){
+                demand.setGoodsTypeEntity(goodsTypeEntities.get(0));
+            }
         }
 
         return R.ok().put("row", demand);

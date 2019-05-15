@@ -21,6 +21,8 @@ public interface PurchaseOrdersDao extends BaseMapper<PurchaseOrdersEntity> {
 
     PurchaseOrdersEntity selectByOrderId(Integer id);
 
+    PurchaseOrdersRepaymentEntity selectByOrderIdWithGoodsEntity(Integer id);
+
     PurchaseOrdersRepaymentEntity selectPurchaseOrderWithRepayment(Integer id);
 
     List<PurchaseOrdersRepaymentEntity> selectPurchaseOrderWithRepaymentList(IPage iPage, @Param("ew") Wrapper wrapper);

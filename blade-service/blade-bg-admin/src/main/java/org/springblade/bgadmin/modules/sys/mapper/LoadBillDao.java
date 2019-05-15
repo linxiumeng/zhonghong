@@ -21,4 +21,6 @@ public interface LoadBillDao extends BaseMapper<LoadBill> {
     List<LoadBill> selectListWithOrder(IPage iPage, @Param("condition") LoadBillCondition condition);
 
     LoadBill selectByOrderId(Integer orderId);
+
+    List<LoadBill> selectListByOrderId(Long orderId);
 }

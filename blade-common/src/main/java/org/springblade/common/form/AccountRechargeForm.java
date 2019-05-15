@@ -37,7 +37,7 @@ public class AccountRechargeForm {
     /**
      * 充值金额
      */
-    @NotNull(groups = {InsertGroup.class})
+ //   @NotNull(groups = {InsertGroup.class})
     @ApiModelProperty(value = "充值金额",example = "999999")
     private Double account;
     /**

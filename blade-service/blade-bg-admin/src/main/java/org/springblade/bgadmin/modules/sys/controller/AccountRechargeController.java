@@ -2,11 +2,14 @@ package org.springblade.bgadmin.modules.sys.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.bgadmin.modules.sys.entity.AccountEntity;
 import org.springblade.bgadmin.modules.sys.entity.AccountRechargeEntity;
 import org.springblade.bgadmin.modules.sys.form.AccountRechargeForm;
 import org.springblade.bgadmin.modules.sys.service.AccountRechargeService;
+import org.springblade.bgadmin.modules.sys.service.AccountService;
 import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +30,9 @@ import java.util.Arrays;
 public class AccountRechargeController {
     @Autowired
     private AccountRechargeService accountRechargeService;
+
+    @Autowired
+    private AccountService accountService;
 
     /**
      * 列表
@@ -116,10 +122,19 @@ public class AccountRechargeController {
             if (rechargeEntity.getStatus() == 1) {
                 return R.ok();
             }
+            BigDecimal accountDecimal = new BigDecimal(accountRechargeForm.getRechargeAmount());
             rechargeEntity.setId(accountRechargeForm.getId());
-            rechargeEntity.setAccount(new BigDecimal(accountRechargeForm.getRechargeAmount()));
+            rechargeEntity.setAccount(accountDecimal);
             rechargeEntity.setStatus(1);
             accountRechargeService.updateById(rechargeEntity);
+
+            AccountEntity accountEntity = accountService.getOne(Wrappers.<AccountEntity>query().eq("user_id",rechargeEntity.getUserId()));
+            if(accountEntity != null){
+                BigDecimal bigDecimal = accountEntity.getAccount();
+                bigDecimal = bigDecimal.add(accountDecimal);
+                accountEntity.setAccount(bigDecimal);
+                accountService.updateById(accountEntity);
+            }
         }
         return R.ok();
     }

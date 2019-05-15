@@ -38,4 +38,8 @@
         select * from tb_load_bill where order_id = #{id}
     </select>
 
+    <select id="selectListByOrderId" resultType="org.springblade.bgadmin.modules.sys.entity.LoadBill">
+        select * from tb_load_bill where order_id = #{id}
+    </select>
+
 </mapper>

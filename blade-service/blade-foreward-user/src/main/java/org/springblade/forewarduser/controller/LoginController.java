@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.RandomUtils;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
+import org.springblade.common.constant.Constant;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.form.LoginForm;
 import org.springblade.common.utils.R;
@@ -15,6 +16,7 @@ import org.springblade.core.log.logger.BladeLogger;
 import org.springblade.forewarduser.service.TokenService;
 import org.springblade.forewarduser.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 登录接口
@@ -42,6 +45,9 @@ import java.util.Random;
 @RequestMapping("/api")
 @Api(tags = "登录接口")
 public class LoginController {
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     @Autowired
     private UserService userService;
@@ -106,7 +112,10 @@ public class LoginController {
         cookie.setMaxAge(-1);
         response.addCookie(cookie);
 
-        redisUtils.set("anonymous::"+markCode,verifyCode,60 * 2);
+     //   redisUtils.set("anonymous::"+markCode,verifyCode,60 * 2);
+        redisTemplate.opsForValue().set("anonymous::"+markCode,verifyCode);
+        redisTemplate.expire("anonymous::"+markCode,60 * 2, TimeUnit.SECONDS);
+
     }
 
 }

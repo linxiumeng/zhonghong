@@ -27,7 +27,7 @@ public interface PurchaseOrdersServiceFeign {
      * @param ordersId
      * @return
      */
-    @RequestMapping("/detail")
+    @RequestMapping(ORDER_API_PREFIX+"/detail")
     R<PurchaseOrders> getPurchaseOrdersDetail(@RequestParam("id")Long ordersId);
 
 }

@@ -3,11 +3,10 @@ package org.springblade.pay.interceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
-import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.enums.PermissionCodeEnum;
 import org.springblade.common.utils.R;
-import org.springblade.pay.feign.UserServiceFeign;
+import org.springblade.pay.service.UserService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,7 +26,7 @@ import java.io.PrintWriter;
 public class PermissionCheckInterceptor extends HandlerInterceptorAdapter {
 
     @Resource
-    UserServiceFeign userService;
+    UserService userService;
 
     /**
      * 成员
@@ -58,47 +57,42 @@ public class PermissionCheckInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
 
-        org.springblade.core.tool.api.R<UserEntity> r = userService.getUserById((Long) object);
+        UserEntity user = userService.selectByIdFromCache((Long) object);
 
-        if(r.getCode() != FeignResultCodeConstant.ENTITY_NOT_EXISTS) {
+        if (user != null) {
 
-            UserEntity user = r.getData();
+            if (hasPermissionAnnotation != null) {
 
-            if (user != null) {
+                if (hasPermissionAnnotation.needVerifyCredit() || hasPermissionAnnotation.needVerifyUser()) {
+                    //判断用户是否验证通过
+                    if (user.getStatus() != 3) {
+                        //获取writer
+                        response.setCharacterEncoding("utf-8");
+                        response.setContentType("application/json; charset=utf-8");
+                        PrintWriter writer = response.getWriter();
 
-                if (hasPermissionAnnotation != null) {
-
-                    if (hasPermissionAnnotation.needVerifyCredit() || hasPermissionAnnotation.needVerifyUser()) {
-                        //判断用户是否验证通过
-                        if (user.getStatus() != 3) {
+                        writer.print(objectMapper.writeValueAsString(R.ok().put("result", PermissionCodeEnum.TWO.getStatus()).put("msg", PermissionCodeEnum.TWO.getDesc())));
+                        writer.flush();
+                        writer.close();
+                        return false;
+                    }
+                    //判断用是是否授信
+                    if(hasPermissionAnnotation.needVerifyCredit()) {
+                        if (user.getCreditStatus() != 3) {
                             //获取writer
                             response.setCharacterEncoding("utf-8");
                             response.setContentType("application/json; charset=utf-8");
                             PrintWriter writer = response.getWriter();
-
-                            writer.print(objectMapper.writeValueAsString(R.ok().put("result", PermissionCodeEnum.TWO.getStatus()).put("msg", PermissionCodeEnum.TWO.getDesc())));
+                            writer.print(objectMapper.writeValueAsString(R.ok().put("result", PermissionCodeEnum.SIX.getStatus()).put("msg", PermissionCodeEnum.SIX.getDesc())));
                             writer.flush();
                             writer.close();
                             return false;
                         }
-                        //判断用是是否授信
-                        if (hasPermissionAnnotation.needVerifyCredit()) {
-                            if (user.getCreditStatus() != 3) {
-                                //获取writer
-                                response.setCharacterEncoding("utf-8");
-                                response.setContentType("application/json; charset=utf-8");
-                                PrintWriter writer = response.getWriter();
-                                writer.print(objectMapper.writeValueAsString(R.ok().put("result", PermissionCodeEnum.SIX.getStatus()).put("msg", PermissionCodeEnum.SIX.getDesc())));
-                                writer.flush();
-                                writer.close();
-                                return false;
-                            }
-                        }
-
                     }
 
-
                 }
+
+
             }
         }
 

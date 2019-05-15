@@ -19,15 +19,20 @@ package org.springblade.pay.config;
 import org.springblade.core.secure.registry.SecureRegistry;
 import org.springblade.core.tool.support.xss.XssFilter;
 import org.springblade.core.tool.utils.Charsets;
+import org.springblade.pay.interceptor.AuthorizationInterceptor;
 import org.springblade.pay.jackson.OverrideMappingApiJackson2HttpMessageConverter;
+import org.springblade.pay.resolver.LoginUserHandlerMethodArgumentResolver;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.converter.*;
 import org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.Resource;
 import javax.servlet.DispatcherType;
 import java.util.List;
 
@@ -38,6 +43,12 @@ import java.util.List;
  */
 @Configuration
 public class PayRegistryConfiguration implements WebMvcConfigurer {
+
+    @Resource
+    AuthorizationInterceptor authorizationInterceptor;
+
+    @Resource
+    private LoginUserHandlerMethodArgumentResolver loginUserHandlerMethodArgumentResolver;
 
     @Bean
     public SecureRegistry secureRegistry() {
@@ -71,6 +82,17 @@ public class PayRegistryConfiguration implements WebMvcConfigurer {
         registration.setName("xssFilter");
         registration.setOrder(Ordered.LOWEST_PRECEDENCE);
         return registration;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authorizationInterceptor).addPathPatterns("/api/**");
+        //   registry.addInterceptor(permissionCheckInterceptor).addPathPatterns("/api/**");
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(loginUserHandlerMethodArgumentResolver);
     }
 
 }

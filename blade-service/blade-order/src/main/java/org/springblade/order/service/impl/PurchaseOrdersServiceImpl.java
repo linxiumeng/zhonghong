@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -56,6 +53,13 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
     @Override
     public boolean putPurchaseOrderByGoods(UserEntity buyer, PurchaseOrders param) {
 
+        PurchaseOrders purchaseOrdersClone = null;
+        try {
+            purchaseOrdersClone = (PurchaseOrders) param.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
         if (buyer.getStatus() != 3) {
             throw new RRException(ErrorEnum.用户未认证.getDesc());
         }
@@ -84,12 +88,13 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         setContact(param, buyer, provider);
         //复制属性
         BeanUtils.copyProperties(goods, param);
-        copyGoodsPropertiesToOrders(goods, param);
+        copyGoodsPropertiesToOrders(goods, param,purchaseOrdersClone);
         param.setGoodsPic(goods.getPic());
         param.setCreatTime(null);
         param.setUpdateTime(null);
         param.setId(null);
         param.setStatus(OrdersEnum.ZERO);
+
 
         boolean status = false;
         try{
@@ -105,6 +110,13 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
 
     @Override
     public PurchaseOrders generatePurchaseOrderModelByGoods(UserEntity buyer, PurchaseOrders param) {
+        PurchaseOrders purchaseOrdersClone = null;
+        try {
+            purchaseOrdersClone = (PurchaseOrders) param.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
 
         if (buyer.getStatus() != 3) {
             throw new RRException(ErrorEnum.用户未认证.getDesc());
@@ -120,7 +132,13 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         }
         setContact(param, buyer, provider);
         BeanUtils.copyProperties(goods, param);
+        copyGoodsPropertiesToOrders(goods, param,purchaseOrdersClone);
         param.setId(null);
+
+        List<GoodsTypeEntity> goodsTypeEntities = (List<GoodsTypeEntity>) (goodsService.batchGetGoodsType(Arrays.asList(param.getGoodsType()))).getData();
+        if(!goodsTypeEntities.isEmpty()){
+            param.setGoodsTypeEntity(goodsTypeEntities.get(0));
+        }
 
         return param;
     }
@@ -254,7 +272,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
 
         for (GoodsTypeEntity goodsTypeEntity : goodsTypeEntities) {
             for (PurchaseOrders purchaseOrders : purchaseOrdersList) {
-                if (purchaseOrders.getGoodsType().longValue() == goodsTypeEntity.getId().longValue()) {
+                if (purchaseOrders.getGoodsType() != null && purchaseOrders.getGoodsType().longValue() == goodsTypeEntity.getId().longValue()) {
                     purchaseOrders.setGoodsTypeEntity(goodsTypeEntity);
                 }
             }
@@ -263,29 +281,43 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
 
     private void setContact(PurchaseOrders param, UserEntity buyer, UserEntity provider) {
         param.setBuyerCompany(buyer.getCompanyName());
+        param.setBuyerEmail(buyer.getMail());
         param.setBuyerPhone(buyer.getContactNumber());
         param.setBuyerId(buyer.getUserId());
         param.setBuyerLinkman(buyer.getContacts());
         param.setBuyerAddress(buyer.getContactAddress());
         param.setProviderCompany(provider.getCompanyName());
+        param.setProviderEmail(provider.getMail());
         param.setProviderPhone(provider.getContactNumber());
         param.setProviderId(provider.getUserId());
         param.setProviderLinkman(provider.getContacts());
     }
 
-    private void copyGoodsPropertiesToOrders(Goods goods, PurchaseOrders purchaseOrders) {
+    private void copyGoodsPropertiesToOrders(Goods goods, PurchaseOrders purchaseOrders,PurchaseOrders purchaseOrdersClone) {
         purchaseOrders.setGoodsPrice(String.valueOf(goods.getGoodsPrice()));
         purchaseOrders.setGoodsName(goods.getGoodsName());
         purchaseOrders.setGoodsId(goods.getId().intValue());
         purchaseOrders.setFilePoint(goods.getFilePoint());
         purchaseOrders.setGoodsType(goods.getGoodsType());
         purchaseOrders.setGoodsUnit(goods.getGoodsUnit());
+
+        if(purchaseOrdersClone != null) {
+
+            purchaseOrders.setContractualValueDate(purchaseOrdersClone.getContractualValueDate());
+            purchaseOrders.setPayDay(purchaseOrdersClone.getPayDay());
+            purchaseOrders.setPaymentBy(purchaseOrdersClone.getPaymentBy());
+            purchaseOrders.setPremiumsDiscounts(purchaseOrdersClone.getPremiumsDiscounts());
+            purchaseOrders.setPricingManner(purchaseOrdersClone.getPricingManner());
+            purchaseOrders.setTradeClause(purchaseOrdersClone.getTradeClause());
+        }
     }
 
     private void copyQuotationPropertiestToOrders(Quotation quotation, PurchaseOrders purchaseOrders) {
         purchaseOrders.setGoodsName(quotation.getFName());
+        purchaseOrders.setGoodsAmount(quotation.getNum());
         purchaseOrders.setGoodsType(quotation.getFType());
         purchaseOrders.setGoodsUnit(quotation.getFUnit());
+        purchaseOrders.setGoodsPrice(String.valueOf(quotation.getPrice()));
         purchaseOrders.setFilePoint(quotation.getFilePoint());
     }
 }

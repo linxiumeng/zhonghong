@@ -24,7 +24,7 @@
 
         <association property="userEntity" column="user_id" select="org.springblade.bgadmin.modules.sys.mapper.FuserDao.selectByUserId"/>
 
-        <association property="ordersEntity" column="order_id" select="org.springblade.bgadmin.modules.sys.mapper.PurchaseOrdersDao.selectByOrderId"/>
+        <association property="ordersEntity" column="order_id" select="org.springblade.bgadmin.modules.sys.mapper.PurchaseOrdersDao.selectByOrderIdWithGoodsEntity"/>
 
         <association property="alreadyPayCount" column="id" select="org.springblade.bgadmin.modules.sys.mapper.AccountRepaymentStepDao.selectAlreadyPayCount"/>
 

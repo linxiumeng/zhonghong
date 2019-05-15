@@ -65,9 +65,11 @@ public class GoodsController {
         UserEntity userEntity = null;
         if (row != null) {
             Long userId = row.getUserId();
-
             if (userId != null) {
                 userEntity = userService.getUserById(userId).getData();
+            }
+            if(row.getGoodsType() != null){
+                row.setGoodsTypeEntity(goodsTypeService.getById(row.getGoodsType()));
             }
         }
 

@@ -21,12 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.constant.Constant;
-import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.TokenEntity;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.utils.R;
-import org.springblade.core.log.logger.BladeLogger;
-import org.springblade.pay.feign.TokenServiceFeign;
+import org.springblade.pay.service.TokenService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -46,23 +44,15 @@ import java.io.PrintWriter;
 @Component
 public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     @Resource
-    private TokenServiceFeign tokenService;
+    private TokenService tokenService;
 
     @Resource
     ObjectMapper objectMapper;
-
-    @Resource
-    BladeLogger logger;
 
     public static final String USER_KEY = "userId";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-        System.out.println("xxxxxxxxxxxxxxx");
-
-      //  logger.info("a","aaaaaaa");
-
         Login annotation;
         if (handler instanceof HandlerMethod) {
             annotation = ((HandlerMethod) handler).getMethodAnnotation(Login.class);
@@ -86,18 +76,11 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             throw new RRException("token不能为空");
         }
 
-
-        System.out.println("==================="+System.currentTimeMillis());
-        long startTime = System.currentTimeMillis();
-
         //查询token信息
-        org.springblade.core.tool.api.R<TokenEntity> r = tokenService.getTokenEntityByToken(token);
-        TokenEntity tokenEntity = r.getData();
-
-        System.out.println("------------------"+(System.currentTimeMillis() - startTime));
+        TokenEntity tokenEntity = tokenService.queryByToken(token);
 
         //判断feign的返回
-        if (r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS || tokenEntity == null || tokenEntity.getExpireTime() == null ||  tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()) {
+        if (tokenEntity == null || tokenEntity.getExpireTime() == null ||  tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()) {
             //throw new RRException("token失效，请重新登录");
             response.setCharacterEncoding("utf-8");
             response.setContentType("application/json;charset=utf-8");

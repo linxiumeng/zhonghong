@@ -88,14 +88,14 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         }
 
 
-        System.out.println("==================="+System.currentTimeMillis());
-        long startTime = System.currentTimeMillis();
+      //  System.out.println("==================="+System.currentTimeMillis());
+      //  long startTime = System.currentTimeMillis();
 
         //查询token信息
         org.springblade.core.tool.api.R<TokenEntity> r = tokenService.getTokenEntityByToken(token);
         TokenEntity tokenEntity = r.getData();
 
-        System.out.println("------------------"+(System.currentTimeMillis() - startTime));
+      //  System.out.println("------------------"+(System.currentTimeMillis() - startTime));
 
         //判断feign的返回
         if (r.getCode() == FeignResultCodeConstant.ENTITY_NOT_EXISTS || tokenEntity == null || tokenEntity.getExpireTime() == null ||  tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()) {

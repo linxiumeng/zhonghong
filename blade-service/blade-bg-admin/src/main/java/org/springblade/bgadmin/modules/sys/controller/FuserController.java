@@ -2,15 +2,18 @@ package org.springblade.bgadmin.modules.sys.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springblade.bgadmin.modules.sys.entity.AccountEntity;
+import org.springblade.bgadmin.modules.sys.entity.AttestEntity;
 import org.springblade.bgadmin.modules.sys.entity.FuserEntity;
 import org.springblade.bgadmin.modules.sys.enums.UserCreditStatusEnum;
 import org.springblade.bgadmin.modules.sys.enums.UserStatusEnum;
 import org.springblade.bgadmin.modules.sys.form.UserForm;
 import org.springblade.bgadmin.modules.sys.service.AccountService;
+import org.springblade.bgadmin.modules.sys.service.AttestService;
 import org.springblade.bgadmin.modules.sys.service.FuserService;
 import org.springblade.common.utils.PageUtils;
 import org.springblade.common.utils.R;
@@ -18,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -36,6 +40,9 @@ public class FuserController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private AttestService attestService;
 
     /**
      * 列表
@@ -265,6 +272,26 @@ public class FuserController {
         FuserEntity fuserEntity = new FuserEntity();
         fuserEntity.setUserId(userId);
         fuserEntity.setStatus(userStatusEnum);
+
+        if(userStatusEnum == UserStatusEnum.ACCEPT){
+            List<AttestEntity> attestEntityList = attestService.list(Wrappers.<AttestEntity>query().eq("user_id",userForm.getUserId()).orderByDesc("creat_time"));
+            AttestEntity attestEntity = null;
+            if(!attestEntityList.isEmpty()){
+                attestEntity = attestEntityList.get(0);
+            }
+            if(attestEntity != null){
+                fuserEntity.setCompanyName(attestEntity.getCnName());
+                fuserEntity.setBusinessLicence(attestEntity.getUnifiedSocialCreditCode());
+                fuserEntity.setContactAddress(attestEntity.getAddress());
+                fuserEntity.setCard1(attestEntity.getIdcardPic1());
+                fuserEntity.setCard2(attestEntity.getIdcardPic2());
+                fuserEntity.setContactNumber(attestEntity.getPhoneNum());
+                fuserEntity.setContacts(attestEntity.getPhoneNum());
+                fuserEntity.setLegalPerson(attestEntity.getLegalPerson());
+                fuserEntity.setMail(attestEntity.getEmail());
+            }
+        }
+
 
         boolean flag = fuserService.updateById(fuserEntity);
         if(flag){

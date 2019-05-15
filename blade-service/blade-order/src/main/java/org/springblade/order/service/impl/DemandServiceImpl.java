@@ -12,6 +12,7 @@ import org.springblade.common.entity.UserEntity;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.respond.DemandResp;
 import org.springblade.common.respond.QuotationResp;
+import org.springblade.common.utils.R;
 import org.springblade.order.feign.GoodsServiceFeign;
 import org.springblade.order.feign.UserServiceFeign;
 import org.springblade.order.mapper.DemandDao;
@@ -105,15 +106,30 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
       //  QueryWrapper<Demand> wrapper = new QueryWrapper<>();
       //  wrapper.eq("creat_userid", userId);
         Demand demand = this.getById(demandId);
+
+        if(demand == null){
+            return R.error("需求单不存在");
+        }
+
         try {
             if (Long.valueOf(demand.getCreatUserid()).longValue() == userId.longValue()) {
 
                 List<QuotationResp> quotationList = quotationService.selectQuotationRespList(new QueryWrapper<>().eq("demand_id", demand.getId()));
 
                 //先这样做 防止分库
-                UserEntity userEntity = null;
-
+                UserEntity userEntity = userService.getUserById(Long.valueOf(demand.getCreatUserid())).getData();
                 demand.setCreateUser(userEntity);
+
+                if(demand.getFType() != null){
+                    Collection<GoodsTypeEntity> entities = goodsService.batchGetGoodsType(Arrays.asList(demand.getFType())).getData();
+
+                    Iterator<GoodsTypeEntity> it = entities.iterator();
+                    if(it.hasNext()){
+                         GoodsTypeEntity goodsTypeEntity = it.next();
+                         demand.setGoodsTypeEntity(goodsTypeEntity);
+                    }
+
+                }
 
                 resultMap.put("row", demand);
                 resultMap.put("quotationList", quotationList);

@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
+import org.springblade.common.entity.Demand;
 import org.springblade.common.entity.Quotation;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.form.PageForm;
@@ -64,10 +65,17 @@ public class QuotationController {
             return R.error("验证码错误");
         }
 
-        if(userEntity.getUserId().toString().equals(demandService.getById(param.getDemandId()).getCreatUserid())){
+        Demand demand = demandService.getById(param.getDemandId());
+
+        if(demand == null){
+            return R.error("需求单为空");
+        }
+
+        if(userEntity.getUserId().toString().equals(demand.getCreatUserid())){
             return R.error("不能给自己的需求单报价");
         }else{
             param.setUserId(userEntity.getUserId());
+            param.setFType(demand.getFType());
             return quotationService.save((Quotation) param) ? R.ok() : R.error();
         }
     }

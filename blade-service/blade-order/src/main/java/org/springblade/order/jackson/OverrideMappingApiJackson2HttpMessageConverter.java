@@ -64,9 +64,9 @@ public class OverrideMappingApiJackson2HttpMessageConverter extends AbstractRead
         // 拷贝 readObjectMapper
         ObjectMapper writeObjectMapper = readObjectMapper.copy();
         // null 处理
-   //     writeObjectMapper.setSerializerFactory(writeObjectMapper.getSerializerFactory().withSerializerModifier(new BladeBeanSerializerModifier()));
         writeObjectMapper.setSerializerFactory(writeObjectMapper.getSerializerFactory());
-  //      writeObjectMapper.getSerializerProvider().setNullValueSerializer(BladeBeanSerializerModifier.NullJsonSerializers.STRING_JSON_SERIALIZER);
+        writeObjectMapper.setSerializerFactory(writeObjectMapper.getSerializerFactory());
+     //   writeObjectMapper.getSerializerProvider().setNullValueSerializer(BladeBeanSerializerModifier.NullJsonSerializers.STRING_JSON_SERIALIZER);
         return writeObjectMapper;
     }
 

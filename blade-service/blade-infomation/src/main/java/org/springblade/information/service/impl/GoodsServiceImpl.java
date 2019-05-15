@@ -71,13 +71,22 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDao, Goods> implements Go
 
         Page<Goods> page = new Page<>(pageForm.getPage(), pageForm.getSize());
 
-        List<Goods> goodsList = page.getRecords();
+        IPage iPage = this.page(page, wrapper);
+
+        List<Goods> goodsList = iPage.getRecords();
+
+        setGoodsTypeListToGoodList(pageForm.getType(),goodsList);
+
+        return iPage;
+    }
+
+    private void setGoodsTypeListToGoodList(Integer type,List<Goods> goodsList){
 
         List<GoodsTypeEntity> goodsTypeEntityList = Collections.EMPTY_LIST;
 
         Set<Long> typeList = new HashSet<>(8);
 
-        if(pageForm.getType() == null) {
+        if(type == null) {
             for (Goods goods : goodsList) {
                 typeList.add(goods.getGoodsType());
             }
@@ -86,7 +95,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDao, Goods> implements Go
             }
         }else{
             goodsTypeEntityList = new ArrayList<>(1);
-            goodsTypeEntityList.add(goodsTypeDao.selectById(Long.valueOf(pageForm.getType())));
+            goodsTypeEntityList.add(goodsTypeDao.selectById(Long.valueOf(type)));
         }
 
         for(GoodsTypeEntity goodsTypeEntity : goodsTypeEntityList){
@@ -96,8 +105,6 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDao, Goods> implements Go
                 }
             }
         }
-
-        return this.page(page, wrapper);
     }
 
     @Override
@@ -106,7 +113,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDao, Goods> implements Go
         // 过滤用户id + 创建时间倒叙
         wrapper.eq(Goods.USER_ID_COLUMN, userId).orderBy(true,false,Goods.CREATE_TIME_COLUMN);
         Page<Goods> page = new Page<>(pageForm.getPage(), pageForm.getSize());
-        return this.page(page, wrapper);
+        IPage iPage = this.page(page, wrapper);
+        List<Goods> goodsList = iPage.getRecords();
+        setGoodsTypeListToGoodList(pageForm.getType(),goodsList);
+
+        return iPage;
     }
 
     @Override

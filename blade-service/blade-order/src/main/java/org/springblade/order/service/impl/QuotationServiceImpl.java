@@ -7,9 +7,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.common.entity.Demand;
+import org.springblade.common.entity.GoodsTypeEntity;
 import org.springblade.common.entity.Quotation;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.respond.QuotationResp;
+import org.springblade.order.feign.GoodsServiceFeign;
 import org.springblade.order.feign.UserServiceFeign;
 import org.springblade.order.mapper.QuotationDao;
 import org.springblade.order.service.DemandService;
@@ -41,6 +43,9 @@ public class QuotationServiceImpl extends ServiceImpl<QuotationDao, Quotation> i
     @Resource
     UserServiceFeign userServiceFeign;
 
+    @Resource
+    GoodsServiceFeign goodsService;
+
     @Override
     public List<QuotationResp> selectQuotationRespList(Wrapper wrapper) {
         return quotationDao.selectQuotationRespList(wrapper);
@@ -52,18 +57,25 @@ public class QuotationServiceImpl extends ServiceImpl<QuotationDao, Quotation> i
      //   wrapper = SqlHelper.fillWrapper(page, wrapper);
         List<Quotation> quotations = this.baseMapper.selectQuotationListByDemand(page, wrapper, userid);
         Set<Long> demandUserIdList = new HashSet<>();
+        Set<Long> demandGoodsTypeIdList = new HashSet<>(8);
         for (Quotation quotation : quotations) {
             Demand demand = demandService.getById(quotation.getDemandId());
             if(demand != null) {
                 quotation.setDemand(demand);
                 //填入批量的userid
                 demandUserIdList.add(Long.valueOf(demand.getCreatUserid()));
+                //填入批量的goodsTypeId
+                demandGoodsTypeIdList.add(demand.getFType());
             }
         }
 
-        org.springblade.core.tool.api.R<Collection<UserEntity>> r = userServiceFeign.batchGetUserByIds(demandUserIdList);
+        org.springblade.core.tool.api.R<Collection<UserEntity>> userEntityListResult = userServiceFeign.batchGetUserByIds(demandUserIdList);
 
-        Collection<UserEntity> userEntityCollection = r.getData();
+        org.springblade.core.tool.api.R<Collection<GoodsTypeEntity>> goodsTypeEntityListResult = goodsService.batchGetGoodsType(demandGoodsTypeIdList);
+
+        Collection<UserEntity> userEntityCollection = userEntityListResult.getData();
+
+        Collection<GoodsTypeEntity> goodsTypeCollection = goodsTypeEntityListResult.getData();
 
         for(Quotation quotation : quotations){
             Demand demand = quotation.getDemand();
@@ -82,6 +94,19 @@ public class QuotationServiceImpl extends ServiceImpl<QuotationDao, Quotation> i
                     }
                 }
             }
+
+            if(!goodsTypeCollection.isEmpty()){
+
+                for(GoodsTypeEntity goodsTypeEntity : goodsTypeCollection){
+                    if(goodsTypeEntity != null && demand != null && quotation.getFType() != null && goodsTypeEntity.getId() != null){
+                        if(goodsTypeEntity.getId().longValue() == quotation.getFType().longValue()){
+                            demand.setGoodsTypeEntity(goodsTypeEntity);
+                        }
+                    }
+                }
+
+            }
+
         }
 
         page.setRecords(quotations);

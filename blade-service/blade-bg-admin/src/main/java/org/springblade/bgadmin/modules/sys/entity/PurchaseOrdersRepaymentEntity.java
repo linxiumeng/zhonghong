@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 采购单 用户 表
@@ -23,6 +24,8 @@ public class PurchaseOrdersRepaymentEntity extends PurchaseOrdersEntity implemen
      */
     private BigDecimal firstPaidAccount;
 
-    private LoadBill loadBillEntity;
+    private List<LoadBill> loadBillEntityList;
+
+    private GoodsTypeEntity goodsTypeEntity;
 
 }

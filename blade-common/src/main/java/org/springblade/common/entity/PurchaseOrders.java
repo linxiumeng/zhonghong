@@ -19,7 +19,7 @@ import java.util.Date;
  */
 @Data
 @TableName("tb_purchase_orders")
-public class PurchaseOrders {
+public class PurchaseOrders implements Cloneable{
 
     /***/
     @TableId(type = IdType.INPUT)
@@ -225,4 +225,9 @@ public class PurchaseOrders {
     @TableField(exist = false)
     private GoodsTypeEntity goodsTypeEntity;
 
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return (PurchaseOrders)super.clone();
+    }
 }

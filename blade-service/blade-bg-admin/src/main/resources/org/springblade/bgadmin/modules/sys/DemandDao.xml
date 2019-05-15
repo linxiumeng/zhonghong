@@ -40,6 +40,8 @@
 
         <association property="quotationCount" column="id" select="org.springblade.bgadmin.modules.sys.mapper.QuotationDao.selectQuotationCountByDemandId"/>
 
+        <association property="goodsTypeEntity" column="f_type" select="org.springblade.bgadmin.modules.sys.mapper.GoodsTypeDao.selectByGoodsTypeId"/>
+
     </resultMap>
 
     <!-- 这是第二套解决方案 可大大提高性能 但是书写麻烦  暂时不用他 -->

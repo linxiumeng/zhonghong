@@ -21,6 +21,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springblade.common.constant.Constant;
 import org.springblade.common.entity.Account;
 import org.springblade.common.entity.TokenEntity;
@@ -39,8 +41,10 @@ import org.springblade.forewarduser.mapper.UserDao;
 import org.springblade.forewarduser.service.AccountService;
 import org.springblade.forewarduser.service.TokenService;
 import org.springblade.forewarduser.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +52,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -56,6 +61,8 @@ import java.util.Map;
  */
 @Service("userService")
 public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements UserService {
+
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Resource
     private TokenService tokenService;
@@ -69,11 +76,18 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     @Resource
     private UserDao userDao;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Resource
     private UserAccountDao userAccountDao;
     public static final String USER_REGISTER_KEY = "market:user:register";
+
+    public static final int MAX_RETRY_COUNT = 3;
+
     /**
      * 这里处理回滚异常
+     *
      * @param form
      * @return
      */
@@ -83,11 +97,20 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
 
         UserEntity user = this.queryByMobile(form.getMobile());
         if (user != null) {
-            return R.error(501,"用户已存在！");
+            return R.error(501, "用户已存在！");
         }
 
         String key = String.format("%s_%s", USER_REGISTER_KEY, form.getMobile());
-        String code = redisUtils.get(key);
+
+        String code = null;
+
+        int retryCount = 0;
+
+        while(code == null && retryCount++ < MAX_RETRY_COUNT){
+         //   code = redisUtils.get(key);
+            code = (String) redisTemplate.opsForValue().get(key);
+        }
+
         if (!(code != null && form.getCode().equals(code))) {
             return R.error("验证码错误");
         }
@@ -104,7 +127,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         Account account = new Account();
         BigDecimal bd = new BigDecimal("0.0");
         account.setAccount(bd);
-        account.setUserId(((Long)map.get("userId")));
+        account.setUserId(((Long) map.get("userId")));
         account.setCashFund(bd);
         account.setCreditHigh(bd);
         account.setCreditLimit(bd);
@@ -115,10 +138,13 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         return R.ok(map);
     }
 
-    public void skipCheck(LoginForm form){
+    public void skipCheck(LoginForm form) {
         form.setMarkCode("test");
         form.setCaptcha("test");
-        redisUtils.set(Constant.ANONYMOUS_PREFIX+"test","test",20);
+       // redisUtils.set(Constant.ANONYMOUS_PREFIX + "test", "test", 20);
+        redisTemplate.opsForValue().set(Constant.ANONYMOUS_PREFIX+"test","test");
+        redisTemplate.expire(Constant.ANONYMOUS_PREFIX+"test",20, TimeUnit.SECONDS);
+
     }
 
     /**
@@ -144,7 +170,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     @Override
     public Map<String, Object> login(LoginForm form) {
         UserEntity user = queryByMobile(form.getMobile());
-        if(user == null){
+        if (user == null) {
             throw new RRException("用户不存在", 502);
         }
         //密码错误
@@ -152,14 +178,23 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
             throw new RRException("密码错误", 502);
         }
 
-        if(UserLoginStatusEnum.values()[user.getLoginStatus()] == UserLoginStatusEnum.FREEZE){
-            throw new RRException("用户已被冻结",502);
+        if (UserLoginStatusEnum.values()[user.getLoginStatus()] == UserLoginStatusEnum.FREEZE) {
+            throw new RRException("用户已被冻结", 502);
         }
 
-        //获取缓存中的验证码
-        String code = redisUtils.get(Constant.ANONYMOUS_PREFIX+form.getMarkCode());
+        //增加重试机制
+        int retryCount = 0;
+        String code = null;
 
-        if(StringUtils.isBlank(code) || !code.equalsIgnoreCase(form.getCaptcha())){
+        while(code == null && retryCount++ < MAX_RETRY_COUNT){
+            //获取缓存中的验证码
+           // code = redisUtils.get(Constant.ANONYMOUS_PREFIX + form.getMarkCode());
+            code = (String) redisTemplate.opsForValue().get(Constant.ANONYMOUS_PREFIX + form.getMarkCode());
+        }
+
+        logger.info("login phone is : {} , markCode is : {} , fromRedisCode is : {}  , form's captcha is : {} ", form.getMobile(), form.getMarkCode(), code, form.getCaptcha());
+
+        if (StringUtils.isBlank(code) || !code.equalsIgnoreCase(form.getCaptcha())) {
             throw new RRException("验证码错误");
         }
 
@@ -183,9 +218,9 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
      * @return 更新成功行数
      */
     @Override
-  //  @CacheEvict(value = "user", key = "#user.userId")
+    //  @CacheEvict(value = "user", key = "#user.userId")
     public Integer changePw(ChangePassword pw, UserEntity user) {
-     //   Assert.isNull(user, ErrorEnum.用户不存在.getDesc());
+        //   Assert.isNull(user, ErrorEnum.用户不存在.getDesc());
         //密码错误
         if (!user.getPassword().equals(DigestUtils.sha256Hex(pw.getOldPassword()))) {
             throw new RRException(ErrorEnum.用户密码错误.getDesc(), ErrorEnum.用户密码错误.getCode());
@@ -202,7 +237,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
      * @return 用户实体
      */
     @Override
-   // @Cacheable(value = "user", key = "#id", unless = "#result == null")
+    // @Cacheable(value = "user", key = "#id", unless = "#result == null")
     public UserEntity selectByIdFromCache(Long id) {
         return this.getById(id);
     }
@@ -214,7 +249,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
      * @return 更新结果
      */
     @Override
-  //  @CacheEvict(value = "user", key = "#userEntity.userId")
+    //  @CacheEvict(value = "user", key = "#userEntity.userId")
     public Boolean updateByIdWithCache(UserEntity userEntity) {
         return this.updateById(userEntity);
     }
