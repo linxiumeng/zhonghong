@@ -1,5 +1,6 @@
 package org.springblade.pay.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.common.entity.AccountDetail;

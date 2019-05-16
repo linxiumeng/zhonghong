@@ -280,6 +280,7 @@ public class PurchaseOrdersController {
     @ApiOperation(value="查询最新的几条订单信息")
     public R listNewPurchaseOrders(@RequestBody PageForm pageForm) {
         IPage page = new Page(pageForm.getPage(),pageForm.getSize());
+        purchaseOrdersService.listNewPurchaseOrders(page);
         return R.ok().put("result",page);
     }
 }
