@@ -2,6 +2,7 @@ package org.springblade.order.controller;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -11,6 +12,7 @@ import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.LoadBill;
+import org.springblade.common.entity.Order;
 import org.springblade.common.entity.PurchaseOrders;
 import org.springblade.common.entity.UserEntity;
 import org.springblade.common.enums.OrdersEnum;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -270,6 +273,13 @@ public class PurchaseOrdersController {
         purchaseOrders.setId(param.getOrderNo());
         return purchaseOrders;
     }
-
-
+    /**
+     *查询最新的几条订单信息
+     */
+    @PostMapping("/listNewPurchaseOrders")
+    @ApiOperation(value="查询最新的几条订单信息")
+    public R listNewPurchaseOrders(@RequestBody PageForm pageForm) {
+        IPage page = new Page(pageForm.getPage(),pageForm.getSize());
+        return R.ok().put("result",page);
+    }
 }

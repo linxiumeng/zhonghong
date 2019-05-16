@@ -74,5 +74,11 @@ public interface PurchaseOrdersService extends IService<PurchaseOrders> {
      * @return
      */
     IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId,Integer key,OrdersEnum ordersEnum);
-    
+
+    /**
+     * 查询最新的几条订单信息
+     * @param page
+     * @return
+     */
+    IPage<PurchaseOrders> listNewPurchaseOrders(IPage page);
 }

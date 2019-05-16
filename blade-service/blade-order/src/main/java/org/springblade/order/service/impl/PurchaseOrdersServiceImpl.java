@@ -1,7 +1,9 @@
 package org.springblade.order.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
@@ -319,5 +321,10 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         purchaseOrders.setGoodsUnit(quotation.getFUnit());
         purchaseOrders.setGoodsPrice(String.valueOf(quotation.getPrice()));
         purchaseOrders.setFilePoint(quotation.getFilePoint());
+    }
+    public IPage<PurchaseOrders> listNewPurchaseOrders(IPage page){
+        QueryWrapper wrapper = Wrappers.query();
+        wrapper.orderByDesc("creat_time");
+        return page(page,wrapper);
     }
 }

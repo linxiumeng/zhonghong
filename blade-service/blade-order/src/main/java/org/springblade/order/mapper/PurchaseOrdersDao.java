@@ -4,8 +4,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springblade.common.entity.Order;
 import org.springblade.common.entity.PurchaseOrders;
+import org.springblade.common.entity.Quotation;
 import org.springblade.common.respond.ProviderPurchaseOrderStatisticsResp;
+
+import java.util.List;
 
 /**
  * (PurchaseOrders)表数据库访问层
@@ -24,5 +28,7 @@ public interface PurchaseOrdersDao extends BaseMapper<PurchaseOrders> {
              "SUM(case tb.status when 10 then 1 else 0 end) as `transferMoneyConfirmation`\n" +
              "from tb_purchase_orders tb where provider_id = #{userId}")
      ProviderPurchaseOrderStatisticsResp getStatistics(@Param("userId") long userId);
+
+
 
 }

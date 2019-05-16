@@ -1,7 +1,8 @@
 package org.springblade.order.mapper;
 
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import
+        com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springblade.common.entity.LoadBill;
 
 /**

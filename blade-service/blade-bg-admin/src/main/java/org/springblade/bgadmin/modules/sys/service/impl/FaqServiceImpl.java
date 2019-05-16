@@ -34,7 +34,7 @@ public class FaqServiceImpl extends ServiceImpl<FaqDao, FaqEntity> implements Fa
             wrapper.eq("is_open",status);
         }
 
-        // 是否显示倒叙 + 序号倒叙 + 创建日期倒叙
+        // 是否显示 + 序号倒叙 + 创建日期倒叙
         wrapper.orderBy(true,false,"is_open").orderBy(true,false,"`order`").orderBy(true,false,"create_date");
         return this.page(page, wrapper);
     }
