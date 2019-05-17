@@ -29,4 +29,17 @@ public enum FinancePriceType {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public static String genTotalCode(){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(FinancePriceType type : FinancePriceType.values()){
+            stringBuilder.append(type.getCode());
+            stringBuilder.append(",");
+        }
+
+        if(stringBuilder.length() > 0){
+            stringBuilder.deleteCharAt(stringBuilder.lastIndexOf(","));
+        }
+        return stringBuilder.toString();
+    }
 }
