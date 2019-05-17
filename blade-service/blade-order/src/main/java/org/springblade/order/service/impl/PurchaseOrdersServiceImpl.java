@@ -322,6 +322,12 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         purchaseOrders.setGoodsPrice(String.valueOf(quotation.getPrice()));
         purchaseOrders.setFilePoint(quotation.getFilePoint());
     }
+
+    /**
+     * 查询最新的几条订单信息
+     * @param page
+     * @return
+     */
     public IPage<PurchaseOrders> listNewPurchaseOrders(IPage page){
         QueryWrapper wrapper = Wrappers.query();
         wrapper.orderByDesc("creat_time");

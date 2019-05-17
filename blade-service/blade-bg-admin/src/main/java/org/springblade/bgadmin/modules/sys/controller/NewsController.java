@@ -71,7 +71,7 @@ public class NewsController {
     }
 
     /**
-     * 删除
+     *
      */
     @RequestMapping("/delete")
     //@RequiresPermissions("sys:news:delete")

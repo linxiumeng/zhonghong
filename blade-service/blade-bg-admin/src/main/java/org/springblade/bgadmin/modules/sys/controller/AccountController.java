@@ -71,7 +71,7 @@ public class AccountController {
     }
 
     /**
-     * 删除
+     *
      */
     @RequestMapping("/delete")
     //@RequiresPermissions("sys:account:delete")

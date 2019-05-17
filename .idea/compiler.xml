@@ -29,33 +29,6 @@
         <module name="blade-order-api" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="blade-admin" target="1.8" />
-      <module name="blade-auth" target="1.8" />
-      <module name="blade-bg-admin" target="1.8" />
-      <module name="blade-common" target="1.8" />
-      <module name="blade-desk" target="1.8" />
-      <module name="blade-desk-api" target="1.8" />
-      <module name="blade-develop" target="1.8" />
-      <module name="blade-dict-api" target="1.8" />
-      <module name="blade-foreward-user" target="1.8" />
-      <module name="blade-foreward-user-api" target="1.8" />
-      <module name="blade-gateway" target="1.8" />
-      <module name="blade-infomation" target="1.8" />
-      <module name="blade-information-api" target="1.8" />
-      <module name="blade-log" target="1.8" />
-      <module name="blade-ops" target="1.8" />
-      <module name="blade-order" target="1.8" />
-      <module name="blade-order-api" target="1.8" />
-      <module name="blade-pay" target="1.8" />
-      <module name="blade-service" target="1.8" />
-      <module name="blade-service-api" target="1.8" />
-      <module name="blade-system" target="1.8" />
-      <module name="blade-system-api" target="1.8" />
-      <module name="blade-user" target="1.8" />
-      <module name="blade-user-api" target="1.8" />
-      <module name="SpringBlade" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

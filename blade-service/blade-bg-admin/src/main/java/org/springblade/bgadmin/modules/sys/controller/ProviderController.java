@@ -71,7 +71,7 @@ public class ProviderController {
     }
 
     /**
-     * 删除
+     *
      */
     @RequestMapping("/delete")
     //@RequiresPermissions("sys:provider:delete")
