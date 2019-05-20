@@ -1,6 +1,9 @@
 package org.springblade.pay.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.common.entity.AccountRepayment;
 import org.springblade.common.entity.AccountRepaymentStep;
 import org.springblade.pay.mapper.AccountRepaymentStepDao;
 import org.springblade.pay.service.AccountRepaymentStepService;
@@ -19,5 +22,11 @@ import javax.annotation.Resource;
 public class AccountRepaymentStepServiceImpl extends ServiceImpl<AccountRepaymentStepDao, AccountRepaymentStep> implements AccountRepaymentStepService {
     @Resource
     private AccountRepaymentStepDao accountRepaymentStepDao;
-    
+
+    @Override
+    public int countNotRepayment(Long repaymentId) {
+        QueryWrapper<AccountRepaymentStep> accountRepaymentQueryWrapper = Wrappers.query();
+        accountRepaymentQueryWrapper.eq("repayment_id",repaymentId).eq("status",0);
+        return accountRepaymentStepDao.selectCount(accountRepaymentQueryWrapper);
+    }
 }

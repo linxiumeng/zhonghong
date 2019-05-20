@@ -7,6 +7,7 @@ import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.*;
+import org.springblade.common.enums.OrdersEnum;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.utils.R;
 import org.springblade.pay.feign.AccountServiceFeign;
@@ -111,6 +112,18 @@ public class AccountRepaymentController {
         accountRepaymentStep.setStatus(1);
         accountService.updateAccountById(account);
         accountRepaymentStepService.updateById(accountRepaymentStep);
+
+        int count = accountRepaymentStepService.countNotRepayment(accountRepaymentStep.getRepaymentId());
+
+        AccountRepayment accountRepayment = accountRepaymentService.getById(accountRepaymentStep.getRepaymentId());
+
+        if(count == 0){
+            PurchaseOrders purchaseOrders = new PurchaseOrders();
+            purchaseOrders.setId(accountRepayment.getOrderId());
+            purchaseOrders.setStatus(OrdersEnum.FOURTEEN);
+            purchaseOrdersService.updateOrder(purchaseOrders);
+        }
+
         return R.ok();
     }
 

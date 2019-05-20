@@ -1,5 +1,7 @@
 package org.springblade.pay.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.common.entity.AccountRepayment;
 import org.springblade.pay.mapper.AccountRepaymentDao;
@@ -24,4 +26,6 @@ public class AccountRepaymentServiceImpl extends ServiceImpl<AccountRepaymentDao
     public int insertWithId(AccountRepayment accountRepayment) {
         return accountRepaymentDao.insertWithId(accountRepayment);
     }
+
+
 }

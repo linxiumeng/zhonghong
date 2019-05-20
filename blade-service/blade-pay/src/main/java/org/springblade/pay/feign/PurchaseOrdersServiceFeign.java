@@ -30,6 +30,15 @@ public interface PurchaseOrdersServiceFeign {
     @RequestMapping(ORDER_API_PREFIX+"/detail")
     R<PurchaseOrders> getPurchaseOrdersDetail(@RequestParam("id")Long ordersId);
 
+
+    /**
+     * 批量更新采购单
+     * @param
+     * @return
+     */
+    @RequestMapping(ORDER_API_PREFIX+"/updateSelective")
+    R<Boolean> updateOrder(@RequestBody PurchaseOrders purchaseOrders);
+
 }
 
 

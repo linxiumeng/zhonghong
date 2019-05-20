@@ -6,10 +6,7 @@ import org.springblade.common.constant.FeignResultCodeConstant;
 import org.springblade.common.entity.PurchaseOrders;
 import org.springblade.core.tool.api.R;
 import org.springblade.order.service.PurchaseOrdersService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -35,6 +32,14 @@ public class RestPurchaseOrdersController {
             r.setCode(FeignResultCodeConstant.ENTITY_NOT_EXISTS);
         }
 
+        return r;
+    }
+
+
+    @GetMapping("updateSelective")
+    public R updateSelective(@RequestBody PurchaseOrders purchaseOrders){
+        R r = R.status(true);
+        purchaseOrdersService.updateById(purchaseOrders);
         return r;
     }
 

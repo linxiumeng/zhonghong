@@ -19,4 +19,6 @@ public interface AccountRepaymentService extends IService<AccountRepayment> {
      */
     int insertWithId(AccountRepayment accountRepayment);
 
+
+
 }
