@@ -81,4 +81,11 @@ public interface PurchaseOrdersService extends IService<PurchaseOrders> {
      * @return
      */
     IPage<PurchaseOrders> listNewPurchaseOrders(IPage page);
+
+    /**
+     * 返回是否是融资
+     * @param orderId
+     * @return
+     */
+    boolean isFinancePurchaseOrder(Long orderId);
 }

@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
@@ -19,6 +21,7 @@ import org.springblade.common.enums.OrdersEnum;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.form.*;
 import org.springblade.common.utils.R;
+import org.springblade.common.utils.SpringContextUtils;
 import org.springblade.order.feign.AccountDetailServiceFeign;
 import org.springblade.order.feign.AccountServiceFeign;
 import org.springblade.order.service.LoadBillService;
@@ -28,6 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 
@@ -129,12 +136,19 @@ public class PurchaseOrdersController {
         if (po.getStatus() == OrdersEnum.TEN) {
             PurchaseOrders purchaseOrders = new PurchaseOrders();
             purchaseOrders.setId(param.getId());
-            purchaseOrders.setStatus(OrdersEnum.ELEVEN);
+
+            if(purchaseOrdersService.isFinancePurchaseOrder(param.getId().longValue())){
+                purchaseOrders.setStatus(OrdersEnum.TWELVE);
+            }else{
+                purchaseOrders.setStatus(OrdersEnum.FOURTEEN);
+            }
+
             purchaseOrdersService.updateById(purchaseOrders);
             return R.ok();
         }
         return R.error();
     }
+
 
     /***********采购商接口*/
     @ApiOperation(value = "采购商确认订单金额接口")

@@ -29,6 +29,8 @@ public interface PurchaseOrdersDao extends BaseMapper<PurchaseOrders> {
              "from tb_purchase_orders tb where provider_id = #{userId}")
      ProviderPurchaseOrderStatisticsResp getStatistics(@Param("userId") long userId);
 
+     @Select("select count(1) as count from tb_repayment where order_id = ? ")
+     int countRepaymentByOrderId(Long orderId);
 
 
 }

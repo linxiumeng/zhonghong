@@ -328,9 +328,15 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
      * @param page
      * @return
      */
+    @Override
     public IPage<PurchaseOrders> listNewPurchaseOrders(IPage page){
         QueryWrapper wrapper = Wrappers.query();
         wrapper.orderByDesc("creat_time");
         return page(page,wrapper);
+    }
+
+    @Override
+    public boolean isFinancePurchaseOrder(Long orderId) {
+        return purchaseOrdersDao.countRepaymentByOrderId(orderId) > 0;
     }
 }
