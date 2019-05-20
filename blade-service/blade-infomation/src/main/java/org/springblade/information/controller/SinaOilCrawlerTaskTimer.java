@@ -258,7 +258,7 @@ public class SinaOilCrawlerTaskTimer {
 
     public static void main(String[] args) {
 
-        long currentTimeMills = System.currentTimeMillis();
+        /*long currentTimeMills = System.currentTimeMillis();
 
 
         String completeUrl = BASE_URL + "_=" + currentTimeMills + "&list=" + FinancePriceType.genTotalCode();
@@ -296,7 +296,7 @@ public class SinaOilCrawlerTaskTimer {
                 String fullStackTrace = org.apache.commons.lang.exception.ExceptionUtils.getFullStackTrace(e);
                 logger.error("出现了异常 {} ", fullStackTrace);
             }
-        }
+        }*/
 
     }
 
