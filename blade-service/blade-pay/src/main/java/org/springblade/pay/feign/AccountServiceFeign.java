@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author hanbin
  */
 @FeignClient(
-        value = "blade-user"
+        value = "blade-foreward-user"
 )
 public interface AccountServiceFeign {
 
@@ -26,7 +26,7 @@ public interface AccountServiceFeign {
      * @param userId
      * @return
      */
-    @GetMapping("getByUserId")
+    @GetMapping(USER_ACCOUNT_API_PREFIX+"/getByUserId")
     R<Account> getAccountByUserId(@RequestParam Long userId);
 
 
@@ -35,7 +35,7 @@ public interface AccountServiceFeign {
      * @param account
      * @return
      */
-    @PostMapping("updateBySelective")
+    @GetMapping(USER_ACCOUNT_API_PREFIX+"/updateBySelective")
     R<Boolean> updateAccountById(@RequestBody Account account);
 
 
