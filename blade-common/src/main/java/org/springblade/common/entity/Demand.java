@@ -186,5 +186,5 @@ public class Demand implements Serializable {
     private GoodsTypeEntity goodsTypeEntity;
 
     @TableField(exist = false)
-    private int quotationNumber;
+    private Long quotationNumber;
 }

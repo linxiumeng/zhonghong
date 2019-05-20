@@ -193,8 +193,8 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
 
         for(Demand demand : demands){
             for(Map<String,Object> map : mapList){
-                if(demand.getId().longValue() == Long.valueOf((String)map.get("demand_id"))){
-                    demand.setQuotationNumber(Integer.valueOf((String)map.get("nums")));
+                if(demand.getId().longValue() == Long.valueOf((Integer)map.get("demand_id"))){
+                    demand.setQuotationNumber((Long) map.get("nums"));
                 }
             }
         }
