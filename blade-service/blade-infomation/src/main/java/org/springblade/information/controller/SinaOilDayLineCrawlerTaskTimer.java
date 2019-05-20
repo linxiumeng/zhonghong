@@ -12,9 +12,11 @@ import org.springblade.common.entity.FinanceDailyPrice;
 import org.springblade.common.entity.FinancePriceType;
 import org.springblade.common.utils.DateUtils;
 import org.springblade.common.utils.HttpClientUtils;
+import org.springblade.information.service.FinanceDailyPriceService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -28,6 +30,11 @@ import static org.springblade.common.utils.DateUtils.DATE_PATTERN;
 @Api(tags = "新浪日K线的数据源")
 public class SinaOilDayLineCrawlerTaskTimer {
 
+
+    @Resource
+    FinanceDailyPriceService financeDailyPriceService;
+
+
     private static final Logger logger = LoggerFactory.getLogger(SinaOilDayLineCrawlerTaskTimer.class);
 
     /**
@@ -37,26 +44,41 @@ public class SinaOilDayLineCrawlerTaskTimer {
      * <p>
      * example url :  https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=OIL&_=2019_5_20
      * <p>
+     *
+     *     https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_CL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=CL&_=2019_5_20
      * 这里每天10点执行一次
      */
     @Scheduled(cron = "0 0 10 * * *")
     public void scheduled() {
 
-        String response = getDailyKPriceResponse("");
+        doWTIOil();
+
+        doBULUNTEOil();
+
+    }
+
+    public void doWTIOil() {
+        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=OIL&_=2019_5_20");
 
         String completeResponse = filterNoUseString(response);
 
-        FinanceDailyPrice oilPrice = generateFinanceDailyPrice(completeResponse,FinancePriceType.HF_CL);
+        FinanceDailyPrice oilPrice = generateFinanceDailyPrice(completeResponse, FinancePriceType.HF_CL);
 
-        FinanceDailyPrice bulunTePrice = generateFinanceDailyPrice(completeResponse,FinancePriceType.HF_OIL);
-
-        if(oilPrice != null){
-
-
+        if (oilPrice != null) {
+            financeDailyPriceService.save(oilPrice);
         }
-        if(bulunTePrice != null){
+    }
 
+    public void doBULUNTEOil() {
 
+        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=OIL&_=2019_5_20");
+
+        String completeResponse = filterNoUseString(response);
+
+        FinanceDailyPrice bulunTePrice = generateFinanceDailyPrice(completeResponse, FinancePriceType.HF_OIL);
+
+        if (bulunTePrice != null) {
+            financeDailyPriceService.save(bulunTePrice);
         }
 
     }
@@ -114,7 +136,7 @@ public class SinaOilDayLineCrawlerTaskTimer {
 
         int lastDayIndex = convertedJSONArr.size() - 1;
 
-        if(lastDayIndex < 0){
+        if (lastDayIndex < 0) {
             return null;
         }
 
@@ -125,17 +147,17 @@ public class SinaOilDayLineCrawlerTaskTimer {
             String thisDateStr = lastDayJSON.getString("date");
             if (StringUtils.isNotBlank(thisDateStr)) {
 
-                String todayStr = DateUtils.format(new Date(),DATE_PATTERN);
-                if(todayStr.equalsIgnoreCase(thisDateStr)){
+                String todayStr = DateUtils.format(new Date(), DATE_PATTERN);
+                if (todayStr.equalsIgnoreCase(thisDateStr)) {
                     return null;
-                }else{
+                } else {
                     FinanceDailyPrice financeDailyPrice = new FinanceDailyPrice();
                     financeDailyPrice.setCode(financePriceType.getCode());
                     financeDailyPrice.setCurrentPrice(lastDayJSON.getString(""));
                     financeDailyPrice.setTodayHighestPrice(lastDayJSON.getString("high"));
                     financeDailyPrice.setTodayOpenPrice(lastDayJSON.getString("open"));
                     financeDailyPrice.setTodayLowestPrice(lastDayJSON.getString("low"));
-                    financeDailyPrice.setCreateDate(DateUtils.stringToDate(todayStr,DATE_PATTERN));
+                    financeDailyPrice.setCreateDate(DateUtils.stringToDate(todayStr, DATE_PATTERN));
                     financeDailyPrice.setTodayClosePrice(lastDayJSON.getString("close"));
                     return financeDailyPrice;
                 }

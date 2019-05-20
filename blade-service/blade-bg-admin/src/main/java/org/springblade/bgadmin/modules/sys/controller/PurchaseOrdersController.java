@@ -152,7 +152,8 @@ public class PurchaseOrdersController {
             return R.error();
         }
 
-        if(purchaseOrderForm.getStatus() != 7 && purchaseOrderForm.getStatus() != 8){
+        // todo 状态14暂时先用着 以后要改掉
+        if(purchaseOrderForm.getStatus() != 7 && purchaseOrderForm.getStatus() != 8 && purchaseOrderForm.getStatus() != 14){
             return R.error("审核状态错误");
         }
 
