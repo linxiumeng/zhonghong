@@ -19,10 +19,7 @@ import org.springblade.order.service.QuotationService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -124,6 +121,22 @@ public class QuotationServiceImpl extends ServiceImpl<QuotationDao, Quotation> i
             sub.setDemand(demand);
         }
         return quotationList;
+    }
+
+    /**
+     * select demand_id,count(1) from tb_quotation where demand_id in (1) group by demand_id
+     * @param demandIds
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> listCountQuotationByDemandIds(List<Long> demandIds) {
+
+        QueryWrapper<Quotation> wrapper = new QueryWrapper<>();
+        wrapper.in("demand_id",demandIds);
+        wrapper.groupBy("demand_id");
+        wrapper.select("demand_id","count(1) as `nums`");
+        return this.listMaps(wrapper);
+
     }
 
 }

@@ -31,7 +31,7 @@ public class Demand implements Serializable {
      */
     @ApiModelProperty(value = "自增id",name="id",example = "1")
     @TableId(type = IdType.INPUT)
-    private Integer id;
+    private Long id;
     /**
      * 产品类型
      */
@@ -184,4 +184,7 @@ public class Demand implements Serializable {
     @ApiModelProperty(value = "商品类别表实体类",name="goodsTypeEntity",example = "商品")
     @TableField(exist = false)
     private GoodsTypeEntity goodsTypeEntity;
+
+    @TableField(exist = false)
+    private int quotationNumber;
 }

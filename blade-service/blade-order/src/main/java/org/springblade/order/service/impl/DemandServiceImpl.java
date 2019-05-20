@@ -150,6 +150,8 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
         List<Long> userIds = new ArrayList<>(16);
         Set<Long> goodsTypeIds = new HashSet<>();
 
+        List<Long> demandIds = new ArrayList<>(16);
+
         if(goodsType != null){
             wrapper.eq("f_type",goodsType);
         }
@@ -164,6 +166,7 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
                 Long createUserid = Long.valueOf(demand.getCreatUserid());
                 userIds.add(createUserid);
                 goodsTypeIds.add(demand.getFType());
+                demandIds.add(demand.getId());
             }
             int cursor = 0;
             Collection<UserEntity> userEntityCollection = userService.batchGetUserByIds(userIds).getData();
@@ -171,12 +174,31 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
                 demandList.get(cursor++).setCreateUser(userEntity);
             }
 
+            //设置商品的类型
             setGoodsTypeInDemandList(goodsTypeIds,demandList);
+
+            //设置报价的数量给需求实体
+            setQuotationNumberToDemand(demandList,quotationService.listCountQuotationByDemandIds(demandIds));
+
+
 
         } catch (NumberFormatException e) {
             throw new RRException("系统出现错误");
         }
         return resultPage;
+    }
+
+
+    private void setQuotationNumberToDemand(List<Demand> demands,List<Map<String,Object>> mapList){
+
+        for(Demand demand : demands){
+            for(Map<String,Object> map : mapList){
+                if(demand.getId().longValue() == Long.valueOf((String)map.get("demand_id"))){
+                    demand.setQuotationNumber(Integer.valueOf((String)map.get("nums")));
+                }
+            }
+        }
+
     }
 
     /*@Override

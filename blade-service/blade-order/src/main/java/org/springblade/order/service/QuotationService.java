@@ -7,6 +7,7 @@ import org.springblade.common.entity.Quotation;
 import org.springblade.common.respond.QuotationResp;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 报价单表
@@ -41,6 +42,13 @@ public interface QuotationService extends IService<Quotation> {
      * @return
      */
     List<Quotation> listQuotationsByDemandIdWithDemand(Long demandId, Long userId);
+
+    /**
+     * 根据demandIds获取quotation的数量
+     * @param demandIds
+     * @return
+     */
+    List<Map<String,Object>> listCountQuotationByDemandIds(List<Long> demandIds);
 
     
 }
