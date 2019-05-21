@@ -45,11 +45,13 @@ public class FinancePriceServiceImpl extends ServiceImpl<FinancePriceDao, Financ
         QueryWrapper wrapper = Wrappers.query();
         wrapper.eq("code",financePrice.getCode());
         long currentDate = new Date().getTime();
+        Date currentDate1 = new Date(currentDate);
         long now = System.currentTimeMillis() / 1000l;
         long daySecond = 60 * 60 * 24;
         long dayTime = now - (now + 8 * 3600) % daySecond;
-        wrapper.ge("create_time",dayTime);
-        wrapper.le("create_time",currentDate);
+        Date dayTime1 = new Date(dayTime);
+        wrapper.ge("create_time",dayTime1);
+        wrapper.le("create_time",currentDate1);
         List<FinancePrice> financePrices = financePriceService.list(wrapper);
         return financePrices;
     }

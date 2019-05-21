@@ -319,7 +319,7 @@ public class SinaOilCrawlerTaskTimer {
                 } else {
                     createTime = ((long) (createTime / 1000)) * 1000;
                 }
-                financePrice.setCreateTime(createTime);
+                financePrice.setCreateTime(createDate);
                 financePrice.setCurrentPrice(informationArr[0]);
                 financePrice.setId(null);
                 financePrice.setYesterdayClosePrice(informationArr[7]);
@@ -357,7 +357,7 @@ public class SinaOilCrawlerTaskTimer {
                 long createTime = System.currentTimeMillis();
                 //以秒来算
                 createTime = ((long) (createTime / 1000)) * 1000;
-                financePrice.setCreateTime(createTime);
+                financePrice.setCreateTime(new Date());
                 //      financePrice.setCurrentGrowPercent(informationArr[1]);
                 financePrice.setCurrentPrice(informationArr[8]);
                 financePrice.setId(null);
@@ -402,7 +402,7 @@ public class SinaOilCrawlerTaskTimer {
                     createDate = new Date();
                     createDate.setMinutes(0);
                 }
-                financePrice.setCreateTime(createTime);
+                financePrice.setCreateTime(createDate);
                 financePrice.setCurrentPrice(informationArr[1]);
                 financePrice.setId(null);
                 financePrice.setYesterdayClosePrice(informationArr[3]);
