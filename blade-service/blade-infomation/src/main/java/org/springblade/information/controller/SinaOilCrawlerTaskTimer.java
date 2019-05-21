@@ -69,22 +69,44 @@ public class SinaOilCrawlerTaskTimer {
         this.financePriceService = financePriceService;
         QueryWrapper loaWrapper = Wrappers.query();
         loaWrapper.eq("code", FinancePriceType.HF_OIL.getCode());
-        long currentDate = new Date().getTime();
-        loaWrapper.gt("create_time",currentDate);
+        long currentDate = System.currentTimeMillis();
+        loaWrapper.gt("create_time", currentDate);
         int loaCount = financePriceService.count(loaWrapper);
         if (loaCount == 0) {
             //todo
-            doDateLoad();
+            doSaveCLData();
+        }
+
+        this.financePriceService = financePriceService;
+        QueryWrapper loaWrapper1 = Wrappers.query();
+        loaWrapper1.eq("code", FinancePriceType.HF_OIL.getCode());
+        long currentDate1 = System.currentTimeMillis();
+        loaWrapper1.gt("create_time", currentDate1);
+        int loaCount1 = financePriceService.count(loaWrapper);
+        if (loaCount1 == 0) {
+            //todo
+            doSaveOILData();
         }
     }
-        private void doDateLoad() {
 
-            String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=OIL&_=2019_5_20");
+    private void doSaveCLData() {
 
-            String completeResponse = filterNoUseString(response);
+        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/openapi.php/GlobalFuturesService.getGlobalFuturesMinLine?symbol=OIL&callback=var%20t1hf_OIL=");
 
-            insertBatch(completeResponse,FinancePriceType.HF_OIL);
-        }
+        String completeResponse = filterNoUseString(response);
+
+        insertBatch(completeResponse, FinancePriceType.HF_CL);
+    }
+
+    private void doSaveOILData() {
+
+        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/openapi.php/GlobalFuturesService.getGlobalFuturesMinLine?symbol=OIL&callback=var%20t1hf_OIL=");
+
+        String completeResponse = filterNoUseString(response);
+
+        insertBatch(completeResponse, FinancePriceType.HF_OIL);
+    }
+
     /**
      * 过滤掉没用的非json字符串
      * <p>
@@ -109,6 +131,7 @@ public class SinaOilCrawlerTaskTimer {
 
         return response.substring(firstQuoStrIndex, lastQuoStrIndex);
     }
+
     /**
      * 生成日K的实体
      *
@@ -121,34 +144,34 @@ public class SinaOilCrawlerTaskTimer {
         try {
             convertedJSONArr = JSON.parseArray(completeResponseString);
         } catch (JSONException e) {
-            return ;
+            return;
         }
 
-        List<FinanceDailyPrice> list = new ArrayList<>(250);
+        List<FinancePrice> list = new ArrayList<>(250);
 
         for (int i = 0; i < convertedJSONArr.size(); i++) {
 
-            JSONObject lastDayJSON = convertedJSONArr.getJSONObject(i);
+            JSONObject hourJSON = convertedJSONArr.getJSONObject(i);
 
-            if (lastDayJSON != null) {
+            if (hourJSON != null) {
 
-                String thisDateStr = lastDayJSON.getString("date");
+                String thisDateStr = hourJSON.getString("date");
                 if (StringUtils.isNotBlank(thisDateStr)) {
-                    FinanceDailyPrice financeDailyPrice = new FinanceDailyPrice();
+                    FinancePrice financeDailyPrice = new FinancePrice();
                     financeDailyPrice.setCode(financePriceType.getCode());
-                    financeDailyPrice.setCurrentPrice(lastDayJSON.getString(""));
-                    financeDailyPrice.setTodayHighestPrice(lastDayJSON.getString("high"));
-                    financeDailyPrice.setTodayOpenPrice(lastDayJSON.getString("open"));
-                    financeDailyPrice.setTodayLowestPrice(lastDayJSON.getString("low"));
-                    financeDailyPrice.setCreateDate(DateUtils.stringToDate(thisDateStr, DATE_PATTERN));
-                    financeDailyPrice.setTodayClosePrice(lastDayJSON.getString("close"));
+                    financeDailyPrice.setCurrentPrice(hourJSON.getString(""));
+                    financeDailyPrice.setTodayHighestPrice(hourJSON.getString("high"));
+                    financeDailyPrice.setTodayOpenPrice(hourJSON.getString("open"));
+                    financeDailyPrice.setTodayLowestPrice(hourJSON.getString("low"));
+                //    financeDailyPrice.setCreateDate(DateUtils.stringToDate(thisDateStr, DATE_PATTERN));
+                 //   financeDailyPrice.setTodayClosePrice(lastDayJSON.getString("close"));
                     list.add(financeDailyPrice);
                 }
             }
 
-            if(list.size() == 20){
-                boolean flag = financeDailyPriceService.saveBatch(list);
-                if(!flag){
+            if (list.size() == 20) {
+                boolean flag = financePriceService.saveBatch(list);
+                if (!flag) {
                     return;
                 }
                 list.clear();
@@ -156,21 +179,21 @@ public class SinaOilCrawlerTaskTimer {
 
         }
 
-        if(list.size() > 0 ){
-            financeDailyPriceService.saveBatch(list);
+        if (list.size() > 0) {
+            financePriceService.saveBatch(list);
         }
 
     }
-        /**
-         * 获取日k的响应
-         *
-         * @param url
-         * @return
-         */
-        private String getDailyKPriceResponse(String url) {
-            return HttpClientUtils.doGet(url);
-        }
 
+    /**
+     * 获取日k的响应
+     *
+     * @param url
+     * @return
+     */
+    private String getDailyKPriceResponse(String url) {
+        return HttpClientUtils.doGet(url);
+    }
 
 
     /**
@@ -196,16 +219,16 @@ public class SinaOilCrawlerTaskTimer {
 
         FinancePrice financePrice = null;
 
-        for(String sub : resultArr) {
+        for (String sub : resultArr) {
 
-            if(sub.contains(FinancePriceType.HF_CL.getCode())) {
+            if (sub.contains(FinancePriceType.HF_CL.getCode())) {
                 financePrice = generateForeignFinancePriceByResponse(sub, FinancePriceType.HF_CL);
-            } else if(sub.contains(FinancePriceType.HF_OIL.getCode())){
-                financePrice = generateForeignFinancePriceByResponse(sub,FinancePriceType.HF_OIL);
-            } else if(sub.contains(FinancePriceType.NF_SC0.getCode())){
-                financePrice = generateInFinancePriceByResponse(sub,FinancePriceType.NF_SC0);
-            } else if(sub.contains(FinancePriceType.DINIW.getCode())){
-                financePrice = generateIndexNumberFinancePriceByResponse(sub,FinancePriceType.DINIW);
+            } else if (sub.contains(FinancePriceType.HF_OIL.getCode())) {
+                financePrice = generateForeignFinancePriceByResponse(sub, FinancePriceType.HF_OIL);
+            } else if (sub.contains(FinancePriceType.NF_SC0.getCode())) {
+                financePrice = generateInFinancePriceByResponse(sub, FinancePriceType.NF_SC0);
+            } else if (sub.contains(FinancePriceType.DINIW.getCode())) {
+                financePrice = generateIndexNumberFinancePriceByResponse(sub, FinancePriceType.DINIW);
             }
 
 
@@ -229,7 +252,7 @@ public class SinaOilCrawlerTaskTimer {
     }
 
 
-   /* *//**
+    /* *//**
      *  定时器清除掉前一天的分时数据
      * @return
      *//*
@@ -370,13 +393,14 @@ public class SinaOilCrawlerTaskTimer {
                 financePrice = new FinancePrice();
 
                 financePrice.setCode(financePriceType.getCode());
-                Date createDate = DateUtils.stringToDate(informationArr[10] + " " + informationArr[0], "yyyy-MM-dd HH:mm:ss");
+                Date createDate = DateUtils.stringToDate(informationArr[10] + " " + informationArr[0].substring(0,informationArr[0].lastIndexOf(":")), "yyyy-MM-dd HH:mm");
                 logger.info("create date is {} ", createDate);
                 long createTime = System.currentTimeMillis();
                 if (createDate != null) {
                     createTime = createDate.getTime();
                 } else {
-                    createTime = ((long) (createTime / 1000)) * 1000;
+                    createDate = new Date();
+                    createDate.setMinutes(0);
                 }
                 financePrice.setCreateTime(createTime);
                 financePrice.setCurrentPrice(informationArr[1]);
@@ -434,7 +458,13 @@ public class SinaOilCrawlerTaskTimer {
             }
         }*/
 
+        String time = "2019-04-01 12:25:23".substring(0,"2019-04-01 12:25:23".lastIndexOf(":"));
+        Date date = DateUtils.stringToDate(time,"yyyy-MM-dd HH:mm");
+        System.out.println(date);
+
     }
+
+
 
 
 }
