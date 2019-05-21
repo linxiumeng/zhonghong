@@ -23,6 +23,7 @@ public class FinanceDailyPriceServiceImpl extends ServiceImpl<FinanceDailyPriceD
 
     @Override
     public List<FinanceDailyPrice> listDayFinancePrice(FinanceDailyPriceForm financeDailyPriceForm) {
+        completeForm(financeDailyPriceForm);
         QueryWrapper<FinanceDailyPrice> queryWrapper = Wrappers.query();
         queryWrapper.eq("code",financeDailyPriceForm.getCode());
         queryWrapper.le("create_date",financeDailyPriceForm.getEndDate());
@@ -53,6 +54,10 @@ public class FinanceDailyPriceServiceImpl extends ServiceImpl<FinanceDailyPriceD
         if(financeDailyPriceForm.getStartDate() == null){
             // 1970年 时间戳
             financeDailyPriceForm.setStartDate(new Date(0L));
+        }
+        if(financeDailyPriceForm.getEndDate() == null){
+            // 1970年 时间戳
+            financeDailyPriceForm.setEndDate(new Date(System.currentTimeMillis()));
         }
         if(financeDailyPriceForm.getCode() == null){
             financeDailyPriceForm.setCode(FinancePriceType.HF_CL.getCode());

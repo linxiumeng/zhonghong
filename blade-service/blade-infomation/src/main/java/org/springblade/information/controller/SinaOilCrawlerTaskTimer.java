@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  * @author hanbin
  * 新浪的金融数据源 使用java的版本
  */
-@Component
+//@Component
 @Api(tags = "新浪的金融数据源")
 public class SinaOilCrawlerTaskTimer {
 
@@ -62,7 +62,7 @@ public class SinaOilCrawlerTaskTimer {
      * <p>
      * 这里5s执行一次
      */
-    @Scheduled(cron = "0/5 * * * * *")
+    //@Scheduled(cron = "0/5 * * * * *")
     public void scheduled() {
 
         long currentTimeMills = System.currentTimeMillis();
