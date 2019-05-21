@@ -4,21 +4,27 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springblade.common.entity.FinanceDailyPrice;
+import org.springblade.common.entity.FinancePrice;
 import org.springblade.common.entity.FinancePriceType;
 import org.springblade.common.utils.DateUtils;
 import org.springblade.common.utils.HttpClientUtils;
 import org.springblade.information.service.FinanceDailyPriceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.springblade.common.utils.DateUtils.DATE_PATTERN;
 
@@ -26,13 +32,41 @@ import static org.springblade.common.utils.DateUtils.DATE_PATTERN;
  * @author hanbin
  * 新浪的金融数据源 使用java的版本
  */
-@Component
+//@Component
 @Api(tags = "新浪日K线的数据源")
 public class SinaOilDayLineCrawlerTaskTimer {
 
-
-    @Resource
+ //   @Resource
     FinanceDailyPriceService financeDailyPriceService;
+
+
+  //  @Autowired
+    public SinaOilDayLineCrawlerTaskTimer(FinanceDailyPriceService financeDailyPriceService) {
+
+        this.financeDailyPriceService = financeDailyPriceService;
+
+        QueryWrapper clWrapper = Wrappers.query();
+        clWrapper.eq("code", FinancePriceType.HF_CL.getCode());
+        int clCount = financeDailyPriceService.count(clWrapper);
+
+        if (clCount == 0) {
+            //todo
+            doBatchInsertWTI();
+        }
+
+        QueryWrapper oilWrapper = Wrappers.query();
+        oilWrapper.eq("code", FinancePriceType.HF_OIL.getCode());
+        int oilCount = financeDailyPriceService.count(oilWrapper);
+
+        if (oilCount == 0) {
+            //todo
+            doBatchInsertBULUNTE();
+        }
+
+
+    }
+
+
 
 
     private static final Logger logger = LoggerFactory.getLogger(SinaOilDayLineCrawlerTaskTimer.class);
@@ -44,8 +78,8 @@ public class SinaOilDayLineCrawlerTaskTimer {
      * <p>
      * example url :  https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=OIL&_=2019_5_20
      * <p>
-     *
-     *     https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_CL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=CL&_=2019_5_20
+     * <p>
+     * https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_CL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=CL&_=2019_5_20
      * 这里每天10点执行一次
      */
     @Scheduled(cron = "0 0 10 * * *")
@@ -58,7 +92,7 @@ public class SinaOilDayLineCrawlerTaskTimer {
     }
 
     public void doWTIOil() {
-        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=OIL&_=2019_5_20");
+        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=CL&_=2019_5_20");
 
         String completeResponse = filterNoUseString(response);
 
@@ -81,6 +115,24 @@ public class SinaOilDayLineCrawlerTaskTimer {
             financeDailyPriceService.save(bulunTePrice);
         }
 
+    }
+
+    private void doBatchInsertWTI() {
+
+        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=CL&_=2019_5_20");
+
+        String completeResponse = filterNoUseString(response);
+
+        insertBatch(completeResponse,FinancePriceType.HF_CL);
+
+    }
+
+    private void doBatchInsertBULUNTE() {
+        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=OIL&_=2019_5_20");
+
+        String completeResponse = filterNoUseString(response);
+
+        insertBatch(completeResponse,FinancePriceType.HF_OIL);
     }
 
 
@@ -170,7 +222,57 @@ public class SinaOilDayLineCrawlerTaskTimer {
     }
 
 
-    public static void main(String[] args) {
+    /**
+     * 生成日K的实体
+     *
+     * @return
+     */
+    private void insertBatch(String completeResponseString, FinancePriceType financePriceType) {
+
+        JSONArray convertedJSONArr = null;
+
+        try {
+            convertedJSONArr = JSON.parseArray(completeResponseString);
+        } catch (JSONException e) {
+            return ;
+        }
+
+        List<FinanceDailyPrice> list = new ArrayList<>(250);
+
+        for (int i = 0; i < convertedJSONArr.size(); i++) {
+
+            JSONObject lastDayJSON = convertedJSONArr.getJSONObject(i);
+
+            if (lastDayJSON != null) {
+
+                String thisDateStr = lastDayJSON.getString("date");
+                if (StringUtils.isNotBlank(thisDateStr)) {
+                    FinanceDailyPrice financeDailyPrice = new FinanceDailyPrice();
+                    financeDailyPrice.setCode(financePriceType.getCode());
+                    financeDailyPrice.setCurrentPrice(lastDayJSON.getString(""));
+                    financeDailyPrice.setTodayHighestPrice(lastDayJSON.getString("high"));
+                    financeDailyPrice.setTodayOpenPrice(lastDayJSON.getString("open"));
+                    financeDailyPrice.setTodayLowestPrice(lastDayJSON.getString("low"));
+                    financeDailyPrice.setCreateDate(DateUtils.stringToDate(thisDateStr, DATE_PATTERN));
+                    financeDailyPrice.setTodayClosePrice(lastDayJSON.getString("close"));
+                    list.add(financeDailyPrice);
+                }
+            }
+
+            if(list.size() == 20){
+                boolean flag = financeDailyPriceService.saveBatch(list);
+                if(!flag){
+                    return;
+                }
+                list.clear();
+            }
+
+        }
+
+        if(list.size() > 0 ){
+            financeDailyPriceService.saveBatch(list);
+        }
+
     }
 
 
