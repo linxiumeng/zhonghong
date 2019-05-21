@@ -1,21 +1,18 @@
 package org.springblade.information.controller;
 
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.common.entity.FinanceDailyPrice;
-import org.springblade.common.entity.FinancePrice;
 import org.springblade.common.enums.PriceDateEnum;
 import org.springblade.common.form.FinanceDailyPriceForm;
 import org.springblade.common.utils.R;
 import org.springblade.information.service.FinanceDailyPriceService;
-import org.springblade.information.service.FinancePriceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -35,7 +32,7 @@ public class FinanceDailyPriceController {
     public R dayList(@RequestBody FinanceDailyPriceForm financeDailyPriceForm){
 
         PriceDateEnum type = financeDailyPriceForm.getType();
-        List<FinanceDailyPrice> resultList = Collections.EMPTY_LIST;
+        List<FinanceDailyPrice> resultList = null;
         if(type == null){
             type = PriceDateEnum.DAY;
         }

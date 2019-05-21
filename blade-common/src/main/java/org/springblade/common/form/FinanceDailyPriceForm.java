@@ -23,5 +23,10 @@ public class FinanceDailyPriceForm {
 
     PriceDateEnum type;
 
+    /**
+     * 多少天之前的
+     */
+    Integer preDays;
+
 
 }

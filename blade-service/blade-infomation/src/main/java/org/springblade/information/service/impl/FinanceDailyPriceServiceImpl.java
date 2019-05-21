@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.common.entity.FinanceDailyPrice;
 import org.springblade.common.entity.FinancePriceType;
+import org.springblade.common.enums.PriceDateEnum;
 import org.springblade.common.form.FinanceDailyPriceForm;
+import org.springblade.common.utils.DateUtils;
 import org.springblade.information.mapper.FinanceDailyPriceDao;
 import org.springblade.information.service.FinanceDailyPriceService;
 import org.springframework.stereotype.Service;
@@ -25,9 +27,9 @@ public class FinanceDailyPriceServiceImpl extends ServiceImpl<FinanceDailyPriceD
     public List<FinanceDailyPrice> listDayFinancePrice(FinanceDailyPriceForm financeDailyPriceForm) {
         completeForm(financeDailyPriceForm);
         QueryWrapper<FinanceDailyPrice> queryWrapper = Wrappers.query();
-        queryWrapper.eq("code",financeDailyPriceForm.getCode());
-        queryWrapper.le("create_date",financeDailyPriceForm.getEndDate());
-        queryWrapper.ge("create_date",financeDailyPriceForm.getStartDate());
+        queryWrapper.eq("code", financeDailyPriceForm.getCode());
+        queryWrapper.le("create_date", financeDailyPriceForm.getEndDate());
+        queryWrapper.ge("create_date", financeDailyPriceForm.getStartDate());
         return this.list(queryWrapper);
     }
 
@@ -50,16 +52,18 @@ public class FinanceDailyPriceServiceImpl extends ServiceImpl<FinanceDailyPriceD
     }
 
 
-    private void completeForm(FinanceDailyPriceForm financeDailyPriceForm){
-        if(financeDailyPriceForm.getStartDate() == null){
-            // 1970年 时间戳
-            financeDailyPriceForm.setStartDate(new Date(0L));
+    private void completeForm(FinanceDailyPriceForm financeDailyPriceForm) {
+
+        if (financeDailyPriceForm.getPreDays() != null) {
+            Integer preDays = financeDailyPriceForm.getPreDays();
+            financeDailyPriceForm.setStartDate(DateUtils.addDateDays(new Date(), preDays * -1));
         }
-        if(financeDailyPriceForm.getEndDate() == null){
+
+        if (financeDailyPriceForm.getEndDate() == null) {
             // 1970年 时间戳
             financeDailyPriceForm.setEndDate(new Date(System.currentTimeMillis()));
         }
-        if(financeDailyPriceForm.getCode() == null){
+        if (financeDailyPriceForm.getCode() == null) {
             financeDailyPriceForm.setCode(FinancePriceType.HF_CL.getCode());
         }
     }
