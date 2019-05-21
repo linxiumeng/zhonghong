@@ -115,6 +115,7 @@ public class PurchaseOrdersController {
             PurchaseOrders purchaseOrders = new PurchaseOrders();
             purchaseOrders.setId(param.getId());
             purchaseOrders.setStatus(param.getStatus());
+            purchaseOrders.setSettleBill(param.getSettleBill());
             purchaseOrders.setFinalQuotation(param.getFinalQuotation());
             purchaseOrdersService.updateById(purchaseOrders);
             return R.ok();

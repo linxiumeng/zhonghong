@@ -28,33 +28,27 @@ public class FinanceDailyPriceController {
     @PostMapping("/dailyList")
     @ApiOperation(value="列表")
     public R dayList(@RequestBody FinanceDailyPriceForm financeDailyPriceForm){
-
-
-
-
-        return R.ok();
+        return R.ok().put("result",financeDailyPriceService.listDayFinancePrice(financeDailyPriceForm));
     }
 
 
     @PostMapping("/weekList")
     @ApiOperation(value="列表")
     public R weekList(@RequestBody FinanceDailyPriceForm financeDailyPriceForm){
-
-
-
-
-        return R.ok();
+        return R.ok().put("result",financeDailyPriceService.listWeekFinancePrice(financeDailyPriceForm));
     }
 
 
     @PostMapping("/monthList")
     @ApiOperation(value="列表")
     public R monthList(@RequestBody FinanceDailyPriceForm financeDailyPriceForm){
+        return R.ok().put("result",financeDailyPriceService.listMonthFinancePrice(financeDailyPriceForm));
+    }
 
-
-
-
-        return R.ok();
+    @PostMapping("/yearList")
+    @ApiOperation(value="列表")
+    public R yearList(@RequestBody FinanceDailyPriceForm financeDailyPriceForm){
+        return R.ok().put("result",financeDailyPriceService.listYearFinancePrice(financeDailyPriceForm));
     }
 
 }

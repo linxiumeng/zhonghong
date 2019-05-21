@@ -22,7 +22,6 @@ import java.util.Date;
 @Data
 @TableName("tb_purchase_orders")
 @ApiModel("采购单表实体类")
-
 public class PurchaseOrders implements Cloneable{
 
     /**
