@@ -24,6 +24,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,7 +38,7 @@ import static org.springblade.common.utils.DateUtils.DATE_PATTERN;
  * @author hanbin
  * 新浪的金融数据源 使用java的版本
  */
-//@Component
+@Component
 @Api(tags = "新浪的金融数据源")
 public class SinaOilCrawlerTaskTimer {
 
@@ -63,13 +64,16 @@ public class SinaOilCrawlerTaskTimer {
 
     FinancePriceService financePriceService;
 
-    FinanceDailyPriceService financeDailyPriceService;
 
-    public SinaOilCrawlerTaskTimer(FinancePriceService financePriceService) {
-        this.financePriceService = financePriceService;
+    @Autowired
+    public SinaOilCrawlerTaskTimer(FinancePriceService financePriceService1) {
+        this.financePriceService = financePriceService1;
+
+        Date currentDate = new Date();
+        currentDate.setHours(0);
+
         QueryWrapper loaWrapper = Wrappers.query();
         loaWrapper.eq("code", FinancePriceType.HF_OIL.getCode());
-        long currentDate = System.currentTimeMillis();
         loaWrapper.gt("create_time", currentDate);
         int loaCount = financePriceService.count(loaWrapper);
         if (loaCount == 0) {
@@ -77,11 +81,9 @@ public class SinaOilCrawlerTaskTimer {
             doSaveCLData();
         }
 
-        this.financePriceService = financePriceService;
         QueryWrapper loaWrapper1 = Wrappers.query();
         loaWrapper1.eq("code", FinancePriceType.HF_OIL.getCode());
-        long currentDate1 = System.currentTimeMillis();
-        loaWrapper1.gt("create_time", currentDate1);
+        loaWrapper1.gt("create_time", currentDate);
         int loaCount1 = financePriceService.count(loaWrapper);
         if (loaCount1 == 0) {
             //todo
@@ -142,8 +144,18 @@ public class SinaOilCrawlerTaskTimer {
         JSONArray convertedJSONArr = null;
 
         try {
-            convertedJSONArr = JSON.parseArray(completeResponseString);
+            JSONObject jsonObject = JSON.parseObject(completeResponseString);
+            if(jsonObject != null){
+                JSONObject resultJSON = jsonObject.getJSONObject("result");
+                if(resultJSON != null){
+                    convertedJSONArr = resultJSON.getJSONObject("data").getJSONArray("minLine_1d");
+                }
+            }
+            if(convertedJSONArr == null){
+                return ;
+            }
         } catch (JSONException e) {
+            e.printStackTrace();
             return;
         }
 
@@ -151,22 +163,16 @@ public class SinaOilCrawlerTaskTimer {
 
         for (int i = 0; i < convertedJSONArr.size(); i++) {
 
-            JSONObject hourJSON = convertedJSONArr.getJSONObject(i);
+            JSONArray minuteJSONArr = convertedJSONArr.getJSONArray(i);
 
-            if (hourJSON != null) {
-
-                String thisDateStr = hourJSON.getString("date");
-                if (StringUtils.isNotBlank(thisDateStr)) {
-                    FinancePrice financeDailyPrice = new FinancePrice();
-                    financeDailyPrice.setCode(financePriceType.getCode());
-                    financeDailyPrice.setCurrentPrice(hourJSON.getString(""));
-                    financeDailyPrice.setTodayHighestPrice(hourJSON.getString("high"));
-                    financeDailyPrice.setTodayOpenPrice(hourJSON.getString("open"));
-                    financeDailyPrice.setTodayLowestPrice(hourJSON.getString("low"));
-                //    financeDailyPrice.setCreateDate(DateUtils.stringToDate(thisDateStr, DATE_PATTERN));
-                 //   financeDailyPrice.setTodayClosePrice(lastDayJSON.getString("close"));
-                    list.add(financeDailyPrice);
-                }
+            if (minuteJSONArr != null) {
+                int size = minuteJSONArr.size();
+                FinancePrice financePrice = new FinancePrice();
+                financePrice.setCode(financePriceType.getCode());
+                Date createDate = DateUtils.stringToDate(DateUtils.format(new Date(), DATE_PATTERN)+" "+minuteJSONArr.getString(size - 3),"yyyy-MM-dd HH:mm");
+                financePrice.setCreateTime(createDate);
+                financePrice.setCurrentPrice(minuteJSONArr.getString(size - 2));
+                list.add(financePrice);
             }
 
             if (list.size() == 20) {
@@ -179,8 +185,8 @@ public class SinaOilCrawlerTaskTimer {
 
         }
 
-        if (list.size() > 0) {
-            financePriceService.saveBatch(list);
+        for(int i = 0 ; i < list.size() ; i++){
+            financePriceService.upsert(list.get(i));
         }
 
     }
@@ -205,7 +211,7 @@ public class SinaOilCrawlerTaskTimer {
      * <p>
      * 这里5s执行一次
      */
-    //@Scheduled(cron = "0/5 * * * * *")
+    @Scheduled(cron = "0/20 * * * * *")
     public void scheduled() {
 
         long currentTimeMills = System.currentTimeMillis();
@@ -232,20 +238,21 @@ public class SinaOilCrawlerTaskTimer {
             }
 
 
-        }
-
-
-        if (financePrice != null) {
-            logger.info("generateFinancePriceByResponse' model is {} ", financePrice.toString());
-            try {
-                //todo 入库
-            } catch (DuplicateKeyException e) {
-                logger.info("重复数据入库失败 ： {} ", financePrice.toString());
-            } catch (Exception e) {
-                //将堆栈信息打印出来
-                String fullStackTrace = org.apache.commons.lang.exception.ExceptionUtils.getFullStackTrace(e);
-                logger.error("出现了异常 {} ", fullStackTrace);
+            if (financePrice != null) {
+                logger.info("generateFinancePriceByResponse' model is {} ", financePrice.toString());
+                try {
+                    //todo 入库
+                    financePriceService.upsert(financePrice);
+                } catch (DuplicateKeyException e) {
+                    logger.info("重复数据入库失败 ： {} ", financePrice.toString());
+                } catch (Exception e) {
+                    //将堆栈信息打印出来
+                    String fullStackTrace = org.apache.commons.lang.exception.ExceptionUtils.getFullStackTrace(e);
+                    logger.error("出现了异常 {} ", fullStackTrace);
+                }
             }
+
+
         }
 
 
@@ -311,13 +318,11 @@ public class SinaOilCrawlerTaskTimer {
                 //设置code
                 financePrice.setCode(financePriceType.getCode());
 
-                Date createDate = DateUtils.stringToDate(informationArr[12] + " " + informationArr[6], "yyyy-MM-dd HH:mm:ss");
+                Date createDate = DateUtils.stringToDate(informationArr[12] + " " + informationArr[6].substring(0, informationArr[6].lastIndexOf(":")), "yyyy-MM-dd HH:mm");
                 logger.info("create date is {} ", createDate);
-                long createTime = System.currentTimeMillis();
-                if (createDate != null) {
-                    createTime = createDate.getTime();
-                } else {
-                    createTime = ((long) (createTime / 1000)) * 1000;
+                if (createDate == null) {
+                    createDate = new Date();
+                    createDate.setSeconds(0);
                 }
                 financePrice.setCreateTime(createDate);
                 financePrice.setCurrentPrice(informationArr[0]);
@@ -354,11 +359,9 @@ public class SinaOilCrawlerTaskTimer {
                 financePrice = new FinancePrice();
 
                 financePrice.setCode(financePriceType.getCode());
-                long createTime = System.currentTimeMillis();
-                //以秒来算
-                createTime = ((long) (createTime / 1000)) * 1000;
-                financePrice.setCreateTime(new Date());
-                //      financePrice.setCurrentGrowPercent(informationArr[1]);
+                Date createDate = new Date();
+                createDate.setSeconds(0);
+                financePrice.setCreateTime(createDate);
                 financePrice.setCurrentPrice(informationArr[8]);
                 financePrice.setId(null);
                 financePrice.setYesterdayClosePrice(informationArr[3]);
@@ -393,14 +396,11 @@ public class SinaOilCrawlerTaskTimer {
                 financePrice = new FinancePrice();
 
                 financePrice.setCode(financePriceType.getCode());
-                Date createDate = DateUtils.stringToDate(informationArr[10] + " " + informationArr[0].substring(0,informationArr[0].lastIndexOf(":")), "yyyy-MM-dd HH:mm");
+                Date createDate = DateUtils.stringToDate(informationArr[10] + " " + informationArr[0].substring(0, informationArr[0].lastIndexOf(":")), "yyyy-MM-dd HH:mm");
                 logger.info("create date is {} ", createDate);
-                long createTime = System.currentTimeMillis();
-                if (createDate != null) {
-                    createTime = createDate.getTime();
-                } else {
+                if (createDate == null) {
                     createDate = new Date();
-                    createDate.setMinutes(0);
+                    createDate.setSeconds(0);
                 }
                 financePrice.setCreateTime(createDate);
                 financePrice.setCurrentPrice(informationArr[1]);
@@ -418,53 +418,8 @@ public class SinaOilCrawlerTaskTimer {
 
     public static void main(String[] args) {
 
-        /*long currentTimeMills = System.currentTimeMillis();
-
-
-        String completeUrl = BASE_URL + "_=" + currentTimeMills + "&list=" + FinancePriceType.genTotalCode();
-        String responseStr = getSinaHttpResonpse(completeUrl);
-        logger.info("getSinaHttpResponse str is {} ", responseStr);
-
-        String[] resultArr = responseStr.split("\n");
-
-        FinancePrice financePrice = null;
-
-        for(String sub : resultArr) {
-
-            if(sub.contains(FinancePriceType.HF_CL.getCode())) {
-                financePrice = generateForeignFinancePriceByResponse(responseStr, FinancePriceType.HF_CL);
-            } else if(sub.contains(FinancePriceType.HF_OIL.getCode())){
-                financePrice = generateForeignFinancePriceByResponse(responseStr,FinancePriceType.HF_OIL);
-            } else if(sub.contains(FinancePriceType.NF_SC0.getCode())){
-                financePrice = generateInFinancePriceByResponse(responseStr,FinancePriceType.NF_SC0);
-            } else if(sub.contains(FinancePriceType.DINIW.getCode())){
-                financePrice = generateIndexNumberFinancePriceByResponse(responseStr,FinancePriceType.DINIW);
-            }
-
-
-        }
-
-
-        if (financePrice != null) {
-            logger.info("generateFinancePriceByResponse' model is {} ", financePrice.toString());
-            try {
-                //todo 入库
-            } catch (DuplicateKeyException e) {
-                logger.info("重复数据入库失败 ： {} ", financePrice.toString());
-            } catch (Exception e) {
-                //将堆栈信息打印出来
-                String fullStackTrace = org.apache.commons.lang.exception.ExceptionUtils.getFullStackTrace(e);
-                logger.error("出现了异常 {} ", fullStackTrace);
-            }
-        }*/
-
-        String time = "2019-04-01 12:25:23".substring(0,"2019-04-01 12:25:23".lastIndexOf(":"));
-        Date date = DateUtils.stringToDate(time,"yyyy-MM-dd HH:mm");
-        System.out.println(date);
 
     }
-
-
 
 
 }

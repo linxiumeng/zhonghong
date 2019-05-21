@@ -26,4 +26,6 @@ public interface FinancePriceService extends IService<FinancePrice> {
      * @return
      */
     List<FinancePrice> listCreateTime(FinancePrice financePrice);
+
+    void upsert(FinancePrice financePrice);
 }

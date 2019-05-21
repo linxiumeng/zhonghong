@@ -27,6 +27,7 @@ public class FinancePriceServiceImpl extends ServiceImpl<FinancePriceDao, Financ
     /**
      * 根据code查询实体
      */
+    @Override
     public List<FinancePrice> groupFinancePriceCode( ){
         /*QueryWrapper wrapper = Wrappers.query();
         wrapper.groupBy("code");
@@ -44,9 +45,9 @@ public class FinancePriceServiceImpl extends ServiceImpl<FinancePriceDao, Financ
     public List<FinancePrice> listCreateTime(FinancePrice financePrice) {
         QueryWrapper wrapper = Wrappers.query();
         wrapper.eq("code",financePrice.getCode());
-        long currentDate = new Date().getTime();
+        long currentDate = System.currentTimeMillis();
         Date currentDate1 = new Date(currentDate);
-        long now = System.currentTimeMillis() / 1000l;
+        long now = System.currentTimeMillis() / 1000L;
         long daySecond = 60 * 60 * 24;
         long dayTime = now - (now + 8 * 3600) % daySecond;
         Date dayTime1 = new Date(dayTime);
@@ -54,6 +55,11 @@ public class FinancePriceServiceImpl extends ServiceImpl<FinancePriceDao, Financ
         wrapper.le("create_time",currentDate1);
         List<FinancePrice> financePrices = financePriceService.list(wrapper);
         return financePrices;
+    }
+
+    @Override
+    public void upsert(FinancePrice financePrice) {
+        baseMapper.replaceOrInsert(financePrice);
     }
 }
 
