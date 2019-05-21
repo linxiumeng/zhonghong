@@ -11,17 +11,12 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springblade.common.entity.FinanceDailyPrice;
-import org.springblade.common.entity.FinancePrice;
 import org.springblade.common.entity.FinancePriceType;
 import org.springblade.common.utils.DateUtils;
 import org.springblade.common.utils.HttpClientUtils;
 import org.springblade.information.service.FinanceDailyPriceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,12 +31,16 @@ import static org.springblade.common.utils.DateUtils.DATE_PATTERN;
 @Api(tags = "新浪日K线的数据源")
 public class SinaOilDayLineCrawlerTaskTimer {
 
- //   @Resource
+    //   @Resource
     FinanceDailyPriceService financeDailyPriceService;
 
+    private String todayUrlStr = null;
 
-  //  @Autowired
+
+    //  @Autowired
     public SinaOilDayLineCrawlerTaskTimer(FinanceDailyPriceService financeDailyPriceService) {
+
+        todayUrlStr = DateUtils.format(new Date(), "yyyy_M_dd");
 
         this.financeDailyPriceService = financeDailyPriceService;
 
@@ -67,8 +66,6 @@ public class SinaOilDayLineCrawlerTaskTimer {
     }
 
 
-
-
     private static final Logger logger = LoggerFactory.getLogger(SinaOilDayLineCrawlerTaskTimer.class);
 
     /**
@@ -92,7 +89,7 @@ public class SinaOilDayLineCrawlerTaskTimer {
     }
 
     public void doWTIOil() {
-        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=CL&_=2019_5_20");
+        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL" + todayUrlStr + "=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=CL&_=" + todayUrlStr);
 
         String completeResponse = filterNoUseString(response);
 
@@ -105,7 +102,7 @@ public class SinaOilDayLineCrawlerTaskTimer {
 
     public void doBULUNTEOil() {
 
-        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=OIL&_=2019_5_20");
+        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL" + todayUrlStr + "=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=OIL&_=" + todayUrlStr);
 
         String completeResponse = filterNoUseString(response);
 
@@ -119,20 +116,20 @@ public class SinaOilDayLineCrawlerTaskTimer {
 
     private void doBatchInsertWTI() {
 
-        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=CL&_=2019_5_20");
+        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL" + todayUrlStr + "=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=CL&_=" + todayUrlStr);
 
         String completeResponse = filterNoUseString(response);
 
-        insertBatch(completeResponse,FinancePriceType.HF_CL);
+        insertBatch(completeResponse, FinancePriceType.HF_CL);
 
     }
 
     private void doBatchInsertBULUNTE() {
-        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=OIL&_=2019_5_20");
+        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL" + todayUrlStr + "=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=OIL&_=" + todayUrlStr);
 
         String completeResponse = filterNoUseString(response);
 
-        insertBatch(completeResponse,FinancePriceType.HF_OIL);
+        insertBatch(completeResponse, FinancePriceType.HF_OIL);
     }
 
 
@@ -234,7 +231,7 @@ public class SinaOilDayLineCrawlerTaskTimer {
         try {
             convertedJSONArr = JSON.parseArray(completeResponseString);
         } catch (JSONException e) {
-            return ;
+            return;
         }
 
         List<FinanceDailyPrice> list = new ArrayList<>(250);
@@ -259,9 +256,9 @@ public class SinaOilDayLineCrawlerTaskTimer {
                 }
             }
 
-            if(list.size() == 20){
+            if (list.size() == 20) {
                 boolean flag = financeDailyPriceService.saveBatch(list);
-                if(!flag){
+                if (!flag) {
                     return;
                 }
                 list.clear();
@@ -269,10 +266,17 @@ public class SinaOilDayLineCrawlerTaskTimer {
 
         }
 
-        if(list.size() > 0 ){
+        if (list.size() > 0) {
             financeDailyPriceService.saveBatch(list);
         }
 
+    }
+
+    public static void main(String[] args) {
+        Date date = new Date();
+        date.setMonth(11);
+        String todayUrlStr = DateUtils.format(date, "yyyy_M_dd");
+        System.out.println(todayUrlStr);
     }
 
 
