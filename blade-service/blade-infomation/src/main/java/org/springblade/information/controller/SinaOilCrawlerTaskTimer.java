@@ -1,17 +1,23 @@
 package org.springblade.information.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springblade.common.entity.FinanceDailyPrice;
 import org.springblade.common.entity.FinancePrice;
 import org.springblade.common.entity.FinancePriceType;
 import org.springblade.common.entity.News;
 import org.springblade.common.utils.DateUtils;
 import org.springblade.common.utils.HttpClientUtils;
+import org.springblade.information.service.FinanceDailyPriceService;
+import org.springblade.information.service.FinancePriceService;
 import org.springblade.information.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -24,6 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.springblade.common.utils.DateUtils.DATE_PATTERN;
 
 /**
  * @author hanbin
@@ -52,6 +60,118 @@ public class SinaOilCrawlerTaskTimer {
     private static final int IN_SPLITE_COUNT = 28;
 
     private static final int INDEX_NUMBER_COUNT = 11;
+
+    FinancePriceService financePriceService;
+
+    FinanceDailyPriceService financeDailyPriceService;
+
+    public SinaOilCrawlerTaskTimer(FinancePriceService financePriceService) {
+        this.financePriceService = financePriceService;
+        QueryWrapper loaWrapper = Wrappers.query();
+        loaWrapper.eq("code", FinancePriceType.HF_OIL.getCode());
+        long currentDate = new Date().getTime();
+        loaWrapper.gt("create_time",currentDate);
+        int loaCount = financePriceService.count(loaWrapper);
+        if (loaCount == 0) {
+            //todo
+            doDateLoad();
+        }
+    }
+        private void doDateLoad() {
+
+            String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_OIL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=OIL&_=2019_5_20");
+
+            String completeResponse = filterNoUseString(response);
+
+            insertBatch(completeResponse,FinancePriceType.HF_OIL);
+        }
+    /**
+     * 过滤掉没用的非json字符串
+     * <p>
+     * /*<script>location.href='//sina.com';</script>
+     * var _OIL2019_5_20 = (
+     *
+     * @return
+     */
+    private static String filterNoUseString(String response) {
+
+        //获取第一个括号
+        int firstQuoStrIndex = response.indexOf("(");
+
+        //获取最后一个括号
+        int lastQuoStrIndex = response.lastIndexOf(")");
+
+        if (firstQuoStrIndex == -1 || lastQuoStrIndex == -1) {
+            return response;
+        }
+
+        firstQuoStrIndex += 1;
+
+        return response.substring(firstQuoStrIndex, lastQuoStrIndex);
+    }
+    /**
+     * 生成日K的实体
+     *
+     * @return
+     */
+    private void insertBatch(String completeResponseString, FinancePriceType financePriceType) {
+
+        JSONArray convertedJSONArr = null;
+
+        try {
+            convertedJSONArr = JSON.parseArray(completeResponseString);
+        } catch (JSONException e) {
+            return ;
+        }
+
+        List<FinanceDailyPrice> list = new ArrayList<>(250);
+
+        for (int i = 0; i < convertedJSONArr.size(); i++) {
+
+            JSONObject lastDayJSON = convertedJSONArr.getJSONObject(i);
+
+            if (lastDayJSON != null) {
+
+                String thisDateStr = lastDayJSON.getString("date");
+                if (StringUtils.isNotBlank(thisDateStr)) {
+                    FinanceDailyPrice financeDailyPrice = new FinanceDailyPrice();
+                    financeDailyPrice.setCode(financePriceType.getCode());
+                    financeDailyPrice.setCurrentPrice(lastDayJSON.getString(""));
+                    financeDailyPrice.setTodayHighestPrice(lastDayJSON.getString("high"));
+                    financeDailyPrice.setTodayOpenPrice(lastDayJSON.getString("open"));
+                    financeDailyPrice.setTodayLowestPrice(lastDayJSON.getString("low"));
+                    financeDailyPrice.setCreateDate(DateUtils.stringToDate(thisDateStr, DATE_PATTERN));
+                    financeDailyPrice.setTodayClosePrice(lastDayJSON.getString("close"));
+                    list.add(financeDailyPrice);
+                }
+            }
+
+            if(list.size() == 20){
+                boolean flag = financeDailyPriceService.saveBatch(list);
+                if(!flag){
+                    return;
+                }
+                list.clear();
+            }
+
+        }
+
+        if(list.size() > 0 ){
+            financeDailyPriceService.saveBatch(list);
+        }
+
+    }
+        /**
+         * 获取日k的响应
+         *
+         * @param url
+         * @return
+         */
+        private String getDailyKPriceResponse(String url) {
+            return HttpClientUtils.doGet(url);
+        }
+
+
 
     /**
      * 定时器
@@ -108,6 +228,22 @@ public class SinaOilCrawlerTaskTimer {
 
     }
 
+
+   /* *//**
+     *  定时器清除掉前一天的分时数据
+     * @return
+     *//*
+    public void timRemoveDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 10); // 控制时
+        calendar.set(Calendar.MINUTE, 0);    // 控制分
+        calendar.set(Calendar.SECOND, 0);    // 控制秒
+
+        Date time = calendar.getTime();     // 得出执行任务的时间,此处为今天的10：00：00
+
+        Timer timer = new Timer();
+
+    }*/
 
     /**
      * 获取新浪网站的返回信息

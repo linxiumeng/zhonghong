@@ -6,12 +6,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import org.springblade.common.entity.FinancePrice;
 
-import org.springblade.common.utils.R;
 import org.springblade.information.mapper.FinancePriceDao;
 import org.springblade.information.service.FinancePriceService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 
@@ -27,16 +27,31 @@ public class FinancePriceServiceImpl extends ServiceImpl<FinancePriceDao, Financ
     /**
      * 根据code查询实体
      */
-    public FinancePrice selectFinancePriceCode(String code){
+    public List<FinancePrice> groupFinancePriceCode( ){
+        /*QueryWrapper wrapper = Wrappers.query();
+        wrapper.groupBy("code");
+        wrapper.orderByDesc("create_time");*/
+        return financePriceDao.groupFinancePriceCode();
+    }
+
+    /**
+     * 根据code查询出他当天的分时数据
+     *
+     * @param
+     * @return
+     */
+    @Override
+    public List<FinancePrice> listCreateTime(FinancePrice financePrice) {
         QueryWrapper wrapper = Wrappers.query();
-        wrapper.eq("code",code);
-        wrapper.orderByDesc("create_time");
-        wrapper.last("limit 1");
-        List<FinancePrice> prices = financePriceService.list(wrapper);
-        if(!prices.isEmpty()){
-            return prices.get(0);
-        }
-        return null;
+        wrapper.eq("code",financePrice.getCode());
+        long currentDate = new Date().getTime();
+        long now = System.currentTimeMillis() / 1000l;
+        long daySecond = 60 * 60 * 24;
+        long dayTime = now - (now + 8 * 3600) % daySecond;
+        wrapper.ge("create_time",dayTime);
+        wrapper.le("create_time",currentDate);
+        List<FinancePrice> financePrices = financePriceService.list(wrapper);
+        return financePrices;
     }
 }
 
