@@ -1,6 +1,7 @@
 package org.springblade.common.form;
 
 import lombok.Data;
+import org.springblade.common.enums.PriceDateEnum;
 
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,8 @@ public class FinanceDailyPriceForm {
     Date endDate;
 
     List<Date> dateList;
+
+    PriceDateEnum type;
 
 
 }
