@@ -4,12 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.common.entity.FinanceDailyPrice;
+import org.springblade.common.entity.FinancePriceType;
 import org.springblade.common.form.FinanceDailyPriceForm;
 import org.springblade.information.mapper.FinanceDailyPriceDao;
 import org.springblade.information.service.FinanceDailyPriceService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 
@@ -28,28 +30,33 @@ public class FinanceDailyPriceServiceImpl extends ServiceImpl<FinanceDailyPriceD
         return this.list(queryWrapper);
     }
 
-    /**
-     * select a.*,a.today_close_price - (select today_close_price from tb_finance_daily_k_price b
-     * 			where DATEDIFF(a.create_date,b.create_date) = 7 and
-     * 						`code` = 'hf_CL') from tb_finance_daily_k_price a
-     * 						where a.`code`='hf_CL' and create_date > '2019-01-01' and DATEDIFF(CURRENT_DATE,a.create_date) % 5 = 0
-     * @param financeDailyPriceForm
-     * @return
-     */
     @Override
     public List<FinanceDailyPrice> listWeekFinancePrice(FinanceDailyPriceForm financeDailyPriceForm) {
-
-        return Collections.emptyList();
+        completeForm(financeDailyPriceForm);
+        return baseMapper.listWeekFinancePrice(financeDailyPriceForm);
     }
 
     @Override
     public List<FinanceDailyPrice> listMonthFinancePrice(FinanceDailyPriceForm financeDailyPriceForm) {
-        return Collections.emptyList();
+        completeForm(financeDailyPriceForm);
+        return baseMapper.listMonthFinancePrice(financeDailyPriceForm);
     }
 
     @Override
     public List<FinanceDailyPrice> listYearFinancePrice(FinanceDailyPriceForm financeDailyPriceForm) {
-        return Collections.emptyList();
+        completeForm(financeDailyPriceForm);
+        return baseMapper.listYearFinancePrice(financeDailyPriceForm);
+    }
+
+
+    private void completeForm(FinanceDailyPriceForm financeDailyPriceForm){
+        if(financeDailyPriceForm.getStartDate() == null){
+            // 1970年 时间戳
+            financeDailyPriceForm.setStartDate(new Date(0L));
+        }
+        if(financeDailyPriceForm.getCode() == null){
+            financeDailyPriceForm.setCode(FinancePriceType.HF_CL.getCode());
+        }
     }
 }
 

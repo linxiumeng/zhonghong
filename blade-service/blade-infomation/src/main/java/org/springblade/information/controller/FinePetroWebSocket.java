@@ -225,6 +225,10 @@ public class FinePetroWebSocket {
                 //如果在线，直接发送
                 if (toSession != null) {
                     sendMessage(toSession, JSON.toJSONString(chatMessage));
+                    chatMessage.setRead(true);
+                    ChatMessageService chatMessageService = (ChatMessageService) applicationContext.getBean(ChatMessageService.class);
+                    chatMessageService.updateById(chatMessage);
+
                 }
                 if (toParentSession != null) {
                     sendMessage(toParentSession, JSON.toJSONString(chatMessage));

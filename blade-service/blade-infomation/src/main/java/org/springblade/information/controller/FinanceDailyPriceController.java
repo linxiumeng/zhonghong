@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 泽
  */
-@Api(tags = "(FinancePrice)表操作控制器", description = " * @author zeze")
 @RestController
 @RequestMapping("api/financeDailyPrice")
 public class FinanceDailyPriceController {

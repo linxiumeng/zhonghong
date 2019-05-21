@@ -20,8 +20,7 @@ public interface FinanceDailyPriceDao extends BaseMapper<FinanceDailyPrice> {
      * @param financeDailyPriceForm
      * @return
      */
-    @Select("select a.* from tb_finance_daily_k_price a \n" +
-            "where a.`code`='hf_CL' and create_date &gt; #{startDate} and create_date &lt; #{endDate} and DATEDIFF(CURRENT_DATE,a.create_date) % 5 = 0")
+    @Select("select * from tb_finance_daily_k_price where `code` = #{code} and create_date in (select max(create_date) from tb_finance_daily_k_price where `code` = #{code} group by DATE_FORMAT(create_date,'%Y%u')) and create_date > #{startDate} ")
     List<FinanceDailyPrice> listWeekFinancePrice(FinanceDailyPriceForm financeDailyPriceForm);
 
     /**
@@ -29,7 +28,7 @@ public interface FinanceDailyPriceDao extends BaseMapper<FinanceDailyPrice> {
      * @param financeDailyPriceForm
      * @return
      */
-    @Select("")
+    @Select("select * from tb_finance_daily_k_price where `code` = #{code} and create_date in (select max(create_date) from tb_finance_daily_k_price where `code` = #{code} group by DATE_FORMAT(create_date,'%Y%m')) and create_date > #{startDate} ")
     List<FinanceDailyPrice> listMonthFinancePrice(FinanceDailyPriceForm financeDailyPriceForm);
 
     /**
@@ -37,7 +36,7 @@ public interface FinanceDailyPriceDao extends BaseMapper<FinanceDailyPrice> {
      * @param financeDailyPriceForm
      * @return
      */
-    @Select("")
+    @Select("select * from tb_finance_daily_k_price where `code` = #{code} and create_date in (select max(create_date) from tb_finance_daily_k_price where `code` = #{code} group by DATE_FORMAT(create_date,'%Y')) and create_date > #{startDate} ")
     List<FinanceDailyPrice> listYearFinancePrice(FinanceDailyPriceForm financeDailyPriceForm);
 
 }
