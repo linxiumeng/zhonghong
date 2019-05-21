@@ -160,6 +160,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
 
     private void fixOrderWithQuotationDesc(PurchaseOrders order,Quotation quotation){
         order.setBuyerRemark(quotation.getRemark());
+        order.setProviderRemark(quotation.getOtherDesc());
     }
 
     @Override
