@@ -157,6 +157,11 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         orders.setGoodsRemark(goods.getGoodsDesc());
     }
 
+
+    private void fixOrderWithQuotationDesc(PurchaseOrders order,Quotation quotation){
+        order.setBuyerRemark(quotation.getRemark());
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean putPurchaseOrderByQuotation(UserEntity buyer, PurchaseOrders param) {
@@ -178,6 +183,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         setContact(param, buyer, provider);
         BeanUtils.copyProperties(quotation, param);
         copyQuotationPropertiestToOrders(quotation, param);
+        fixOrderWithQuotationDesc(param,quotation);
         return this.save(param);
 
     }
@@ -197,6 +203,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         }
         setContact(param, buyer, provider);
         BeanUtils.copyProperties(quotation, param);
+        fixOrderWithQuotationDesc(param,quotation);
         return param;
     }
 
