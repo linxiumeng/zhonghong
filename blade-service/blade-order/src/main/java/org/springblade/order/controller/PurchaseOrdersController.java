@@ -220,7 +220,7 @@ public class PurchaseOrdersController {
         if(r.getCode() == FeignResultCodeConstant.EXCEPTION_CODE){
             throw new RRException(r.getMsg());
         }
-        purchaseOrders.setStatus(OrdersEnum.FOURTEEN);
+        purchaseOrders.setStatus(OrdersEnum.TEN);
         purchaseOrdersService.updateById(purchaseOrders);
         return R.ok();
     }
