@@ -14,7 +14,7 @@ import org.springblade.bgadmin.modules.sys.entity.AttestEntity;
 public interface AttestDao extends BaseMapper<AttestEntity> {
 
     /**
-     * 根据用户id查询实体
+     * 根据用户id
      * @param userId
      * @return
      */
