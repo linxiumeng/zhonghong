@@ -60,6 +60,11 @@ public class PurchaseOrders implements Cloneable{
      */
     @ApiModelProperty(value = "买方地址",name="买方地址",example = "杭州市江干区")
     private String buyerAddress;
+
+    /**
+     * 买家备注
+     */
+    private String providerRemark;
     /**
      * 卖方id
      */

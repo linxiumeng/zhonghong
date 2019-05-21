@@ -97,6 +97,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         param.setId(null);
         param.setStatus(OrdersEnum.ZERO);
 
+        fixDesc(param,goods);
 
         boolean status = false;
         try{
@@ -133,8 +134,14 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
             throw new RRException("供应商不存在");
         }
         setContact(param, buyer, provider);
+
+
+
         BeanUtils.copyProperties(goods, param);
         copyGoodsPropertiesToOrders(goods, param,purchaseOrdersClone);
+
+        fixDesc(param,goods);
+
         param.setId(null);
 
         List<GoodsTypeEntity> goodsTypeEntities = (List<GoodsTypeEntity>) (goodsService.batchGetGoodsType(Arrays.asList(param.getGoodsType()))).getData();
@@ -143,6 +150,11 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         }
 
         return param;
+    }
+
+    private void fixDesc(PurchaseOrders orders , Goods goods){
+        orders.setProviderRemark(goods.getOtherDescription());
+        orders.setGoodsRemark(goods.getGoodsDesc());
     }
 
     @Override
@@ -293,6 +305,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
         param.setProviderPhone(provider.getContactNumber());
         param.setProviderId(provider.getUserId());
         param.setProviderLinkman(provider.getContacts());
+
     }
 
     private void copyGoodsPropertiesToOrders(Goods goods, PurchaseOrders purchaseOrders,PurchaseOrders purchaseOrdersClone) {
