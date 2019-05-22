@@ -79,7 +79,7 @@ public class SinaOilDayLineCrawlerTaskTimer {
      * https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_CL2019_5_20=/GlobalFuturesService.getGlobalFuturesDailyKLine?symbol=CL&_=2019_5_20
      * 这里每天10点执行一次
      */
-    @Scheduled(cron = "0 0 10 * * *")
+    @Scheduled(cron = "0 0/10 * * * *")
     public void scheduled() {
 
         doWTIOil();
@@ -196,8 +196,9 @@ public class SinaOilDayLineCrawlerTaskTimer {
             String thisDateStr = lastDayJSON.getString("date");
             if (StringUtils.isNotBlank(thisDateStr)) {
 
+                Date lastDate = DateUtils.stringToDate(thisDateStr,DATE_PATTERN);
                 String todayStr = DateUtils.format(new Date(), DATE_PATTERN);
-                if (todayStr.equalsIgnoreCase(thisDateStr)) {
+                if (DateUtils.format(DateUtils.addDateDays(lastDate,1),DATE_PATTERN).equalsIgnoreCase(todayStr)) {
                     return null;
                 } else {
                     FinanceDailyPrice financeDailyPrice = new FinanceDailyPrice();

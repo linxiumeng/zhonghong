@@ -58,7 +58,7 @@ public class SinaOilCrawlerTaskTimer {
 
 
     @Autowired
-    public SinaOilCrawlerTaskTimer(FinancePriceService financePriceService1,RedisTemplate redisTemplate) {
+    public SinaOilCrawlerTaskTimer(FinancePriceService financePriceService1, RedisTemplate redisTemplate) {
         this.financePriceService = financePriceService1;
         this.redisTemplate = redisTemplate;
 
@@ -138,14 +138,14 @@ public class SinaOilCrawlerTaskTimer {
 
         try {
             JSONObject jsonObject = JSON.parseObject(completeResponseString);
-            if(jsonObject != null){
+            if (jsonObject != null) {
                 JSONObject resultJSON = jsonObject.getJSONObject("result");
-                if(resultJSON != null){
+                if (resultJSON != null) {
                     convertedJSONArr = resultJSON.getJSONObject("data").getJSONArray("minLine_1d");
                 }
             }
-            if(convertedJSONArr == null){
-                return ;
+            if (convertedJSONArr == null) {
+                return;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -162,7 +162,7 @@ public class SinaOilCrawlerTaskTimer {
                 int size = minuteJSONArr.size();
                 FinancePrice financePrice = new FinancePrice();
                 financePrice.setCode(financePriceType.getCode());
-                Date createDate = DateUtils.stringToDate(DateUtils.format(new Date(), DATE_PATTERN)+" "+minuteJSONArr.getString(size - 3),"yyyy-MM-dd HH:mm");
+                Date createDate = DateUtils.stringToDate(DateUtils.format(new Date(), DATE_PATTERN) + " " + minuteJSONArr.getString(size - 3), "yyyy-MM-dd HH:mm");
                 financePrice.setCreateTime(createDate);
                 financePrice.setCurrentPrice(minuteJSONArr.getString(size - 2));
                 list.add(financePrice);
@@ -178,7 +178,7 @@ public class SinaOilCrawlerTaskTimer {
 
         }
 
-        for(int i = 0 ; i < list.size() ; i++){
+        for (int i = 0; i < list.size(); i++) {
             financePriceService.upsert(list.get(i));
         }
 
@@ -309,12 +309,12 @@ public class SinaOilCrawlerTaskTimer {
             //判断处理的数据的分组是不是为14
             if (informationArr.length == FOREIGN_SPLITE_COUNT) {
 
-                String jsonDateString = informationArr[12]+" "+informationArr[6];
+                String jsonDateString = informationArr[12] + " " + informationArr[6];
                 String redisDateString = (String) redisTemplate.opsForValue().get(financePriceType.getCode());
-                if(Objects.equals(jsonDateString,redisDateString)){
+                if (Objects.equals(jsonDateString, redisDateString)) {
                     return null;
-                }else{
-                    redisTemplate.opsForValue().set(financePriceType.getCode(),jsonDateString);
+                } else {
+                    redisTemplate.opsForValue().set(financePriceType.getCode(), jsonDateString);
                 }
 
                 financePrice = new FinancePrice();

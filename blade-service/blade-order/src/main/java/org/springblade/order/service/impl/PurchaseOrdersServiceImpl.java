@@ -235,7 +235,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
     @Override
     public IPage<PurchaseOrders> listPurchaseOrdersUseForPurchaser(Page page, Long userId, Integer key, OrdersEnum ordersEnum) {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
-        buildSearchWrapper(wrapper, key, ordersEnum);
+        buildSearchWrapper(wrapper, key, Arrays.asList(ordersEnum));
         wrapper.eq("buyer_id", userId).orderBy(true, false, "creat_time");
         IPage<PurchaseOrders> po = this.page(page, wrapper);
 
@@ -246,7 +246,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
     }
 
     @Override
-    public IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId, Integer key, OrdersEnum ordersEnum) {
+    public IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId, Integer key, List<OrdersEnum> ordersEnum) {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
 
         buildSearchWrapper(wrapper, key, ordersEnum);
@@ -267,12 +267,16 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
      * @param key
      * @param ordersEnum
      */
-    private static void buildSearchWrapper(QueryWrapper<PurchaseOrders> wrapper, Integer key, OrdersEnum ordersEnum) {
+    private static void buildSearchWrapper(QueryWrapper<PurchaseOrders> wrapper, Integer key, List<OrdersEnum> ordersEnum) {
         if (key != null) {
             wrapper.eq("goods_type", key);
         }
-        if (ordersEnum != null) {
-            wrapper.eq("status", ordersEnum.getStatus());
+        if (ordersEnum != null && ordersEnum.size() > 0) {
+            ArrayList<Integer> list = new ArrayList<>();
+            for(OrdersEnum subOrdersEnum : ordersEnum) {
+                list.add(subOrdersEnum.getStatus());
+            }
+            wrapper.in("status", list.toArray());
         }
     }
 

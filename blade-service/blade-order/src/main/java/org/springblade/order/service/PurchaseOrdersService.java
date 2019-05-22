@@ -9,6 +9,8 @@ import org.springblade.common.entity.UserEntity;
 import org.springblade.common.enums.OrdersEnum;
 import org.springblade.common.respond.ProviderPurchaseOrderStatisticsResp;
 
+import java.util.List;
+
 /**
  * (PurchaseOrders)表服务接口
  *
@@ -73,7 +75,7 @@ public interface PurchaseOrdersService extends IService<PurchaseOrders> {
      * @param userId
      * @return
      */
-    IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId,Integer key,OrdersEnum ordersEnum);
+    IPage<PurchaseOrders> listPurchaseOrderUseForProvider(Page page, Long userId,Integer key,List<OrdersEnum> ordersEnum);
 
     /**
      * 查询最新的几条订单信息

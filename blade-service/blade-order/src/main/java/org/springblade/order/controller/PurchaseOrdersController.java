@@ -35,6 +35,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -238,7 +239,23 @@ public class PurchaseOrdersController {
     @PostMapping("/provider/listpage")
     @Login
     public R providerlistpage(@RequestBody PurchaseOrdersForm param, @LoginUser UserEntity user) {
-        return R.ok().put("Orderpage", purchaseOrdersService.listPurchaseOrderUseForProvider(new Page(param.getPage(), param.getSize()), user.getUserId(),param.getGoodsType(),param.getStatus()));
+        ArrayList<OrdersEnum> statusList = new ArrayList<>(10);
+        if(param.getStatus() != null){
+            if(param.getStatus() == OrdersEnum.FIVE){
+                statusList.add(OrdersEnum.FIVE);
+                statusList.add(OrdersEnum.SIX);
+                statusList.add(OrdersEnum.SEVEN);
+            } else if(param.getStatus() == OrdersEnum.ELEVEN){
+                statusList.add(OrdersEnum.ELEVEN);
+                statusList.add(OrdersEnum.TWELVE);
+                statusList.add(OrdersEnum.THIRTEEN);
+                statusList.add(OrdersEnum.FOURTEEN);
+            } else {
+                statusList.add(param.getStatus());
+            }
+        }
+
+        return R.ok().put("Orderpage", purchaseOrdersService.listPurchaseOrderUseForProvider(new Page(param.getPage(), param.getSize()), user.getUserId(),param.getGoodsType(),statusList));
     }
 
     @ApiOperation(value = "订单详情")
