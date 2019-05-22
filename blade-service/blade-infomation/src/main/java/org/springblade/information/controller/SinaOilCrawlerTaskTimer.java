@@ -7,30 +7,20 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springblade.common.entity.FinanceDailyPrice;
 import org.springblade.common.entity.FinancePrice;
 import org.springblade.common.entity.FinancePriceType;
-import org.springblade.common.entity.News;
 import org.springblade.common.utils.DateUtils;
 import org.springblade.common.utils.HttpClientUtils;
-import org.springblade.information.service.FinanceDailyPriceService;
 import org.springblade.information.service.FinancePriceService;
-import org.springblade.information.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.springblade.common.utils.DateUtils.DATE_PATTERN;
 
@@ -63,6 +53,8 @@ public class SinaOilCrawlerTaskTimer {
     private static final int INDEX_NUMBER_COUNT = 11;
 
     FinancePriceService financePriceService;
+
+    RedisTemplate redisTemplate;
 
 
     @Autowired
@@ -227,6 +219,8 @@ public class SinaOilCrawlerTaskTimer {
 
         for (String sub : resultArr) {
 
+            //todo 增加开闭盘时间
+
             if (sub.contains(FinancePriceType.HF_CL.getCode())) {
                 financePrice = generateForeignFinancePriceByResponse(sub, FinancePriceType.HF_CL);
             } else if (sub.contains(FinancePriceType.HF_OIL.getCode())) {
@@ -303,7 +297,7 @@ public class SinaOilCrawlerTaskTimer {
      * @param response var hq_str_hf_CL="62.45,0.6933,62.44,62.45,62.55,62.08,17:05:55,62.02,62.13,6685,0,0,2019-05-16,纽约原油";
      * @return
      */
-    public static FinancePrice generateForeignFinancePriceByResponse(String response, FinancePriceType financePriceType) {
+    public FinancePrice generateForeignFinancePriceByResponse(String response, FinancePriceType financePriceType) {
 
         FinancePrice financePrice = null;
         int commaPosition = 0;
@@ -313,6 +307,15 @@ public class SinaOilCrawlerTaskTimer {
 
             //判断处理的数据的分组是不是为14
             if (informationArr.length == FOREIGN_SPLITE_COUNT) {
+
+                String jsonDateString = informationArr[12]+" "+informationArr[6];
+                String redisDateString = (String) redisTemplate.opsForValue().get(financePriceType.getCode());
+                if(Objects.equals(jsonDateString,redisDateString)){
+                    return null;
+                }else{
+                    redisTemplate.opsForValue().set(financePriceType.getCode(),jsonDateString);
+                }
+
                 financePrice = new FinancePrice();
 
                 //设置code
@@ -324,6 +327,7 @@ public class SinaOilCrawlerTaskTimer {
                     createDate = new Date();
                     createDate.setSeconds(0);
                 }
+
                 financePrice.setCreateTime(createDate);
                 financePrice.setCurrentPrice(informationArr[0]);
                 financePrice.setId(null);
