@@ -35,12 +35,12 @@ public class FinancePriceServiceImpl extends ServiceImpl<FinancePriceDao, Financ
         return financePriceDao.groupFinancePriceCode();
     }
 
-    /**
+  /*  *//**
      * 根据code查询出他当天的分时数据
      *
      * @param
      * @return
-     */
+     *//*
     @Override
     public List<FinancePrice> listCreateTime(FinancePrice financePrice) {
         QueryWrapper wrapper = Wrappers.query();
@@ -55,11 +55,16 @@ public class FinancePriceServiceImpl extends ServiceImpl<FinancePriceDao, Financ
         wrapper.le("create_time",currentDate1);
         List<FinancePrice> financePrices = financePriceService.list(wrapper);
         return financePrices;
-    }
+    }*/
 
     @Override
     public void upsert(FinancePrice financePrice) {
         baseMapper.replaceOrInsert(financePrice);
+    }
+
+    @Override
+    public List<FinancePrice> groupFinancePriceCreateHour(FinancePrice financePrice) {
+        return financePriceDao.groupFinancePriceCreateHour(financePrice);
     }
 }
 

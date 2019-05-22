@@ -19,13 +19,20 @@ public interface FinancePriceService extends IService<FinancePrice> {
      */
     List<FinancePrice> groupFinancePriceCode( );
 
-    /**
+/*    *//**
      * 根据code查询出他的分时数据
      *
      * @param
      * @return
-     */
-    List<FinancePrice> listCreateTime(FinancePrice financePrice);
+     *//*
+    List<FinancePrice> listCreateTime(FinancePrice financePrice);*/
 
     void upsert(FinancePrice financePrice);
+
+    /**
+     * 根据小时获得分时数据
+     *
+     * @return
+     */
+    List<FinancePrice> groupFinancePriceCreateHour(FinancePrice financePrice);
 }

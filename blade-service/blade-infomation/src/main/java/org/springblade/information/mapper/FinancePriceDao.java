@@ -37,4 +37,12 @@ public interface FinancePriceDao extends BaseMapper<FinancePrice> {
             "`yesterday_close_price`) values (#{code},#{createTime},#{currentPrice},#{todayHighestPrice},#{todayLowestPrice},#{currentGrowPercent},#{todayOpenPrice},#{yesterdayClosePrice})")
     boolean replaceOrInsert(FinancePrice financePrice);
 
+    /**
+     * 根据小时获得分时数据
+     *
+     * @return
+     */
+    @Select("select * from tb_finance_price where `code` = #{code} and create_time in (select min(create_time) from tb_finance_price where `code` = #{code} group by DATE_FORMAT(create_time,'%Y%m%d%H')) and create_time > CURDATE()")
+    List<FinancePrice> groupFinancePriceCreateHour(FinancePrice financePrice);
+
 }
