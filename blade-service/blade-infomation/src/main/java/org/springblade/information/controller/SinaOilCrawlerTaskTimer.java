@@ -58,8 +58,9 @@ public class SinaOilCrawlerTaskTimer {
 
 
     @Autowired
-    public SinaOilCrawlerTaskTimer(FinancePriceService financePriceService1) {
+    public SinaOilCrawlerTaskTimer(FinancePriceService financePriceService1,RedisTemplate redisTemplate) {
         this.financePriceService = financePriceService1;
+        this.redisTemplate = redisTemplate;
 
         Date currentDate = new Date();
         currentDate.setHours(0);
@@ -76,7 +77,7 @@ public class SinaOilCrawlerTaskTimer {
         QueryWrapper loaWrapper1 = Wrappers.query();
         loaWrapper1.eq("code", FinancePriceType.HF_OIL.getCode());
         loaWrapper1.gt("create_time", currentDate);
-        int loaCount1 = financePriceService.count(loaWrapper);
+        int loaCount1 = financePriceService.count(loaWrapper1);
         if (loaCount1 == 0) {
             //todo
             doSaveOILData();
@@ -85,7 +86,7 @@ public class SinaOilCrawlerTaskTimer {
 
     private void doSaveCLData() {
 
-        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/openapi.php/GlobalFuturesService.getGlobalFuturesMinLine?symbol=OIL&callback=var%20t1hf_OIL=");
+        String response = getDailyKPriceResponse("https://stock2.finance.sina.com.cn/futures/api/openapi.php/GlobalFuturesService.getGlobalFuturesMinLine?symbol=CL&callback=var%20t1hf_CL=");
 
         String completeResponse = filterNoUseString(response);
 
