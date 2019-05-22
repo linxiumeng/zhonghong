@@ -51,11 +51,21 @@ public class FinancePriceController {
         return R.ok().put("result",price);
     }
 
-    @PostMapping("listCreateTime")
+    /*@PostMapping("listCreateTime")
     @ApiOperation(value = "查询code一天内的分时数据")
     public R listCreateTime(@RequestBody FinancePrice financePrice){
         List<FinancePrice> price = financePriceService.listCreateTime(financePrice);
         return R.ok().put("result",price);
+    }*/
+    /**
+     * 根据Hour查询分时数据
+     *
+     * @return
+     */
+    @PostMapping("groupFinancePriceCreateHour")
+    @ApiOperation(value="根据Hour查询分时数据")
+    public R groupFinancePriceCreateHour(@RequestBody FinancePrice financePrice){
+        List<FinancePrice> price = financePriceService.groupFinancePriceCreateHour(financePrice);
+        return R.ok().put("result",price);
     }
-
 }
