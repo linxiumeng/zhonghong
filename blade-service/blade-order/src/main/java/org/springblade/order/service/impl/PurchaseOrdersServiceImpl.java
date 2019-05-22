@@ -235,7 +235,11 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
     @Override
     public IPage<PurchaseOrders> listPurchaseOrdersUseForPurchaser(Page page, Long userId, Integer key, OrdersEnum ordersEnum) {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
-        buildSearchWrapper(wrapper, key, Arrays.asList(ordersEnum));
+        List<OrdersEnum> ordersEnumList = new ArrayList<>(1);
+        if(ordersEnum != null){
+            ordersEnumList.add(ordersEnum);
+        }
+        buildSearchWrapper(wrapper, key, ordersEnumList);
         wrapper.eq("buyer_id", userId).orderBy(true, false, "creat_time");
         IPage<PurchaseOrders> po = this.page(page, wrapper);
 
