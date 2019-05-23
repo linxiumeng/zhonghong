@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 import static org.springblade.common.utils.DateUtils.DATE_PATTERN;
+import static org.springblade.common.utils.DateUtils.DATE_TIME_PATTERN;
 
 /**
  * @author hanbin
@@ -299,6 +300,21 @@ public class SinaOilCrawlerTaskTimer {
      * @return
      */
     public FinancePrice generateForeignFinancePriceByResponse(String response, FinancePriceType financePriceType) {
+
+        String minStr = "";
+
+        if(financePriceType == FinancePriceType.HF_OIL){
+            minStr = "08:00:00";
+        }else if(financePriceType == FinancePriceType.HF_CL){
+            minStr = "06:00:00";
+        }
+
+        //如果没超过6点直接返回空
+        Date currentDateTime = new Date();
+        Date openPriceDate = DateUtils.stringToDate(DateUtils.format(currentDateTime,DATE_PATTERN)+" "+minStr,DATE_TIME_PATTERN);
+        if(openPriceDate != null && currentDateTime.before(openPriceDate)){
+            return null;
+        }
 
         FinancePrice financePrice = null;
         int commaPosition = 0;
