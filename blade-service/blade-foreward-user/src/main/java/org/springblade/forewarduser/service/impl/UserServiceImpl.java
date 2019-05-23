@@ -195,7 +195,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
 
         while(code == null && retryCount++ < MAX_RETRY_COUNT){
             //获取缓存中的验证码
-           // code = redisUtils.get(Constant.ANONYMOUS_PREFIX + form.getMarkCode());
+            // code = redisUtils.get(Constant.ANONYMOUS_PREFIX + form.getMarkCode());
             code = (String) redisTemplate.opsForValue().get(Constant.ANONYMOUS_PREFIX + form.getMarkCode());
         }
 
@@ -215,58 +215,6 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         map.put("type", user.getType());
      //   map.put("fileToken",createSTSOSSToken());
         return map;
-    }
-
-    private String createSTSOSSToken(){
-        String endpoint = "sts.aliyuncs.com";
-        String accessKeyId = "<access-key-id>";
-        String accessKeySecret = "<access-key-secret>";
-        String roleArn = "<role-arn>";
-        String roleSessionName = "session-name";
-        String policy = "{\n" +
-                "    \"Version\": \"1\", \n" +
-                "    \"Statement\": [\n" +
-                "        {\n" +
-                "            \"Action\": [\n" +
-                "                \"oss:*\"\n" +
-                "            ], \n" +
-                "            \"Resource\": [\n" +
-                "                \"acs:oss:*:*:*\" \n" +
-                "            ], \n" +
-                "            \"Effect\": \"Allow\"\n" +
-                "        }\n" +
-                "    ]\n" +
-                "}";
-        try {
-            // 添加endpoint（直接使用STS endpoint，前两个参数留空，无需添加region ID）
-            DefaultProfile.addEndpoint("", "", "Sts", endpoint);
-            // 构造default profile（参数留空，无需添加region ID）
-            IClientProfile profile = DefaultProfile.getProfile("", accessKeyId, accessKeySecret);
-            // 用profile构造client
-            DefaultAcsClient client = new DefaultAcsClient(profile);
-            final AssumeRoleRequest request = new AssumeRoleRequest();
-            request.setMethod(MethodType.POST);
-            request.setRoleArn(roleArn);
-            request.setRoleSessionName(roleSessionName);
-            // 若policy为空，则用户将获得该角色下所有权限
-            request.setPolicy(policy);
-            // 设置凭证有效时间
-            request.setDurationSeconds(1000L);
-            final AssumeRoleResponse response = client.getAcsResponse(request);
-            logger.info("Expiration: " + response.getCredentials().getExpiration());
-            logger.info("Access Key Id: " + response.getCredentials().getAccessKeyId());
-            logger.info("Access Key Secret: " + response.getCredentials().getAccessKeySecret());
-            logger.info("Security Token: " + response.getCredentials().getSecurityToken());
-            logger.info("RequestId: " + response.getRequestId());
-            return response.getCredentials().getSecurityToken();
-        } catch (ClientException e) {
-            logger.error("Failed：");
-            logger.error("Error code: " + e.getErrCode());
-            logger.error("Error message: " + e.getErrMsg());
-            logger.error("RequestId: " + e.getRequestId());
-            return null;
-        }
-
     }
 
 
