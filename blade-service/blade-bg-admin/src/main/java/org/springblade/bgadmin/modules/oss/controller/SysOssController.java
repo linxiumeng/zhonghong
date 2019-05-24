@@ -155,9 +155,9 @@ public class SysOssController {
 		return R.ok().put("url", url);
 	}
 
-	@RequestMapping("/privateFileUrl/{fileName}")
-	public void getFile(@PathVariable("fileName")String fileName, HttpServletResponse response){
-		OSSObject ossObject = OSSFactory.build().getPrivateOssObject(fileName);
+	@RequestMapping("/privateFileUrl/{date}/{fileName}")
+	public void getFile(@PathVariable("fileName")String fileName,@PathVariable("date") String date, HttpServletResponse response){
+		OSSObject ossObject = OSSFactory.build().getPrivateOssObject(date+"/"+fileName);
 		InputStream fileInputStream = ossObject.getObjectContent();
 		try {
 			BufferedImage bufferedImage = ImageIO.read(fileInputStream);
