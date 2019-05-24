@@ -18,12 +18,12 @@ import java.util.Arrays;
 public class WebConfig implements WebMvcConfigurer {
 
     @Resource
-    SessionInterceptor  sessionInterceptor;
+    SessionInterceptor sessionInterceptor;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-     //   registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
-    //    registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
+        //   registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
+        //    registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/templates/static/");
     }
 
@@ -31,15 +31,19 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionInterceptor).addPathPatterns("/**").
                 excludePathPatterns(Arrays.asList("/swagger/**",
-                "/sys/login",
-                "/captcha.jpg",
-                "/favicon.ico",
-                "/login.html",
-                "/",
-                "/static/**",
-                "/swagger/**",
-                "/v2/api-docs",
-                "/webjars/**","/statics/**","/**/*.jpg","/*.jpg"));
+                        "/sys/login",
+                        "/captcha.jpg",
+                        "/favicon.ico",
+                        "/login.html",
+                        "/",
+                        "/static/**",
+                        "/swagger/**",
+                        "/v2/api-docs",
+                        "/webjars/**",
+                        "/statics/**",
+                        "/**/*.jpg", "/*.jpg",
+                        "/**/*.png", "/*.png",
+                        "/**/*.jpeg", "/*.jpeg"));
     }
 
     //    @Override
