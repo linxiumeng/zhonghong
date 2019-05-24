@@ -12,6 +12,7 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import io.swagger.annotations.Api;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,9 +76,13 @@ public class UploadController {
         return R.ok(url);
     }
 
-    @GetMapping("/privateFileUrl/{fileName}")
+    @GetMapping(value = {"/privateFileUrl/{fileName}","/privateFileUrl/{date}/{fileName}"})
     @Login
-    public void getStsInfo(@PathVariable("fileName") String objectName, HttpServletResponse servletResponse) throws Exception {
+    public void getStsInfo(@PathVariable("fileName") String objectName, @PathVariable(required = false,value = "date")String date, HttpServletResponse servletResponse) throws Exception {
+
+        if(StringUtils.isNotBlank(date)){
+            objectName = date+"/"+objectName;
+        }
 
         OSSObject ossObject = ossClient.getObject(config.getAliyunNuoeePrivateBucketName(),objectName);
         InputStream fileInputStream = ossObject.getObjectContent();

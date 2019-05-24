@@ -18,6 +18,7 @@ package org.springblade.bgadmin.modules.oss.controller;
 
 import com.aliyun.oss.model.OSSObject;
 import com.google.gson.Gson;
+import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.common.utils.ConfigConstant;
 import org.springblade.bgadmin.modules.oss.cloud.CloudStorageConfig;
 import org.springblade.bgadmin.modules.oss.cloud.OSSFactory;
@@ -155,9 +156,12 @@ public class SysOssController {
 		return R.ok().put("url", url);
 	}
 
-	@RequestMapping("/privateFileUrl/{date}/{fileName}")
-	public void getFile(@PathVariable("fileName")String fileName,@PathVariable("date") String date, HttpServletResponse response){
-		OSSObject ossObject = OSSFactory.build().getPrivateOssObject(date+"/"+fileName);
+	@RequestMapping(value = {"/privateFileUrl/{date}/{fileName}","/privateFileUrl/{fileName}"})
+	public void getFile(@PathVariable("fileName")String fileName,@PathVariable(required = false,value = "date") String date, HttpServletResponse response){
+		if(StringUtils.isNotBlank(date)){
+		    fileName = date+"/"+fileName;
+        }
+	    OSSObject ossObject = OSSFactory.build().getPrivateOssObject(fileName);
 		InputStream fileInputStream = ossObject.getObjectContent();
 		try {
 			BufferedImage bufferedImage = ImageIO.read(fileInputStream);
