@@ -77,6 +77,10 @@ public class CloudStorageConfig implements Serializable {
     @NotBlank(message="阿里云BucketName不能为空", groups = AliyunGroup.class)
     private String aliyunBucketName = "zhonghong";
 
+    private String aliyunPrivateBucketName = "nuoee";
+
+    private String aliyunPrivateDomain = "nuoee.oss-cn-hangzhou.aliyuncs.com";
+
     //腾讯云绑定的域名
     @NotBlank(message="腾讯云绑定的域名不能为空", groups = QcloudGroup.class)
     @URL(message = "腾讯云绑定的域名格式不正确", groups = QcloudGroup.class)

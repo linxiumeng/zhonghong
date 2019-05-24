@@ -17,6 +17,7 @@
 package org.springblade.bgadmin.modules.oss.cloud;
 
 import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.OSSObject;
 import org.springblade.common.exception.RRException;
 
 import java.io.ByteArrayInputStream;
@@ -60,6 +61,22 @@ public class AliyunCloudStorageService extends CloudStorageService {
     }
 
     @Override
+    public String uploadPrivate(byte[] data, String path) {
+        return uploadPrivate(new ByteArrayInputStream(data), path);
+    }
+
+    @Override
+    public String uploadPrivate(InputStream inputStream, String path) {
+        try {
+            client.putObject(config.getAliyunPrivateBucketName(), path, inputStream);
+        } catch (Exception e){
+            throw new RRException("上传文件失败，请检查配置信息", e);
+        }
+
+        return config.getAliyunPrivateDomain() + "/" + path;
+    }
+
+    @Override
     public String uploadSuffix(byte[] data, String suffix) {
         return upload(data, getPath(config.getAliyunPrefix(), suffix));
     }
@@ -68,4 +85,21 @@ public class AliyunCloudStorageService extends CloudStorageService {
     public String uploadSuffix(InputStream inputStream, String suffix) {
         return upload(inputStream, getPath(config.getAliyunPrefix(), suffix));
     }
+
+    @Override
+    public String uploadSuffixPrivate(byte[] data, String suffix) {
+        return uploadPrivate(data, getPath(config.getAliyunPrefix(), suffix));
+    }
+
+    @Override
+    public OSSObject getPrivateOssObject(String key) {
+        return client.getObject(config.getAliyunPrivateBucketName(),key);
+    }
+
+    @Override
+    public String uploadSuffixPrivate(InputStream inputStream, String suffix) {
+        return uploadPrivate(inputStream, getPath(config.getAliyunPrefix(), suffix));
+    }
+
+
 }

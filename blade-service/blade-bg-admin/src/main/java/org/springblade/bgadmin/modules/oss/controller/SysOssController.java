@@ -16,6 +16,7 @@
 
 package org.springblade.bgadmin.modules.oss.controller;
 
+import com.aliyun.oss.model.OSSObject;
 import com.google.gson.Gson;
 import org.springblade.bgadmin.common.utils.ConfigConstant;
 import org.springblade.bgadmin.modules.oss.cloud.CloudStorageConfig;
@@ -27,12 +28,15 @@ import org.springblade.common.exception.RRException;
 import org.springblade.common.utils.PageUtils;
 import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -128,6 +132,42 @@ public class SysOssController {
 
 		return R.ok().put("url", url);
 	}
+
+	@RequestMapping("/privateUpload")
+	//@RequiresPermissions("sys:oss:all")
+	public R uploadPrivate(@RequestParam("file") MultipartFile file) throws Exception {
+		if (file.isEmpty()) {
+			throw new RRException("上传文件不能为空");
+		}
+
+		//上传文件
+		String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+		String url = OSSFactory.build().uploadSuffixPrivate(file.getBytes(), suffix);
+
+		url = "http://"+url;
+
+		//保存文件信息
+		SysOssEntity ossEntity = new SysOssEntity();
+		ossEntity.setUrl(url);
+		ossEntity.setCreateDate(new Date());
+		sysOssService.save(ossEntity);
+
+		return R.ok().put("url", url);
+	}
+
+	@RequestMapping("/privateFileUrl/{fileName}")
+	public void getFile(@PathVariable("fileName")String fileName, HttpServletResponse response){
+		OSSObject ossObject = OSSFactory.build().getPrivateOssObject(fileName);
+		InputStream fileInputStream = ossObject.getObjectContent();
+		try {
+			BufferedImage bufferedImage = ImageIO.read(fileInputStream);
+			ServletOutputStream out = response.getOutputStream();
+			ImageIO.write(bufferedImage,"png",out);
+		}catch (IOException e){
+
+		}
+	}
+
 
 
 	/**

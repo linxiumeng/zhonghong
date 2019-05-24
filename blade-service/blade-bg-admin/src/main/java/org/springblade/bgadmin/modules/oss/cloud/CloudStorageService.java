@@ -16,6 +16,7 @@
 
 package org.springblade.bgadmin.modules.oss.cloud;
 
+import com.aliyun.oss.model.OSSObject;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.common.utils.DateUtils;
 
@@ -78,10 +79,45 @@ public abstract class CloudStorageService {
 
     /**
      * 文件上传
+     * @param inputStream   字节流
+     * @param path          文件路径，包含文件名
+     * @return              返回http地址
+     */
+    public abstract String uploadPrivate(InputStream inputStream, String path);
+
+    /**
+     * 文件上传
      * @param inputStream  字节流
      * @param suffix       后缀
      * @return             返回http地址
      */
     public abstract String uploadSuffix(InputStream inputStream, String suffix);
+
+    /**
+     * 文件上传
+     * @param data    文件字节数组
+     * @param path    文件路径，包含文件名
+     * @return        返回http地址
+     */
+    public abstract String uploadPrivate(byte[] data, String path);
+
+    /**
+     * 文件上传
+     * @param inputStream  字节流
+     * @param suffix       后缀
+     * @return             返回http地址
+     */
+    public abstract String uploadSuffixPrivate(InputStream inputStream, String suffix);
+
+    /**
+     * 文件上传
+     * @param data     文件字节数组
+     * @param suffix   后缀
+     * @return         返回http地址
+     */
+    public abstract String uploadSuffixPrivate(byte[] data, String suffix);
+
+
+    public abstract OSSObject getPrivateOssObject(String key);
 
 }

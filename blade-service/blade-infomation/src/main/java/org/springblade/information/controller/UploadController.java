@@ -84,7 +84,6 @@ public class UploadController {
         BufferedImage bufferedImage = ImageIO.read(fileInputStream);
         ServletOutputStream out = servletResponse.getOutputStream();
         ImageIO.write(bufferedImage,"png",out);
-        ossClient.shutdown();
 
     }
 
