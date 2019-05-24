@@ -122,7 +122,7 @@ public class SysOssController {
 		String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 		String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
 
-		url = "http://"+url;
+		url = "https://"+url;
 
 		//保存文件信息
 		SysOssEntity ossEntity = new SysOssEntity();
@@ -144,7 +144,7 @@ public class SysOssController {
 		String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 		String url = OSSFactory.build().uploadSuffixPrivate(file.getBytes(), suffix);
 
-		url = "http://"+url;
+		url = "https://"+url;
 
 		//保存文件信息
 		SysOssEntity ossEntity = new SysOssEntity();
