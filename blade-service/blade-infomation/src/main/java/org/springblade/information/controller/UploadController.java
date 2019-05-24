@@ -71,7 +71,7 @@ public class UploadController {
         String filename = UUID.randomUUID().toString().replace("-", "") + suffix;
         //上传文件返回网址
         PutObjectResult putObjectResult = ossClient.putObject(config.getAliyunNuoeePrivateBucketName(), filename, new ByteArrayInputStream(file.getBytes()));
-        String url = "https://" + config.getAliyunNuoeePrivateDomain() + "." + config.getAliyunEndPoint() + File.separator + filename.substring(filename.lastIndexOf("\\") + 1);
+        String url = "https://" + config.getAliyunNuoeePrivateBucketName() + "." + config.getAliyunEndPoint() + File.separator + filename.substring(filename.lastIndexOf("\\") + 1);
         return R.ok(url);
     }
 
