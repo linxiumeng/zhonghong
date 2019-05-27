@@ -13,9 +13,11 @@ import org.springblade.common.form.ChangePassword;
 import org.springblade.common.form.UserForm;
 import org.springblade.common.respond.UserDto;
 import org.springblade.common.utils.R;
+import org.springblade.common.validation.group.UpdateGroup;
 import org.springblade.forewarduser.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -87,7 +89,7 @@ public class UserController {
     @ApiOperation(value = "修改用户密码", notes = "" )
     @PostMapping("changepw")
     @Login
-    public R changepw(@RequestBody ChangePassword pw, @LoginUser UserEntity currentUser) {
+    public R changepw(@Validated @RequestBody ChangePassword pw, @LoginUser UserEntity currentUser) {
         this.userService.changePw(pw, currentUser);
         return R.ok();
     }
@@ -106,7 +108,7 @@ public class UserController {
     @ApiOperation(value = "修改用户表(user)数据", notes = "" )
     @PostMapping("updateUser")
     @Login
-    public R update(@RequestBody UserForm userForm, @LoginUser UserEntity currentUser) {
+    public R update(@Validated(UpdateGroup.class) @RequestBody UserForm userForm, @LoginUser UserEntity currentUser) {
         UserEntity param2 = new UserEntity();
         //设置修改参数
         param2.setUserId(currentUser.getUserId());

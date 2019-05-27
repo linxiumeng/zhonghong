@@ -9,7 +9,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.ibatis.annotations.Update;
+import org.springblade.common.validation.group.UpdateGroup;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -72,9 +77,10 @@ public class UserEntity implements Serializable {
     @ApiModelProperty(value = "联系人",name="contacts",example = "马云")
     private String contacts;
     /**
-     * 联系电话
+     * 联系电话,随便匹配不带汉字
      */
     @ApiModelProperty(value = "联系电话",name="contactNumber",example = "15698745214")
+    @Pattern(regexp = "^[A-Za-z0-9]{5,20}", message = "联系电话格式不对",groups = UpdateGroup.class)
     private String contactNumber;
     /**
      * 联系地址
@@ -124,6 +130,7 @@ public class UserEntity implements Serializable {
      * 邮箱
      */
     @ApiModelProperty(value = "邮箱",name="mail",example = "*****@163.com")
+    @Email(groups = UpdateGroup.class,message = "请输入正确的邮箱")
     private String mail;
 
     /**
@@ -138,5 +145,6 @@ public class UserEntity implements Serializable {
      */
     @ApiModelProperty(value = "登录状态",name="loginStatus",example = "1")
     private Integer loginStatus;
+
 
 }
