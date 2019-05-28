@@ -15,7 +15,9 @@ import org.springblade.common.entity.FinancePriceType;
 import org.springblade.common.utils.DateUtils;
 import org.springblade.common.utils.HttpClientUtils;
 import org.springblade.information.service.FinanceDailyPriceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,7 +29,7 @@ import static org.springblade.common.utils.DateUtils.DATE_PATTERN;
  * @author hanbin
  * 新浪的金融数据源 使用java的版本
  */
-//@Component
+@Component
 @Api(tags = "新浪日K线的数据源")
 public class SinaOilDayLineCrawlerTaskTimer {
 
@@ -37,7 +39,7 @@ public class SinaOilDayLineCrawlerTaskTimer {
     private String todayUrlStr = null;
 
 
-    //  @Autowired
+    @Autowired
     public SinaOilDayLineCrawlerTaskTimer(FinanceDailyPriceService financeDailyPriceService) {
 
         todayUrlStr = DateUtils.format(new Date(), "yyyy_M_dd");
