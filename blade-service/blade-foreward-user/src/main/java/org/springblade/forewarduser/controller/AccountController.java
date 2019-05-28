@@ -101,7 +101,7 @@ public class AccountController {
     @ApiOperation(value = "余额提现", notes = "传入token")
     /*@ApiOperation("余额提现")*/
     @Login
-    public R extract(@RequestBody AccountExtractForm form, @LoginUser UserEntity user) {
+    public R extract(@RequestBody @Validated AccountExtractForm form, @LoginUser UserEntity user) {
         AccountRecharge accountRecharge = new AccountRecharge();
 
         String password = DigestUtils.sha256Hex(form.getPassword());
