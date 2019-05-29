@@ -42,6 +42,9 @@ mac: docker 小海豚 -> preference -> Daemon -> Advance -> 填入下面的地�
 windows自便
 ````
 
+#### 然后安装部署nacos和redis 脚本在 deploy_nacos.sh中 还需要在nacos中增加配置 需要配置一下nacos
+
+
 #### 全部改好之后 调用 deploy.sh 脚本进行部署
 
 

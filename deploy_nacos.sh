@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+##启动redis
+docker run --name redis -p 6379:6379 redis:latest
+
+
 ## 启动docker运行nacos
 docker run --name nacos-standalone -e MODE=standalone -p 8848:8848 nacos/nacos-server:latest
 
