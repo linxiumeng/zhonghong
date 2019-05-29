@@ -275,12 +275,6 @@ public class SinaOilDayLineCrawlerTaskTimer {
 
     }
 
-    public static void main(String[] args) {
-        Date date = new Date();
-        date.setMonth(11);
-        String todayUrlStr = DateUtils.format(date, "yyyy_M_dd");
-        System.out.println(todayUrlStr);
-    }
 
 
 }

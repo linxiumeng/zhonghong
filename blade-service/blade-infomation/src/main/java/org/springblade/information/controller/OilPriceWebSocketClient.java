@@ -72,66 +72,6 @@ public class OilPriceWebSocketClient extends WebSocketClient {
         System.out.println(bytes);
     }
 
-    public static void main(String[] args) {
-
-        SSLContext sslContext = null;
-        try {
-            sslContext = SSLContext.getInstance("SSL");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        try {
-            sslContext.init(null, new TrustManager[] { new X509TrustManager() {
-
-                @Override
-                public void checkClientTrusted(X509Certificate[] chain,
-                                               String authType) {
-
-                }
-
-                @Override
-                public void checkServerTrusted(X509Certificate[] chain,
-                                               String authType) {
-
-                }
-
-                @Override
-                public X509Certificate[] getAcceptedIssuers() {
-                    return new X509Certificate[0];
-                }
-            } }, new SecureRandom());
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        }
-
-
-        try {
-            Map<String, String> headers = generateHeaders2();
-      //      OilPriceWebSocketClient client = new OilPriceWebSocketClient("ws://47.96.146.130:12345/quote?codes=oilf_oilh_oilz_oilg_oilm_oiln_oilq_oilu_oilv_oilx",headers);
-            OilPriceWebSocketClient client = new OilPriceWebSocketClient("wss://stream183.forexpros.com/echo/937/g4s39659/websocket",headers);
-
-            SSLSocketFactory factory = sslContext.getSocketFactory();
-            try {
-                client.setSocket(factory.createSocket());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            client.connect();
-            while (!(client.getReadyState()==ReadyState.OPEN)) {
-                logger.info("还没有打开");
-            }
-            logger.info("建立websocket连接");
-            String a = "";
-          //  ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
-            client.onMessage(a);
-            client.send("[\"{\\\"_event\\\":\\\"bulk-subscribe\\\",\\\"tzID\\\":28,\\\"message\\\":\\\"pid-8849:%%pid-44794:%%pid-14208:%%pid-14218:%%pid-1043091:%%pid-1075589:%%pid-44793:%%pid-1014132:%%pid-38233:%%pid-40820:%%pid-28930:%%pid-179:%%pid-178:%%pid-8873:%%pid-8839:%%pid-8827:%%pid-8984:%%pid-1:%%pid-2:%%pid-3:%%pid-5:%%pid-7:%%pid-9:%%pid-10:%%pidTechSumm-1:%%pidTechSumm-2:%%pidTechSumm-3:%%pidTechSumm-5:%%pidTechSumm-7:%%pidTechSumm-9:%%pidTechSumm-10:%%pidExt-8849:%%isOpenExch-1:%%isOpenExch-95:%%isOpenExch-54:%%isOpenExch-21:%%isOpenExch-20:%%isOpenPair-8849:%%isOpenPair-8873:%%isOpenPair-8839:%%isOpenPair-8827:%%isOpenPair-8984:%%cmt-6-5-8849:%%domain-6:\\\"}\"]");
-            client.send("[\"{\\\"_event\\\":\\\"UID\\\",\\\"UID\\\":0}\"]");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-
     private static Map<String, String> generateHeaders() {
         Map<String, String> headers = new HashMap<>();
         headers.put("Upgrade","websocket");

@@ -17,10 +17,10 @@
     <description>SpringBlade 微服务集合</description>
 
     <modules>
-        <module>blade-desk</module>
+        <!--<module>blade-desk</module>-->
         <module>blade-log</module>
-        <module>blade-system</module>
-        <module>blade-user</module>
+        <!--<module>blade-system</module>-->
+        <!--<module>blade-user</module>-->
         <module>blade-foreward-user</module>
         <module>blade-pay</module>
         <module>blade-infomation</module>
@@ -60,7 +60,7 @@
                         </resource>
                     </resources>
                     <registryUrl>http://${docker.registry.url}/v2/</registryUrl>
-                    <serverId>${docker.registry.url}</serverId>
+                    <serverId>hanbin</serverId>
                     <pushImage>true</pushImage>
                 </configuration>
             </plugin>

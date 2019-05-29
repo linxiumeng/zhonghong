@@ -2,13 +2,13 @@ FROM anapsix/alpine-java:8_server-jre_unlimited
 
 MAINTAINER smallchill@163.com
 
-RUN mkdir -p /blade/auth
+RUN mkdir -p /blade/admin
 
-WORKDIR /blade/auth
+WORKDIR /blade/admin
 
-EXPOSE 8010
+EXPOSE 7002
 
-ADD ./target/blade-auth.jar ./app.jar
+ADD ../../../target/blade-admin.jar ./app.jar
 
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
 

@@ -30,7 +30,7 @@
         <!-- 推荐使用Harbor -->
         <docker.registry.url>docker-registry.verasti.com</docker.registry.url>
         <docker.registry.host>unix:///var/run/docker.sock</docker.registry.host>
-        <docker.plugin.version>1.2.0</docker.plugin.version>
+        <docker.plugin.version>1.1.0</docker.plugin.version>
 
 
 
@@ -164,6 +164,28 @@
                 </configuration>
                 <version>3.8.1</version>
             </plugin>
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${docker.plugin.version}</version>
+                <configuration>
+                    <imageName>${docker.registry.url}/blade/${project.artifactId}:${project.version}</imageName>
+                    <dockerDirectory>${project.basedir}</dockerDirectory>
+                    <dockerHost>${docker.registry.host}</dockerHost>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                    <registryUrl>http://${docker.registry.url}/v2/</registryUrl>
+                    <serverId>hanbin</serverId>
+                    <pushImage>true</pushImage>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
@@ -186,5 +208,7 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
+
 
 </project>

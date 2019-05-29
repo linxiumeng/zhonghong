@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>blade-infomation</artifactId>
+    <artifactId>blade-information</artifactId>
 
-    <name>blade-infomation</name>
+    <name>blade-information</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
