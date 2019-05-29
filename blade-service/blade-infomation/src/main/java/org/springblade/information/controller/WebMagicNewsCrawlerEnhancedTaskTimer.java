@@ -107,7 +107,7 @@ public class WebMagicNewsCrawlerEnhancedTaskTimer extends BaseNewsCrawler {
     @Override
     protected News generateNews(String url, int type, final Date maxDate) {
 
-        final News news = new News();
+        /*final News news = new News();
 
         Spider spider = Spider.create(new PageProcessor() {
 
@@ -149,13 +149,13 @@ public class WebMagicNewsCrawlerEnhancedTaskTimer extends BaseNewsCrawler {
                     }
                     //这里选择直接替换掉
                     title = title.replace("--中国石油新闻中心", "");
-                    news.setTitle(title);
+                    *//*news.setTitle(title);
                     news.setDetails(content);
                     news.setTab("石油");
                     news.setEditor("中国石油网");
                     news.setOrigin(origin);
                     news.setCreateDate(publishDate);
-                    news.setType(type);
+                    news.setType(type);*//*
                 }
 
             }
@@ -174,7 +174,9 @@ public class WebMagicNewsCrawlerEnhancedTaskTimer extends BaseNewsCrawler {
             return null;
         }
 
-        return news;
+        return news;*/
+
+        return null;
     }
 
 }

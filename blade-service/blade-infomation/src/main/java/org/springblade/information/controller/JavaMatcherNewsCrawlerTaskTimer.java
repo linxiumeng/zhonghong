@@ -20,11 +20,11 @@ import java.util.regex.Pattern;
  * @author hanbin
  * 新闻爬取的爬虫 使用java的版本
  */
-@Component
+//@Component
 @Api(tags ="新闻爬虫（java）")
 public class JavaMatcherNewsCrawlerTaskTimer extends BaseNewsCrawler {
 
-    @Autowired
+  //  @Autowired
     public JavaMatcherNewsCrawlerTaskTimer(NewsService newsService){
         super.newsService = newsService;
     }
@@ -35,7 +35,7 @@ public class JavaMatcherNewsCrawlerTaskTimer extends BaseNewsCrawler {
      * 每个五秒钟执行一次 @Scheduled(cron = "0/5 * * * * *")  0 20 10 * * ?
      * 每天10点触发@Scheduled(cron = "0 0 10 * * *")
      */
-    @Scheduled(cron = "0 0 0/1 * * *")
+  //  @Scheduled(cron = "0 0 0/1 * * *")
     @Override
     public void scheduled() {
 
