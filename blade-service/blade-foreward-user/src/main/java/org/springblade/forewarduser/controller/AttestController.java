@@ -47,6 +47,9 @@ public class AttestController {
             @ApiImplicitParam(name = "param", value = "采购商认证", paramType = "query", dataType = "string",dataTypeClass = AttestForm.class)
     })*/
     @ApiOperation(value = "采购商认证接口", notes = "传入userform" )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R creat(@RequestBody @Validated(InsertGroup.class) AttestForm param, @LoginUser UserEntity user){
         param.setUserId(user.getUserId());
         Attest attest = new Attest();

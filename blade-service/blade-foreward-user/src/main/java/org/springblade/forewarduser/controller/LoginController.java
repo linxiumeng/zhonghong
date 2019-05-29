@@ -20,10 +20,7 @@ import org.springblade.forewarduser.service.TokenService;
 import org.springblade.forewarduser.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -95,7 +92,7 @@ public class LoginController {
         return R.ok();
     }
 
-    @RequestMapping("captcha.jpg")
+    @GetMapping("captcha.jpg")
     public void captcha(HttpServletResponse response) throws IOException {
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");

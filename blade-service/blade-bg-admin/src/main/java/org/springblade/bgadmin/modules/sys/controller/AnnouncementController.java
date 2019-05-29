@@ -1,5 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.AnnouncementEntity;
 import org.springblade.bgadmin.modules.sys.service.AnnouncementService;
 import org.springblade.common.utils.PageUtils;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/announcement")
+@Api(tags = "公告", description = " * @author jinzeze")
 public class AnnouncementController {
     @Autowired
     private AnnouncementService announcementService;
@@ -27,7 +30,8 @@ public class AnnouncementController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions("sys:announcement:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = announcementService.queryPage(params);
@@ -39,7 +43,8 @@ public class AnnouncementController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:announcement:info")
     public R info(@PathVariable("id") Integer id) {
             AnnouncementEntity announcement = announcementService.getById(id);
@@ -50,7 +55,8 @@ public class AnnouncementController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:announcement:save")
     public R save(@RequestBody AnnouncementEntity announcement) {
             announcementService.save(announcement);
@@ -61,7 +67,8 @@ public class AnnouncementController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:announcement:update")
     public R update(@RequestBody AnnouncementEntity announcement) {
        //ValidatorUtils.validateEntity(announcement);
@@ -73,7 +80,8 @@ public class AnnouncementController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:announcement:delete")
     public R delete(@RequestBody Integer[] ids) {
             announcementService.removeByIds(Arrays.asList(ids));

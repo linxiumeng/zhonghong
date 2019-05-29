@@ -2,6 +2,8 @@ package org.springblade.bgadmin.modules.sys.controller;
 
 import com.aliyun.oss.OSSClient;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.oss.cloud.CloudStorageConfig;
 import org.springblade.bgadmin.modules.sys.entity.LoadBill;
 import org.springblade.bgadmin.modules.sys.entity.PurchaseOrdersEntity;
@@ -24,6 +26,7 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("sys/loadbill")
+@Api(tags = "余额详情表", description = " * @author jinzeze")
 public class LoadBillController {
 
     @Resource
@@ -38,6 +41,7 @@ public class LoadBillController {
 
 
     @PostMapping("list")
+    @ApiOperation(value = "列表", notes = "")
     public R listLoadBills(@RequestBody LoadBillForm loadBillForm) {
         LoadBillCondition condition = new LoadBillCondition();
         BeanUtils.copyProperties(loadBillForm, condition);
@@ -45,6 +49,7 @@ public class LoadBillController {
     }
 
     @PostMapping("save")
+    @ApiOperation(value = "保存", notes = "")
     public R saveLoadBill(@RequestBody LoadBillForm loadBillForm) {
 
         LoadBill loadBill = new LoadBill();
@@ -75,7 +80,8 @@ public class LoadBillController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //   @RequiresPermissions("sys:purchaseorders:delete")
     public R delete(@RequestBody Integer[] ids) {
         loadBillService.removeByIds(Arrays.asList(ids));

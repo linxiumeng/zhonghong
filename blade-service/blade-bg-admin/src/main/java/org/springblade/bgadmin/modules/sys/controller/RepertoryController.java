@@ -1,5 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.RepertoryEntity;
 import org.springblade.bgadmin.modules.sys.service.RepertoryService;
 import org.springblade.common.utils.PageUtils;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/repertory")
+@Api(tags = "仓储表", description = " * @author jinzeze")
 public class RepertoryController {
     @Autowired
     private RepertoryService repertoryService;
@@ -27,7 +30,8 @@ public class RepertoryController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions("sys:repertory:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = repertoryService.queryPage(params);
@@ -39,7 +43,8 @@ public class RepertoryController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:repertory:info")
     public R info(@PathVariable("id") Integer id) {
             RepertoryEntity repertory = repertoryService.getById(id);
@@ -50,7 +55,8 @@ public class RepertoryController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
    // @RequiresPermissions("sys:repertory:save")
     public R save(@RequestBody RepertoryEntity repertory) {
             repertoryService.save(repertory);
@@ -61,7 +67,8 @@ public class RepertoryController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:repertory:update")
     public R update(@RequestBody RepertoryEntity repertory) {
         //ValidatorUtils.validateEntity(repertory);
@@ -73,7 +80,8 @@ public class RepertoryController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:repertory:delete")
     public R delete(@RequestBody Integer[] ids) {
             repertoryService.removeByIds(Arrays.asList(ids));

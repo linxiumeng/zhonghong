@@ -43,6 +43,9 @@ public class CreditController {
             @ApiImplicitParam(name = "param", value = "采购商申请授信", paramType = "query", dataType = "string",dataTypeClass = CreditForm.class)
     })*/
     @ApiOperation(value = "采购商申请授信接口", notes = "传入param" )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @Login
     @PostMapping("creat")
     @Transactional(rollbackFor = Exception.class)

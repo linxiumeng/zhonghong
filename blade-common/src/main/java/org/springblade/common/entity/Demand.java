@@ -35,7 +35,7 @@ public class Demand implements Serializable {
     /**
      * 产品类型
      */
-    @ApiModelProperty(value = "产品类型",name="fType",example = "原油产品")
+    @ApiModelProperty(value = "产品类型",name="fType",example = "")
     @JsonProperty(value = "fType")
    // @NotBlank
     private Long fType;

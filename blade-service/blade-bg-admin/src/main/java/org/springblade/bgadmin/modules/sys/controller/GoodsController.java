@@ -3,6 +3,8 @@ package org.springblade.bgadmin.modules.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.modules.sys.CheckBGListUtils;
 import org.springblade.bgadmin.modules.sys.entity.GoodsEntity;
@@ -28,6 +30,7 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("sys/goods")
+@Api(tags = "商品表", description = " * @author jinzeze")
 public class GoodsController {
     @Autowired
     private GoodsService goodsService;
@@ -35,7 +38,8 @@ public class GoodsController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions(value = {"sys:chanpinliebiao:list","sys:chanpinshenhe:list"},logical = Logical.OR)
     public R list(@RequestBody GoodsForm goodsForm) {
         IPage page = new Page(goodsForm.getPage(),goodsForm.getSize());
@@ -69,7 +73,8 @@ public class GoodsController {
     /**
      * 信息
      */
-    @RequestMapping("/detail")
+    @PostMapping("/detail")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions(value = {"sys:chanpinliebiao:detail"})
     public R info(@RequestBody GoodsForm goodsForm) {
 
@@ -85,7 +90,8 @@ public class GoodsController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:goods:save")
     public R save(@RequestBody GoodsEntity goods) {
             goodsService.save(goods);
@@ -96,7 +102,8 @@ public class GoodsController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:goods:update")
     public R update(@RequestBody GoodsEntity goods) {
         //ValidatorUtils.validateEntity(goods);
@@ -108,7 +115,8 @@ public class GoodsController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:goods:delete")
     public R delete(@RequestBody Integer[] ids) {
             goodsService.removeByIds(Arrays.asList(ids));
@@ -117,6 +125,7 @@ public class GoodsController {
     }
 
     @PostMapping("review")
+    @ApiOperation(value = "审核", notes = "")
     //@RequiresPermissions("sys:chanpinshenhe:verify")
     public R review(@RequestBody GoodsForm goodsForm){
         if(goodsForm.getGoodsId() == null || goodsForm.getAuditStatus() == null){
@@ -135,6 +144,7 @@ public class GoodsController {
     }
 
     @PostMapping("put_on")
+    @ApiOperation(value = "增加", notes = "")
     //@RequiresPermissions("sys:chanpinliebiao:updown")
     public R push(@RequestBody GoodsForm goodsForm){
         if(goodsForm.getGoodsId() == null || goodsForm.getGoodsStatus() == null){

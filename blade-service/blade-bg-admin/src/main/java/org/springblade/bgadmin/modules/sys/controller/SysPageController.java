@@ -16,8 +16,10 @@
 
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,35 +31,36 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2016年11月24日 下午11:05:27
  */
 @Controller
+@Api(tags = "系统页面视图", description = " * @author jinzeze")
 public class SysPageController {
 	
-	@RequestMapping("modules/{module}/{url}.html")
+	@PostMapping("modules/{module}/{url}.html")
 	public String module(@PathVariable("module") String module, @PathVariable("url") String url){
 		return "modules/" + module + "/" + url;
 	}
 
-	@RequestMapping(value = {"/", "templates/index.html"})
+	@PostMapping(value = {"/", "templates/index.html"})
 	public String index(){
 		System.out.println("////");
 		return "index";
 	}
 
-	@RequestMapping("index1.html")
+	@PostMapping("index1.html")
 	public String index1(){
 		return "index1";
 	}
 
-	@RequestMapping("login.html")
+	@PostMapping("login.html")
 	public String login(){
 		return "login";
 	}
 
-	@RequestMapping("main.html")
+	@PostMapping("main.html")
 	public String main(){
 		return "main";
 	}
 
-	@RequestMapping("404.html")
+	@PostMapping("404.html")
 	public String notFound(){
 		return "404";
 	}

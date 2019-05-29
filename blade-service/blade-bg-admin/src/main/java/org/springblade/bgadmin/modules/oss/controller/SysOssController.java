@@ -18,6 +18,8 @@ package org.springblade.bgadmin.modules.oss.controller;
 
 import com.aliyun.oss.model.OSSObject;
 import com.google.gson.Gson;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.common.utils.ConfigConstant;
 import org.springblade.bgadmin.modules.oss.cloud.CloudStorageConfig;
@@ -51,6 +53,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/oss")
+@Api(tags = "文件上传", description = " * @author jinzeze")
 public class SysOssController {
 	@Autowired
 	private SysOssService sysOssService;
@@ -62,7 +65,8 @@ public class SysOssController {
 	/**
 	 * 列表
 	 */
-	@RequestMapping("/list")
+	@PostMapping("/list")
+	@ApiOperation(value = "列表", notes = "")
 	//@RequiresPermissions("sys:oss:all")
 	public R list(@RequestParam Map<String, Object> params){
 		PageUtils page = sysOssService.queryPage(params);
@@ -74,7 +78,8 @@ public class SysOssController {
     /**
      * 云存储配置信息
      */
-    @RequestMapping("/config")
+    @PostMapping("/config")
+	@ApiOperation(value = "云存储配置信息", notes = "")
    // @RequiresPermissions("sys:oss:all")
     public R config(){
         CloudStorageConfig config = sysConfigService.getConfigObject(KEY, CloudStorageConfig.class);
@@ -86,8 +91,9 @@ public class SysOssController {
 	/**
 	 * 保存云存储配置信息
 	 */
-	@RequestMapping("/saveConfig")
+	@PostMapping("/saveConfig")
 	//@RequiresPermissions("sys:oss:all")
+	@ApiOperation(value = "保存云存储配置信息", notes = "")
 	public R saveConfig(@RequestBody CloudStorageConfig config){
 		//校验类型
 		/*ValidatorUtils.validateEntity(config);
@@ -177,7 +183,8 @@ public class SysOssController {
 	/**
 	 * 删除
 	 */
-	@RequestMapping("/delete")
+	@PostMapping("/delete")
+	@ApiOperation(value = "删除", notes = "")
 	//@RequiresPermissions("sys:oss:all")
 	public R delete(@RequestBody Long[] ids){
 		sysOssService.removeByIds(Arrays.asList(ids));

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -55,6 +57,9 @@ public class PurchaseOrdersController {
     private LoadBillService loadBillService;
 
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @ApiOperation(value = "商品下单接口")
     @PostMapping("insert")
     @Login
@@ -68,6 +73,9 @@ public class PurchaseOrdersController {
     @ApiOperation(value = "商品生成采购单接口 ， 仅前端展示用")
     @PostMapping("create")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R create(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
         PurchaseOrders result = purchaseOrdersService.generatePurchaseOrderModelByGoods(user, param);
         return R.ok().put("row", result);
@@ -78,6 +86,9 @@ public class PurchaseOrdersController {
     @PostMapping("demandinsert")
     @HasPermission(needVerifyUser = true)
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R demandinsert(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
         boolean flag = purchaseOrdersService.putPurchaseOrderByQuotation(user, param);
         return R.ok().put("row", flag);
@@ -86,6 +97,9 @@ public class PurchaseOrdersController {
     @ApiOperation(value = "需求单生成采购单接口")
     @PostMapping("demandcreate")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R demandcreate(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
 
         return R.ok().put("row", purchaseOrdersService.generatePurchaseOrderModelByQuotation(user, param));
@@ -96,6 +110,9 @@ public class PurchaseOrdersController {
     @PostMapping("/provider/createorder")
     @HasPermission(needVerifyUser = true)
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R createOrder(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
         boolean flag = purchaseOrdersService.confirmPurchaseOrder(param, user.getUserId());
         if (flag) {
@@ -108,6 +125,9 @@ public class PurchaseOrdersController {
     @HasPermission(needVerifyUser = true)
     @PostMapping("/provider/sendprice")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R sendPrice(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
         wrapper.eq("id", param.getId()).eq("provider_id", user.getUserId());
@@ -128,6 +148,9 @@ public class PurchaseOrdersController {
     @PostMapping("/provider/confirmreceipt")
     @HasPermission(needVerifyUser = true)
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R confirmReceipt(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
         QueryWrapper<PurchaseOrders> wrapper = new QueryWrapper<>();
         wrapper.eq("id", param.getId()).eq("provider_id", user.getUserId());
@@ -157,6 +180,9 @@ public class PurchaseOrdersController {
     @PostMapping("/buyer/confirmprice")
     @HasPermission(needVerifyUser = true)
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R confirmPrice(@RequestBody PurchaseOrders param, @LoginUser UserEntity user) {
         if (param.getStatus() == OrdersEnum.FIVE && param.getStatus() == OrdersEnum.FOUR) {
             return R.error("输入状态错误");
@@ -179,10 +205,13 @@ public class PurchaseOrdersController {
         return R.error();
     }
 
-    @ApiOperation(value = "采购商融资付款接口")
+    @ApiOperation(value = "采购商接口")
     @PostMapping("/buyer/financing")
     @HasPermission(needVerifyCredit = true)
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R financing(@RequestBody PayForm param, @LoginUser UserEntity user) {
         PurchaseOrders po = purchaseOrdersService.getById(param.getOrderNo());
         PurchaseOrders purchaseOrders = payCheck(param, user);
@@ -190,7 +219,7 @@ public class PurchaseOrdersController {
         form.setPayForm(param);
         form.setPurchaseOrders(po);
         form.setUser(user);
-        org.springblade.core.tool.api.R r = accountService.financingPay(form);        //融资付款方法
+        org.springblade.core.tool.api.R r = accountService.financingPay(form);        //方法
         if(r.getCode() == FeignResultCodeConstant.EXCEPTION_CODE){
             throw new RRException(r.getMsg());
         }
@@ -209,6 +238,9 @@ public class PurchaseOrdersController {
     @PostMapping("/buyer/pay")
     @HasPermission(needVerifyCredit = true)
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R pay(@RequestBody PayForm param, @LoginUser UserEntity user) {
         //todo 这里可能要引出分布式事务
         PurchaseOrders purchaseOrders = payCheck(param, user);
@@ -230,6 +262,9 @@ public class PurchaseOrdersController {
     @HasPermission(needVerifyUser = true)
     @PostMapping("/buyer/listpage")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R buyerlistpage(@RequestBody PurchaseOrdersForm param, @LoginUser UserEntity user) {
         return R.ok().put("Orderpage", purchaseOrdersService.listPurchaseOrdersUseForPurchaser(new Page(param.getPage(), param.getSize()), user.getUserId(),param.getGoodsType(),param.getStatus()));
     }
@@ -238,6 +273,9 @@ public class PurchaseOrdersController {
     @HasPermission(needVerifyUser = true)
     @PostMapping("/provider/listpage")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R providerlistpage(@RequestBody PurchaseOrdersForm param, @LoginUser UserEntity user) {
         ArrayList<OrdersEnum> statusList = new ArrayList<>(10);
         if(param.getStatus() != null){
@@ -262,6 +300,10 @@ public class PurchaseOrdersController {
     @HasPermission(needVerifyUser = true)
     @PostMapping("/detail")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string"),
+            @ApiImplicitParam(name = "id", value = "用户id", paramType = "header", dataType = "string")
+    })
     // @HasPermission(identification = UserTypeEnum.PURCHASER)
     public R getDetail(@RequestParam("id") Integer id, @LoginUser UserEntity user) {
         return R.ok().put("row", purchaseOrdersService.getById(id));
@@ -271,6 +313,10 @@ public class PurchaseOrdersController {
     @ApiOperation(value = "供应商订单统计")
     @PostMapping("/provider/statistics")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+
+    })
     public R getProviderStatistics(@LoginUser UserEntity user) {
 
         return R.ok().put("row", purchaseOrdersService.getStatistics(user.getUserId().longValue()));
@@ -279,6 +325,10 @@ public class PurchaseOrdersController {
     @ApiOperation(value = "根据订单id查询提货单详情")
     @PostMapping("/loadBillList")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string"),
+            @ApiImplicitParam(name = "id", value = "用户id", paramType = "header", dataType = "string")
+    })
     public R getLoadBill(@RequestBody LoadBillForm loadBill,@LoginUser UserEntity user) {
         QueryWrapper<LoadBill> wrapper = Wrappers.query();
         wrapper.eq("order_id",loadBill.getOrderId());

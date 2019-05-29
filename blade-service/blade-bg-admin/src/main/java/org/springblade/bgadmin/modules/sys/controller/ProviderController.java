@@ -1,5 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.ProviderEntity;
 import org.springblade.bgadmin.modules.sys.service.ProviderService;
 import org.springblade.common.utils.PageUtils;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/provider")
+@Api(tags = "用户表", description = " * @author jinzeze")
 public class ProviderController {
     @Autowired
     private ProviderService providerService;
@@ -27,7 +30,8 @@ public class ProviderController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions("sys:provider:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = providerService.queryPage(params);
@@ -39,7 +43,8 @@ public class ProviderController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{userId}")
+    @PostMapping("/info/{userId}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:provider:info")
     public R info(@PathVariable("userId") Integer userId) {
             ProviderEntity provider = providerService.getById(userId);
@@ -50,7 +55,8 @@ public class ProviderController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:provider:save")
     public R save(@RequestBody ProviderEntity provider) {
             providerService.save(provider);
@@ -61,7 +67,8 @@ public class ProviderController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:provider:update")
     public R update(@RequestBody ProviderEntity provider) {
        // ValidatorUtils.validateEntity(provider);
@@ -73,7 +80,8 @@ public class ProviderController {
     /**
      *
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:provider:delete")
     public R delete(@RequestBody Integer[] userIds) {
             providerService.removeByIds(Arrays.asList(userIds));

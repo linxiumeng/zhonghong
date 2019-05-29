@@ -3,6 +3,8 @@ package org.springblade.bgadmin.modules.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.modules.sys.CheckBGListUtils;
 import org.springblade.bgadmin.modules.sys.entity.AccountRepaymentWithStepEntity;
@@ -30,6 +32,7 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("sys/purchaseorders")
+@Api(tags = "采购单表", description = " * @author jinzeze")
 public class PurchaseOrdersController {
     @Autowired
     private PurchaseOrdersService purchaseOrdersService;
@@ -37,7 +40,8 @@ public class PurchaseOrdersController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //   @RequiresPermissions("sys:purchaseorders:list")
     public R list(@RequestBody PurchaseOrderForm purchaseOrderForm) {
         IPage page = new Page(purchaseOrderForm.getPage(),purchaseOrderForm.getSize());
@@ -57,7 +61,8 @@ public class PurchaseOrdersController {
         return R.ok().put("page", purchaseOrdersService.page(page,wrapper));
     }
 
-    @RequestMapping("/order_repayment_list")
+    @PostMapping("/order_repayment_list")
+    @ApiOperation(value = "订单列表", notes = "")
     //   @RequiresPermissions("sys:purchaseorders:list")
     public R orderRepaymentList(@RequestBody PurchaseOrderForm purchaseOrderForm) {
         Page page = new Page(purchaseOrderForm.getPage(),purchaseOrderForm.getSize());
@@ -75,7 +80,8 @@ public class PurchaseOrdersController {
     /**
      * 信息
      */
-    @RequestMapping("/detail")
+    @PostMapping("/detail")
+    @ApiOperation(value = "信息", notes = "")
     //   @RequiresPermissions("sys:purchaseorders:info")
     public R info(@RequestBody PurchaseOrderForm purchaseOrderForm) {
         if(purchaseOrderForm.getId() == null){
@@ -108,7 +114,8 @@ public class PurchaseOrdersController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:purchaseorders:save")
     public R save(@RequestBody PurchaseOrdersEntity purchaseOrders) {
         purchaseOrdersService.save(purchaseOrders);
@@ -119,7 +126,8 @@ public class PurchaseOrdersController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:purchaseorders:update")
     public R update(@RequestBody PurchaseOrdersEntity purchaseOrders) {
         //ValidatorUtils.validateEntity(purchaseOrders);
@@ -131,7 +139,8 @@ public class PurchaseOrdersController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:purchaseorders:delete")
     public R delete(@RequestBody Integer[] ids) {
         purchaseOrdersService.removeByIds(Arrays.asList(ids));
@@ -145,6 +154,7 @@ public class PurchaseOrdersController {
      * @return
      */
     @PostMapping("review_repayment")
+    @ApiOperation(value = "融资审批", notes = "")
     public R reviewRepayment(@RequestBody PurchaseOrderForm purchaseOrderForm) {
 
 

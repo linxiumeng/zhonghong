@@ -19,6 +19,8 @@ package org.springblade.bgadmin.modules.sys.controller;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.springblade.bgadmin.modules.sys.entity.SysMenuEntity;
@@ -28,9 +30,7 @@ import org.springblade.bgadmin.modules.sys.shiro.ShiroUtils;
 import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -47,6 +47,7 @@ import java.util.List;
  * @date 2016年11月10日 下午1:15:31
  */
 @Controller
+@Api(tags = "登录相关", description = " * @author jinzeze")
 public class SysLoginController {
 	@Autowired
 	private Producer producer;
@@ -55,6 +56,7 @@ public class SysLoginController {
 	SysMenuService sysMenuService;
 
 	@RequestMapping("captcha.jpg")
+	@ApiOperation(value = "获取验证码", notes = "")
 	public void captcha(HttpServletResponse response)throws IOException {
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
@@ -74,7 +76,8 @@ public class SysLoginController {
 	 * 登录
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/sys/login", method = RequestMethod.POST)
+	@PostMapping(value = "/sys/login")
+	@ApiOperation(value = "登录", notes = "")
 	public R login(String username, String password, String captcha) {
 		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
 		if(!captcha.equalsIgnoreCase(kaptcha)){
@@ -108,7 +111,8 @@ public class SysLoginController {
 	 * 退出
 	 */
 	@ResponseBody
-	@RequestMapping(value = "logout", method = RequestMethod.POST)
+	@PostMapping(value = "logout")
+	@ApiOperation(value = "退出", notes = "")
 	public R logout() {
 		ShiroUtils.logout();
 		return R.ok();
@@ -119,7 +123,7 @@ public class SysLoginController {
 	 * 返回session没有的接口
 	 */
 	@ResponseBody
-	@RequestMapping(value = "nonesession", method = RequestMethod.GET)
+	@GetMapping(value = "nonesession")
 	public R notsession() {
 		return R.error(3000,"session失效或者您未登陆");
 	}

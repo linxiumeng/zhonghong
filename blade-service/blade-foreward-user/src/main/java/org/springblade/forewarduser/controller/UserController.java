@@ -1,9 +1,6 @@
 package org.springblade.forewarduser.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
@@ -47,6 +44,9 @@ public class UserController {
             @ApiImplicitParam(name = "userForm", value = "用户表单", paramType = "query", dataType = "string",dataTypeClass = UserForm.class)
     })*/
     @ApiOperation(value = "查询用户实体", notes = "" )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @PostMapping("selectbyid")
     @Login
     @HasPermission(needVerifyUser = true)
@@ -70,6 +70,9 @@ public class UserController {
             @ApiImplicitParam(name = "UserEntity", value = "获取用户状态", paramType = "query", dataType = "string",dataTypeClass = UserEntity.class)
     })*/
     @ApiOperation(value = "判断用户状态", notes = "" )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @PostMapping("selectStatus")
     @Login
     public R selectStatus(@LoginUser UserEntity currentUser) {
@@ -87,6 +90,9 @@ public class UserController {
             @ApiImplicitParam(name = "UserEntity", value = "", paramType = "query", dataType = "string",dataTypeClass = UserEntity.class)
     })*/
     @ApiOperation(value = "修改用户密码", notes = "" )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @PostMapping("changepw")
     @Login
     public R changepw(@Validated @RequestBody ChangePassword pw, @LoginUser UserEntity currentUser) {
@@ -108,6 +114,9 @@ public class UserController {
     @ApiOperation(value = "修改用户表(user)数据", notes = "" )
     @PostMapping("updateUser")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R update(@Validated(UpdateGroup.class) @RequestBody UserForm userForm, @LoginUser UserEntity currentUser) {
         UserEntity param2 = new UserEntity();
         //设置修改参数
@@ -121,7 +130,7 @@ public class UserController {
     }
 
     /**
-     * 判断页面跳转
+     *
      * @param currentUser
      * @return
      */
@@ -130,6 +139,9 @@ public class UserController {
     })*/
     @ApiOperation(value = "判断页面跳转", notes = "" )
     @PostMapping("userValidation")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @Login
     public R userValidation(@LoginUser UserEntity currentUser){
         Integer status = currentUser.getStatus();

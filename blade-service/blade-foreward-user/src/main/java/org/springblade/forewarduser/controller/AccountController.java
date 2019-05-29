@@ -59,6 +59,9 @@ public class AccountController {
             @ApiImplicitParam(name = "token", value = "用户token", paramType = "query", dataType = "integer")
     })*/
     @ApiOperation(value = "查询余额", notes = "传入token")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
   /*  @ApiOperation("查询余额")*/
     @Login
     public R query(@LoginUser UserEntity user) {
@@ -79,6 +82,9 @@ public class AccountController {
             @ApiImplicitParam(name = "token", value = "用户token", paramType = "query", dataType = "integer")
     })*/
     @ApiOperation(value = "充值余额", notes = "传入token")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     /*@ApiOperation("充值余额")*/
     @Login
     public R recharge(@RequestBody @Validated(InsertGroup.class) AccountRechargeForm form, @LoginUser UserEntity user) {
@@ -99,6 +105,9 @@ public class AccountController {
             @ApiImplicitParam(name = "token", value = "用户token", paramType = "query", dataType = "integer")
     })*/
     @ApiOperation(value = "余额提现", notes = "传入token")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     /*@ApiOperation("余额提现")*/
     @Login
     public R extract(@RequestBody @Validated AccountExtractForm form, @LoginUser UserEntity user) {

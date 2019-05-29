@@ -1,5 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.AccountEntity;
 import org.springblade.bgadmin.modules.sys.service.AccountService;
 import org.springblade.common.utils.PageUtils;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/account")
+@Api(tags = "余额表", description = " * @author jinzeze")
 public class AccountController {
     @Autowired
     private AccountService accountService;
@@ -27,8 +30,9 @@ public class AccountController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
     //@RequiresPermissions("sys:account:list")
+    @ApiOperation(value = "列表", notes = "")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = accountService.queryPage(params);
 
@@ -39,7 +43,8 @@ public class AccountController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:account:info")
     public R info(@PathVariable("id") Integer id) {
             AccountEntity account = accountService.getById(id);
@@ -50,7 +55,8 @@ public class AccountController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
+    @PostMapping("/save")
     //@RequiresPermissions("sys:account:save")
     public R save(@RequestBody AccountEntity account) {
             accountService.save(account);
@@ -61,7 +67,8 @@ public class AccountController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:account:update")
     public R update(@RequestBody AccountEntity account) {
         //ValidatorUtils.validateEntity(account);
@@ -73,7 +80,8 @@ public class AccountController {
     /**
      *
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:account:delete")
     public R delete(@RequestBody Integer[] ids) {
             accountService.removeByIds(Arrays.asList(ids));

@@ -1,5 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.ArticleEntity;
 import org.springblade.bgadmin.modules.sys.service.ArticleService;
 import org.springblade.common.utils.PageUtils;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/article")
+@Api(tags = "帮助配置表", description = " * @author jinzeze")
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
@@ -27,7 +30,8 @@ public class ArticleController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions("sys:article:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = articleService.queryPage(params);
@@ -39,7 +43,8 @@ public class ArticleController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:article:info")
     public R info(@PathVariable("id") Integer id) {
             ArticleEntity article = articleService.getById(id);
@@ -50,7 +55,8 @@ public class ArticleController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:article:save")
     public R save(@RequestBody ArticleEntity article) {
             articleService.save(article);
@@ -61,7 +67,8 @@ public class ArticleController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:article:update")
     public R update(@RequestBody ArticleEntity article) {
         //ValidatorUtils.validateEntity(article);
@@ -73,7 +80,8 @@ public class ArticleController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:article:delete")
     public R delete(@RequestBody Integer[] ids) {
             articleService.removeByIds(Arrays.asList(ids));

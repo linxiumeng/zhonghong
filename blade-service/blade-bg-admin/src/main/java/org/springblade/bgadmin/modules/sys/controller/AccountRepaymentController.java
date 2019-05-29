@@ -3,6 +3,8 @@ package org.springblade.bgadmin.modules.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.CheckBGListUtils;
 import org.springblade.bgadmin.modules.sys.entity.AccountRepaymentEntity;
 import org.springblade.bgadmin.modules.sys.enums.AccountRepaymentStatusEnum;
@@ -26,6 +28,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/accountrepayment")
+@Api(tags = "分期还款表", description = " * @author jinzeze")
 public class AccountRepaymentController {
     @Autowired
     private AccountRepaymentService accountRepaymentService;
@@ -33,7 +36,8 @@ public class AccountRepaymentController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
    // @RequiresPermissions("sys:accountrepayment:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = accountRepaymentService.queryPage(params);
@@ -45,7 +49,8 @@ public class AccountRepaymentController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:accountrepayment:info")
     public R info(@PathVariable("id") Integer id) {
         AccountRepaymentEntity accountRepayment = accountRepaymentService.getById(id);
@@ -56,7 +61,8 @@ public class AccountRepaymentController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:accountrepayment:save")
     public R save(@RequestBody AccountRepaymentEntity accountRepayment) {
         accountRepaymentService.save(accountRepayment);
@@ -67,7 +73,8 @@ public class AccountRepaymentController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:accountrepayment:update")
     public R update(@RequestBody AccountRepaymentEntity accountRepayment) {
        // ValidatorUtils.validateEntity(accountRepayment);
@@ -79,7 +86,8 @@ public class AccountRepaymentController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:accountrepayment:delete")
     public R delete(@RequestBody Integer[] ids) {
         accountRepaymentService.removeByIds(Arrays.asList(ids));
@@ -91,7 +99,8 @@ public class AccountRepaymentController {
     /**
      * 列表
      */
-    @RequestMapping("/repayment_list")
+    @PostMapping("/repayment_list")
+    @ApiOperation(value = "列表", notes = "")
     //   @RequiresPermissions("sys:accountrepayment:list")
     public R repaymentList(@RequestBody AccountRepaymentForm repaymentForm) {
         IPage page = new Page(repaymentForm.getPage(), repaymentForm.getSize());

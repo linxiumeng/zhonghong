@@ -17,6 +17,8 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.common.annotation.SysLog;
 import org.springblade.bgadmin.modules.sys.entity.SysConfigEntity;
 import org.springblade.bgadmin.modules.sys.service.SysConfigService;
@@ -36,6 +38,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/sys/config")
+@Api(tags = "系统配置信息", description = " * @author jinzeze")
 public class SysConfigController extends AbstractController {
 	@Autowired
 	private SysConfigService sysConfigService;
@@ -43,7 +46,8 @@ public class SysConfigController extends AbstractController {
 	/**
 	 * 所有配置列表
 	 */
-	@RequestMapping("/list")
+	@PostMapping("/list")
+	@ApiOperation(value = "所有配置列表", notes = "")
 	//@RequiresPermissions("sys:config:list")
 	public R list(@RequestParam Map<String, Object> params){
 		PageUtils page = sysConfigService.queryPage(params);
@@ -55,7 +59,8 @@ public class SysConfigController extends AbstractController {
 	/**
 	 * 配置信息
 	 */
-	@RequestMapping("/info/{id}")
+	@PostMapping("/info/{id}")
+	@ApiOperation(value = "配置信息", notes = "")
 	//@RequiresPermissions("sys:config:info")
 	public R info(@PathVariable("id") Long id){
 		SysConfigEntity config = sysConfigService.getById(id);
@@ -67,7 +72,8 @@ public class SysConfigController extends AbstractController {
 	 * 保存配置
 	 */
 	@SysLog("保存配置")
-	@RequestMapping("/save")
+	@PostMapping("/save")
+	@ApiOperation(value = "保存配置", notes = "")
 	//@RequiresPermissions("sys:config:save")
 	public R save(@RequestBody SysConfigEntity config){
 		//ValidatorUtils.validateEntity(config);
@@ -81,7 +87,8 @@ public class SysConfigController extends AbstractController {
 	 * 修改配置
 	 */
 	@SysLog("修改配置")
-	@RequestMapping("/update")
+	@PostMapping("/update")
+	@ApiOperation(value = "修改配置", notes = "")
 	//@RequiresPermissions("sys:config:update")
 	public R update(@RequestBody SysConfigEntity config){
 		//ValidatorUtils.validateEntity(config);
@@ -95,7 +102,8 @@ public class SysConfigController extends AbstractController {
 	 * 删除配置
 	 */
 	@SysLog("删除配置")
-	@RequestMapping("/delete")
+	@PostMapping("/delete")
+	@ApiOperation(value = "删除配置", notes = "")
 	//@RequiresPermissions("sys:config:delete")
 	public R delete(@RequestBody Long[] ids){
 		sysConfigService.deleteBatch(ids);

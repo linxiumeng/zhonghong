@@ -50,7 +50,7 @@ public class Quotation implements Serializable {
     /**
      * 产品类型
      */
-    @ApiModelProperty(value = "产品类型",name="fType",example = "原油产品")
+    @ApiModelProperty(value = "产品类型",name="fType",example = "13151665")
     @JsonProperty(value = "fType")
     private Long fType;
     /**

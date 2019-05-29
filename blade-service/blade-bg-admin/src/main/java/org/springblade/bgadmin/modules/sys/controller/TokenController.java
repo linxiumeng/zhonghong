@@ -1,5 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.service.TokenService;
 import org.springblade.common.entity.TokenEntity;
 import org.springblade.common.utils.PageUtils;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/token")
+@Api(tags = "密钥", description = " * @author jinzeze")
 public class TokenController {
     @Autowired
     private TokenService tokenService;
@@ -27,7 +30,8 @@ public class TokenController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions("sys:token:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = tokenService.queryPage(params);
@@ -39,7 +43,8 @@ public class TokenController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{userId}")
+    @PostMapping("/info/{userId}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:token:info")
     public R info(@PathVariable("userId") Integer userId) {
             TokenEntity token = tokenService.getById(userId);
@@ -50,7 +55,8 @@ public class TokenController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:token:save")
     public R save(@RequestBody TokenEntity token) {
             tokenService.save(token);
@@ -61,7 +67,8 @@ public class TokenController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:token:update")
     public R update(@RequestBody TokenEntity token) {
        // ValidatorUtils.validateEntity(token);
@@ -73,7 +80,8 @@ public class TokenController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:token:delete")
     public R delete(@RequestBody Integer[] userIds) {
             tokenService.removeByIds(Arrays.asList(userIds));

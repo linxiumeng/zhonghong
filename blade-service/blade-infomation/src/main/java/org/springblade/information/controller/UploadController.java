@@ -12,6 +12,8 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -78,6 +80,9 @@ public class UploadController {
 
     @GetMapping(value = {"/privateFileUrl/{fileName}","/privateFileUrl/{date}/{fileName}"})
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public void getStsInfo(@PathVariable("fileName") String objectName, @PathVariable(required = false,value = "date")String date, HttpServletResponse servletResponse) throws Exception {
 
         if(StringUtils.isNotBlank(date)){

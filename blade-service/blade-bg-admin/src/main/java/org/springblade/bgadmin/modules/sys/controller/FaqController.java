@@ -1,6 +1,8 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.FaqEntity;
 import org.springblade.bgadmin.modules.sys.form.FaqForm;
 import org.springblade.bgadmin.modules.sys.service.FaqService;
@@ -19,12 +21,14 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/sys/faq")
+@Api(tags = "常见问题控制层", description = " * @author jinzeze")
 public class FaqController {
 
     @Resource
     FaqService faqService;
 
     @PostMapping("/detail")
+    @ApiOperation(value = "问题详情", notes = "")
     public R detail(@RequestBody FaqForm faqForm){
         Long id = faqForm.getId();
         if(id == null){
@@ -34,6 +38,7 @@ public class FaqController {
     }
 
     @PostMapping("list")
+    @ApiOperation(value = "列表", notes = "")
     public R list(@RequestBody FaqForm faqForm){
 
         return R.ok().put("result",faqService.listFaq(
@@ -44,6 +49,7 @@ public class FaqController {
     }
 
     @PostMapping("update")
+    @ApiOperation(value = "修改", notes = "")
     public R update(@RequestBody FaqForm faqForm){
 
         Long id = faqForm.getId();
@@ -64,6 +70,7 @@ public class FaqController {
     }
 
     @PostMapping("delete")
+    @ApiOperation(value = "删除", notes = "")
     public R delete(@RequestBody FaqForm faqForm){
         Long id = faqForm.getId();
         if(id == null){
@@ -73,6 +80,7 @@ public class FaqController {
     }
 
     @PostMapping("save")
+    @ApiOperation(value = "保存", notes = "")
     public R save(@RequestBody FaqForm faqForm){
 
         FaqEntity faqEntity = new FaqEntity();

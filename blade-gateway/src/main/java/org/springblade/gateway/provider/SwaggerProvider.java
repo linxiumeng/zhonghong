@@ -50,7 +50,11 @@ public class SwaggerProvider implements SwaggerResourcesProvider {
 		routeMap.put(AppConstant.APPLICATION_AUTH_NAME, "授权模块");
 		routeMap.put(AppConstant.APPLICATION_DESK_NAME, "工作台模块");
 		routeMap.put(AppConstant.APPLICATION_SYSTEM_NAME, "系统模块");
+		routeMap.put("blade-bg-admin","后台管理模块");
 		routeMap.put("blade-information","信息模块");
+		routeMap.put("blade-foreward-user","前台用户模块");
+		routeMap.put("blade-pay","支付模块");
+		routeMap.put("blade-order","订单模块");
 	}
 
 	@Override

@@ -3,6 +3,8 @@ package org.springblade.bgadmin.modules.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.modules.sys.entity.AccountDetailEntity;
 import org.springblade.bgadmin.modules.sys.form.AccountDetailForm;
@@ -10,10 +12,7 @@ import org.springblade.bgadmin.modules.sys.service.AccountDetailService;
 import org.springblade.common.entity.AccountDetail;
 import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 
@@ -27,6 +26,7 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("sys/accountdetail")
+@Api(tags = "余额详情表", description = " * @author jinzeze")
 public class AccountDetailController {
     @Autowired
     private AccountDetailService accountDetailService;
@@ -34,8 +34,9 @@ public class AccountDetailController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
   //  @RequiresPermissions("sys:accountdetail:list")
+    @ApiOperation(value = "列表", notes = "")
     public R list(@RequestBody AccountDetailForm accountDetailForm) {
         IPage page = new Page(accountDetailForm.getPage(),accountDetailForm.getSize());
         QueryWrapper <AccountDetailEntity> wrapper = new QueryWrapper();
@@ -64,7 +65,8 @@ public class AccountDetailController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:accountdetail:info")
     public R info(@PathVariable("id") Integer id) {
             AccountDetailEntity accountDetail = accountDetailService.getById(id);
@@ -75,7 +77,8 @@ public class AccountDetailController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:accountdetail:save")
     public R save(@RequestBody AccountDetailEntity accountDetail) {
             accountDetailService.save(accountDetail);
@@ -86,7 +89,8 @@ public class AccountDetailController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:accountdetail:update")
     public R update(@RequestBody AccountDetailEntity accountDetail) {
         //ValidatorUtils.validateEntity(accountDetail);
@@ -98,7 +102,8 @@ public class AccountDetailController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:accountdetail:delete")
     public R delete(@RequestBody Integer[] ids) {
             accountDetailService.removeByIds(Arrays.asList(ids));

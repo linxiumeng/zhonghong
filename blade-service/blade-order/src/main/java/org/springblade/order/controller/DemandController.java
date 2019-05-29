@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.common.annotation.HasPermission;
@@ -62,6 +64,9 @@ public class DemandController {
     @PostMapping("creat")
     @Login
     @ApiOperation(value = "创建需求接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @HasPermission(needVerifyUser = true)
     public R creatDemand(@RequestBody DemandForm param, @LoginUser UserEntity user) {
         param.setCreatUserid(user.getUserId().toString());
@@ -72,6 +77,9 @@ public class DemandController {
 
     @PostMapping("queryList")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @ApiOperation(value = "查看自己需求接口")
     public R listDemands(@RequestBody DemandForm demandForm, @LoginUser UserEntity user) {
 
@@ -90,6 +98,9 @@ public class DemandController {
     @PostMapping("updateDemand")
     @Login
     @ApiOperation(value = "编辑自己需求接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @HasPermission(needVerifyUser = true)
     public R updateDemand(@RequestBody DemandForm param, @LoginUser UserEntity user) {
         //更新自己的接口
@@ -102,6 +113,9 @@ public class DemandController {
 
     @PostMapping("getbyid")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @ApiOperation(value = "查看需求详情接口")
     public R getbyid(@RequestBody Demand param, @LoginUser UserEntity user) {
         R r = R.ok();
@@ -130,6 +144,9 @@ public class DemandController {
     @PostMapping("detail")
     @Login
     @ApiOperation(value = "查看需求详情接口:不需要验证和返回报价信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R getbyidNotCheckParam(@RequestBody Demand param, @LoginUser UserEntity user) {
         Demand demand = demandService.getById(param.getId());
         UserEntity userEntity = null;

@@ -3,6 +3,8 @@ package org.springblade.bgadmin.modules.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.modules.sys.entity.AccountRechargeEntity;
 import org.springblade.bgadmin.modules.sys.entity.AccountWithdrawEntity;
@@ -27,6 +29,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("sys/accountwithdraw")
+@Api(tags = "充值记录表", description = " * @author jinzeze")
 public class AccountWithdrawController {
 
     @Resource
@@ -35,7 +38,8 @@ public class AccountWithdrawController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
   //  @RequiresPermissions("sys:accountrecharge:list")
     public R list(@RequestBody AccountRechargeForm accountRechargeForm) {
         IPage page = new Page(accountRechargeForm.getPage(),accountRechargeForm.getSize());
@@ -63,6 +67,7 @@ public class AccountWithdrawController {
 
 
     @PostMapping("review")
+    @ApiOperation(value = "检查", notes = "")
     public R reviewRecharge(@RequestBody AccountWithdrawForm accountRechargeForm){
 
         if(accountRechargeForm.getStatus() == null || accountRechargeForm.getId() == null){

@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
@@ -58,6 +60,9 @@ public class QuotationController {
     @ApiOperation(value = "提交报价单接口")
     @PostMapping("insert")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @HasPermission(needVerifyUser = true)
     public R insert(@RequestBody @Validated(InsertGroup.class) QuotationForm param, @LoginUser UserEntity userEntity) {
 
@@ -83,6 +88,9 @@ public class QuotationController {
     @ApiOperation(value = "分页查询自己报价单列表接口")
     @PostMapping("selectPage")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @HasPermission(needVerifyUser = true)
     public R selectPage(@RequestBody PageForm param, @LoginUser UserEntity userEntity) {
         Page<Quotation> page = new Page<>(param.getPage(), param.getSize());
@@ -94,6 +102,10 @@ public class QuotationController {
     @ApiOperation(value = "根据需求单id查询报价单列表接口")
     @PostMapping("selectPageByDemandId")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string"),
+            @ApiImplicitParam(name = "id", value = "需求单id", paramType = "header", dataType = "string")
+    })
     @HasPermission(needVerifyCredit = true)
     public R selectPageByDemandId(@RequestBody QuotationForm param, @LoginUser UserEntity userEntity) {
         List<Quotation> quotationList = quotationService.listQuotationsByDemandIdWithDemand(param.getDemandId().longValue(),userEntity.getUserId());
@@ -104,6 +116,9 @@ public class QuotationController {
     @ApiOperation(value = "分页查询供应商报价单列表接口")
     @PostMapping("demandPage")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @HasPermission(needVerifyCredit = true)
     public R demandPage(@RequestBody PageForm param, @LoginUser UserEntity userEntity) {
         QueryWrapper<Quotation> wrapper = new QueryWrapper<>();

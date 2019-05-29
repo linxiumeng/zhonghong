@@ -1,5 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.OrderEntity;
 import org.springblade.bgadmin.modules.sys.service.OrderService;
 import org.springblade.common.utils.PageUtils;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/order")
+@Api(tags = "采购单表", description = " * @author jinzeze")
 public class OrderController {
     @Autowired
     private OrderService orderService;
@@ -27,7 +30,8 @@ public class OrderController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions("sys:order:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = orderService.queryPage(params);
@@ -39,7 +43,8 @@ public class OrderController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
    // @RequiresPermissions("sys:order:info")
     public R info(@PathVariable("id") Integer id) {
             OrderEntity order = orderService.getById(id);
@@ -50,7 +55,8 @@ public class OrderController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:order:save")
     public R save(@RequestBody OrderEntity order) {
             orderService.save(order);
@@ -61,7 +67,8 @@ public class OrderController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:order:update")
     public R update(@RequestBody OrderEntity order) {
         //ValidatorUtils.validateEntity(order);
@@ -73,7 +80,8 @@ public class OrderController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
    // @RequiresPermissions("sys:order:delete")
     public R delete(@RequestBody Integer[] ids) {
             orderService.removeByIds(Arrays.asList(ids));

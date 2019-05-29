@@ -1,5 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.MessageEntity;
 import org.springblade.bgadmin.modules.sys.service.MessageService;
 import org.springblade.common.utils.PageUtils;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/message")
+@Api(tags = "余额详情表", description = " * @author jinzeze")
 public class MessageController {
     @Autowired
     private MessageService messageService;
@@ -27,7 +30,8 @@ public class MessageController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions("sys:message:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = messageService.queryPage(params);
@@ -39,7 +43,8 @@ public class MessageController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
    // @RequiresPermissions("sys:message:info")
     public R info(@PathVariable("id") Integer id) {
             MessageEntity message = messageService.getById(id);
@@ -50,7 +55,8 @@ public class MessageController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:message:save")
     public R save(@RequestBody MessageEntity message) {
             messageService.save(message);
@@ -61,7 +67,8 @@ public class MessageController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:message:update")
     public R update(@RequestBody MessageEntity message) {
         //ValidatorUtils.validateEntity(message);
@@ -73,7 +80,8 @@ public class MessageController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
    // @RequiresPermissions("sys:message:delete")
     public R delete(@RequestBody Integer[] ids) {
             messageService.removeByIds(Arrays.asList(ids));

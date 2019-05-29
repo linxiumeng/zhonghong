@@ -1,5 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.NewsEntity;
 import org.springblade.bgadmin.modules.sys.service.NewsService;
 import org.springblade.common.utils.PageUtils;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/news")
+@Api(tags = "新闻表", description = " * @author jinzeze")
 public class NewsController {
     @Autowired
     private NewsService newsService;
@@ -27,7 +30,8 @@ public class NewsController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions("sys:news:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = newsService.queryPage(params);
@@ -39,7 +43,8 @@ public class NewsController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:news:info")
     public R info(@PathVariable("id") Integer id) {
             NewsEntity news = newsService.getById(id);
@@ -50,7 +55,8 @@ public class NewsController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:news:save")
     public R save(@RequestBody NewsEntity news) {
             newsService.save(news);
@@ -61,8 +67,9 @@ public class NewsController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
     //@RequiresPermissions("sys:news:update")
+    @ApiOperation(value = "修改", notes = "")
     public R update(@RequestBody NewsEntity news) {
         //ValidatorUtils.validateEntity(news);
             newsService.updateById(news);//全部更新
@@ -71,9 +78,10 @@ public class NewsController {
     }
 
     /**
-     *
+     * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:news:delete")
     public R delete(@RequestBody Integer[] ids) {
             newsService.removeByIds(Arrays.asList(ids));

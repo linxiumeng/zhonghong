@@ -3,6 +3,8 @@ package org.springblade.bgadmin.modules.sys.controller;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.PutObjectResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.oss.cloud.CloudStorageConfig;
 import org.springblade.bgadmin.modules.sys.entity.BannerEntity;
 import org.springblade.bgadmin.modules.sys.service.BannerService;
@@ -27,6 +29,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("sys/banner")
+@Api(tags = "广告图表", description = " * @author jinzeze")
 public class BannerController {
     @Autowired
     private BannerService bannerService;
@@ -38,7 +41,8 @@ public class BannerController {
     /**
      * 列表sys:banner:list
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions("sys:banner:list")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().put("result", bannerService.list(new QueryWrapper<BannerEntity>().orderBy(true,false,"`sort`")));
@@ -49,8 +53,9 @@ public class BannerController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
     //@RequiresPermissions("sys:banner:add")
+    @ApiOperation(value = "保存", notes = "")
     public R save(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             throw new RRException("上传文件不能为NULL");
@@ -86,7 +91,8 @@ public class BannerController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:banner:showhide")
     public R update(@RequestBody BannerEntity banner) {
         //ValidatorUtils.validateEntity(banner);
@@ -97,7 +103,8 @@ public class BannerController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:banner:delete")
     public R delete(@RequestBody Integer[] ids) {
         bannerService.removeByIds(Arrays.asList(ids));
@@ -105,6 +112,7 @@ public class BannerController {
     }
 
     @PostMapping("order")
+    @ApiOperation(value = "订单", notes = "")
     public R orderBanners(@RequestBody List<Integer> bannerIds) {
 
         int cusor = bannerIds.size();

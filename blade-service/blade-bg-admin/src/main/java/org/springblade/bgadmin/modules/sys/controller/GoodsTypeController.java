@@ -1,10 +1,13 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.GoodsTypeEntity;
 import org.springblade.bgadmin.modules.sys.service.GoodsTypeService;
 import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +24,7 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("sys/goods_type")
+@Api(tags = "商品表", description = " * @author jinzeze")
 public class GoodsTypeController {
     @Autowired
     private GoodsTypeService goodsTypeService;
@@ -28,7 +32,8 @@ public class GoodsTypeController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //  @RequiresPermissions("sys:goods:list")
     public R list(@RequestBody GoodsTypeEntity goodsTypeEntity) {
 
@@ -40,7 +45,8 @@ public class GoodsTypeController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     // @RequiresPermissions("sys:goods:save")
     public R save(@RequestBody GoodsTypeEntity goodsTypeEntity) {
         goodsTypeService.save(goodsTypeEntity);
@@ -50,7 +56,8 @@ public class GoodsTypeController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
   //  @RequiresPermissions("sys:goods:update")
     public R update(@RequestBody GoodsTypeEntity goodsTypeEntity) {
         //ValidatorUtils.validateEntity(goodsTypeEntity);
@@ -62,7 +69,8 @@ public class GoodsTypeController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
   //  @RequiresPermissions("sys:goods:delete")
     public R delete(@RequestBody Integer[] ids) {
         goodsTypeService.removeByIds(Arrays.asList(ids));

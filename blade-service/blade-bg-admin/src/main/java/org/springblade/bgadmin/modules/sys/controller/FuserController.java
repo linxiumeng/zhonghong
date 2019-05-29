@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springblade.bgadmin.modules.sys.entity.AccountEntity;
@@ -34,6 +36,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/fuser")
+@Api(tags = "用户表", description = " * @author jinzeze")
 public class FuserController {
     @Autowired
     private FuserService fuserService;
@@ -47,8 +50,9 @@ public class FuserController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
     //@RequiresPermissions("sys:fuser:list")
+    @ApiOperation(value = "列表", notes = "")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = fuserService.queryPage(params);
 
@@ -59,7 +63,8 @@ public class FuserController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{userId}")
+    @PostMapping("/info/{userId}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:fuser:info")
     public R info(@PathVariable("userId") Integer userId) {
             FuserEntity fuser = fuserService.getById(userId);
@@ -70,7 +75,8 @@ public class FuserController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:fuser:save")
     public R save(@RequestBody FuserEntity fuser) {
             fuserService.save(fuser);
@@ -81,7 +87,8 @@ public class FuserController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:fuser:update")
     public R update(@RequestBody FuserEntity fuser) {
         //ValidatorUtils.validateEntity(fuser);
@@ -93,7 +100,8 @@ public class FuserController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:fuser:delete")
     public R delete(@RequestBody Integer[] userIds) {
             fuserService.removeByIds(Arrays.asList(userIds));
@@ -109,6 +117,7 @@ public class FuserController {
      * @return
      */
     @PostMapping("freeze")
+    @ApiOperation(value = "冻结和解冻用户，针对于采购商", notes = "")
     //@RequiresPermissions("sys:shanghuliebiao:freeze")
     public R freeze(@RequestBody UserForm userForm) {
 
@@ -135,6 +144,7 @@ public class FuserController {
      * @return
      */
     @PostMapping("user_list")
+    @ApiOperation(value = "用户列表", notes = "")
     //@RequiresPermissions("sys:shanghuliebiao:list")
     public R getUserAccount(@RequestBody UserForm userForm){
         IPage page = new Page(userForm.getPage(),userForm.getSize());
@@ -177,6 +187,7 @@ public class FuserController {
      * @return
      */
     @PostMapping("wait_review_list")
+    @ApiOperation(value = "用户列表", notes = "")
     //@RequiresPermissions("sys:shanghushenhe:list")
     public R getWaitReviewUserAccount(@RequestBody UserForm userForm){
         Page page = new Page(userForm.getPage(),userForm.getSize());
@@ -213,6 +224,7 @@ public class FuserController {
      * @return
      */
     @PostMapping("wait_credit_list")
+    @ApiOperation(value = "用户列表", notes = "")
     //@RequiresPermissions("sys:shanghushouxin:list")
     public R getWaitCreditUserAccount(@RequestBody UserForm userForm){
         Page page = new Page(userForm.getPage(),userForm.getSize());
@@ -247,6 +259,7 @@ public class FuserController {
 
 
     @PostMapping("detail")
+    @ApiOperation(value = "详情", notes = "")
     //@RequiresPermissions(value = {"sys:shanghuliebiao:detail","sys:shanghushouxin:detail"},logical = Logical.OR)
     public R getUserAccountById(@Param("id")Integer id){
         return R.ok().put("result",fuserService.getUserAccountByUserId(id));
@@ -259,6 +272,7 @@ public class FuserController {
      * @return
      */
     @PostMapping("review")
+    @ApiOperation(value = "审核", notes = "")
     //@RequiresPermissions("sys:shanghushenhe:verify")
     public R riewUserById(@RequestBody UserForm userForm){
 
@@ -307,6 +321,7 @@ public class FuserController {
      * @return
      */
     @PostMapping("credit")
+    @ApiOperation(value = "审核", notes = "")
     //@RequiresPermissions("sys:shanghushouxin:credit")
     public R creditUserById(@RequestBody UserForm userForm){
 

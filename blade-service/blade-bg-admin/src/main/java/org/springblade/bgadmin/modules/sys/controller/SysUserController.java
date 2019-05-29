@@ -20,6 +20,8 @@ package org.springblade.bgadmin.modules.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.springblade.bgadmin.modules.sys.entity.*;
@@ -42,6 +44,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/sys/user")
+@Api(tags = "系统用户", description = " * @author jinzeze")
 public class SysUserController extends AbstractController {
 	@Autowired
 	private SysUserService sysUserService;
@@ -69,8 +72,9 @@ public class SysUserController extends AbstractController {
 	/**
 	 * 所有用户列表
 	 */
-	@RequestMapping("/list")
+	@PostMapping("/list")
 //	@RequiresPermissions("sys:user:list")
+	@ApiOperation(value = "所有用户列表", notes = "")
 	public R list(@RequestBody BaseForm baseForm){
 	//	PageUtils page = sysUserService.queryPage(params);
 
@@ -87,7 +91,8 @@ public class SysUserController extends AbstractController {
 	/**
 	 * 获取登录的用户信息
 	 */
-	@RequestMapping("/info")
+	@PostMapping("/info")
+	@ApiOperation(value = "获取登录的用户信息", notes = "")
 	public R info(){
 		return R.ok().put("user", getUser());
 	}
@@ -96,7 +101,8 @@ public class SysUserController extends AbstractController {
 	 * 修改登录用户密码
 	 */
 	//@SysLog("修改密码")
-	@RequestMapping("/password")
+	@PostMapping("/password")
+	@ApiOperation(value = "修改登录用户密码", notes = "")
 	public R password(String password, String newPassword){
 	//	Assert.isBlank(newPassword, "新密码不为能空");
 
@@ -117,7 +123,8 @@ public class SysUserController extends AbstractController {
 	/**
 	 * 用户信息
 	 */
-	@RequestMapping("/info/{userId}")
+	@PostMapping("/info/{userId}")
+	@ApiOperation(value = "用户信息", notes = "")
 	//@RequiresPermissions("sys:user:info")
 	public R info(@PathVariable("userId") Long userId){
 		SysUserEntity user = sysUserService.getById(userId);
@@ -133,7 +140,8 @@ public class SysUserController extends AbstractController {
 	 * 保存用户
 	 */
 //	@SysLog("保存用户")
-	@RequestMapping("/save")
+	@PostMapping("/save")
+	@ApiOperation(value = "保存用户", notes = "")
 	//@RequiresPermissions("sys:user:save")
 	public R save(@RequestBody SysUserEntity user){
 	//	ValidatorUtils.validateEntity(user, AddGroup.class);
@@ -147,7 +155,8 @@ public class SysUserController extends AbstractController {
 	 * 修改用户
 	 */
 //	@SysLog("修改用户")
-	@RequestMapping("/update")
+	@PostMapping("/update")
+	@ApiOperation(value = "修改用户", notes = "")
 	//@RequiresPermissions("sys:user:update")
 	public R update(@RequestBody SysUserEntity user){
 		//ValidatorUtils.validateEntity(user, UpdateGroup.class);
@@ -163,7 +172,8 @@ public class SysUserController extends AbstractController {
 	 * 删除用户
 	 */
 //	@SysLog("删除用户")
-	@RequestMapping("/delete")
+	@PostMapping("/delete")
+	@ApiOperation(value = "删除用户", notes = "")
 	//@RequiresPermissions("sys:user:delete")
 	public R delete(@RequestBody Long[] userIds){
 		if(ArrayUtils.contains(userIds, 1L)){
@@ -181,6 +191,7 @@ public class SysUserController extends AbstractController {
 
 
 	@PostMapping("statistics")
+	@ApiOperation(value = "统计", notes = "")
 	public R listIndexInfo(){
 
 		AuthorizationInfo authorizationInfo = shiroTag.getAllPermission();

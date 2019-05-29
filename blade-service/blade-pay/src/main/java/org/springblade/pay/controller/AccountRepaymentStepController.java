@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/accountRepaymentStep")
-@Api(value="分期还款详情表(AccountRepaymentStep)表服务实现类")
+@Api(tags="分期还款详情表(AccountRepaymentStep)表服务实现类")
 public class AccountRepaymentStepController {
     @Resource
     private AccountRepaymentStepService accountRepaymentStepService;

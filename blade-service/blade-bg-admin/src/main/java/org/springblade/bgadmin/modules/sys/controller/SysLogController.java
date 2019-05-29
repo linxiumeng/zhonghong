@@ -16,11 +16,14 @@
 
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.service.SysLogService;
 import org.springblade.common.utils.PageUtils;
 import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,6 +40,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/sys/log")
+@Api(tags = "系统日志", description = " * @author jinzeze")
 public class SysLogController {
 	@Autowired
 	private SysLogService sysLogService;
@@ -45,8 +49,9 @@ public class SysLogController {
 	 * 列表
 	 */
 	@ResponseBody
-	@RequestMapping("/list")
+	@PostMapping("/list")
 	//@RequiresPermissions("sys:log:list")
+	@ApiOperation(value = "列表", notes = "")
 	public R list(@RequestParam Map<String, Object> params){
 		PageUtils page = sysLogService.queryPage(params);
 

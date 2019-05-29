@@ -1,5 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.BankEntity;
 import org.springblade.bgadmin.modules.sys.service.BankService;
 import org.springblade.common.utils.PageUtils;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/bank")
+@Api(tags = "银行表", description = " * @author jinzeze")
 public class BankController {
     @Autowired
     private BankService bankService;
@@ -27,7 +30,8 @@ public class BankController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions("sys:bank:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = bankService.queryPage(params);
@@ -39,8 +43,9 @@ public class BankController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
     //@RequiresPermissions("sys:bank:info")
+    @ApiOperation(value = "信息", notes = "")
     public R info(@PathVariable("id") Integer id) {
             BankEntity bank = bankService.getById(id);
 
@@ -50,7 +55,8 @@ public class BankController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:bank:save")
     public R save(@RequestBody BankEntity bank) {
             bankService.save(bank);
@@ -61,7 +67,8 @@ public class BankController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:bank:update")
     public R update(@RequestBody BankEntity bank) {
        //ValidatorUtils.validateEntity(bank);
@@ -73,7 +80,8 @@ public class BankController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:bank:delete")
     public R delete(@RequestBody Integer[] ids) {
             bankService.removeByIds(Arrays.asList(ids));

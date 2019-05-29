@@ -17,6 +17,8 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.common.annotation.SysLog;
 import org.springblade.bgadmin.common.utils.Constant;
@@ -27,10 +29,7 @@ import org.springblade.bgadmin.modules.sys.service.SysRoleMenuService;
 import org.springblade.common.exception.RRException;
 import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,6 +42,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/sys/menu")
+@Api(tags = "系统菜单", description = " * @author jinzeze")
 public class SysMenuController extends AbstractController {
 	@Autowired
 	private SysMenuService sysMenuService;
@@ -53,7 +53,8 @@ public class SysMenuController extends AbstractController {
 	/**
 	 * 导航菜单
 	 */
-	@RequestMapping("/nav")
+	@PostMapping("/nav")
+	@ApiOperation(value = "导航菜单", notes = "")
 	public R nav(){
 		List<SysMenuEntity> menuList = sysMenuService.getUserMenuList(getUserId());
         return R.ok().put("menuList", menuList);
@@ -62,8 +63,9 @@ public class SysMenuController extends AbstractController {
 	/**
 	 * 所有菜单列表
 	 */
-	@RequestMapping("/list")
+	@PostMapping("/list")
 	//@RequiresPermissions("sys:menu:list")
+	@ApiOperation(value = "列表", notes = "")
 	public R list(@RequestBody SysMenuForm sysMenuForm){
 		List<SysMenuEntity> menuList = sysMenuService.list(new QueryWrapper<>());
 		for(SysMenuEntity sysMenuEntity : menuList){
@@ -85,7 +87,8 @@ public class SysMenuController extends AbstractController {
 	/**
 	 * 选择菜单(添加、修改菜单)
 	 */
-	@RequestMapping("/select")
+	@PostMapping("/select")
+	@ApiOperation(value = "列表", notes = "")
 	//@RequiresPermissions("sys:menu:select")
 	public R select(){
 		//查询列表数据
@@ -105,8 +108,9 @@ public class SysMenuController extends AbstractController {
 	/**
 	 * 菜单信息
 	 */
-	@RequestMapping("/info/{menuId}")
+	@PostMapping("/info/{menuId}")
 	//@RequiresPermissions("sys:menu:info")
+	@ApiOperation(value = "菜单信息", notes = "")
 	public R info(@PathVariable("menuId") Long menuId){
 		SysMenuEntity menu = sysMenuService.getById(menuId);
 		return R.ok().put("menu", menu);
@@ -116,7 +120,8 @@ public class SysMenuController extends AbstractController {
 	 * 保存
 	 */
 	@SysLog("保存菜单")
-	@RequestMapping("/save")
+	@PostMapping("/save")
+	@ApiOperation(value = "保存菜单", notes = "")
 	//@RequiresPermissions("sys:menu:save")
 	public R save(@RequestBody SysMenuEntity menu){
 		//数据校验
@@ -131,7 +136,8 @@ public class SysMenuController extends AbstractController {
 	 * 修改
 	 */
 	@SysLog("修改菜单")
-	@RequestMapping("/update")
+	@PostMapping("/update")
+	@ApiOperation(value = "修改菜单", notes = "")
 	//@RequiresPermissions("sys:menu:update")
 	public R update(@RequestBody SysMenuEntity menu){
 		//数据校验
@@ -146,7 +152,8 @@ public class SysMenuController extends AbstractController {
 	 * 删除
 	 */
 	@SysLog("删除菜单")
-	@RequestMapping("/delete")
+	@PostMapping("/delete")
+	@ApiOperation(value = "删除菜单", notes = "")
 	//@RequiresPermissions("sys:menu:delete")
 	public R delete(long menuId){
 		if(menuId <= 31){

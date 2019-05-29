@@ -16,6 +16,8 @@
 
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.SysDictEntity;
 import org.springblade.bgadmin.modules.sys.service.SysDictService;
 import org.springblade.common.utils.PageUtils;
@@ -34,6 +36,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/dict")
+@Api(tags = "数据字典", description = " * @author jinzeze")
 public class SysDictController {
     @Autowired
     private SysDictService sysDictService;
@@ -41,8 +44,9 @@ public class SysDictController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
    // @RequiresPermissions("sys:dict:list")
+    @ApiOperation(value = "列表", notes = "")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = sysDictService.queryPage(params);
 
@@ -53,7 +57,8 @@ public class SysDictController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:dict:info")
     public R info(@PathVariable("id") Long id){
         SysDictEntity dict = sysDictService.getById(id);
@@ -64,7 +69,8 @@ public class SysDictController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
    // @RequiresPermissions("sys:dict:save")
     public R save(@RequestBody SysDictEntity dict){
         //校验类型
@@ -78,7 +84,8 @@ public class SysDictController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
    // @RequiresPermissions("sys:dict:update")
     public R update(@RequestBody SysDictEntity dict){
         //校验类型
@@ -92,7 +99,8 @@ public class SysDictController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
    // @RequiresPermissions("sys:dict:delete")
     public R delete(@RequestBody Long[] ids){
         sysDictService.removeByIds(Arrays.asList(ids));

@@ -3,12 +3,15 @@ package org.springblade.bgadmin.modules.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.modules.sys.form.AccountRepaymentDetailLogForm;
 import org.springblade.bgadmin.modules.sys.service.AccountRepaymentDetailLogService;
 import org.springblade.common.entity.AccountRepayment;
 import org.springblade.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("sys/accountrepaymentdetaillog")
+@Api(tags = "余额详情表", description = " * @author jinzeze")
 public class AccountRepaymentDetailLogController {
     @Autowired
     private AccountRepaymentDetailLogService accountRepaymentDetailLogService;
@@ -30,8 +34,9 @@ public class AccountRepaymentDetailLogController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
    // @RequiresPermissions("sys:accountrepayment:list")
+    @ApiOperation(value = "列表", notes = "")
     public R list(@RequestBody AccountRepaymentDetailLogForm accountRepaymentDetailLogForm) {
 
         IPage page = new Page(accountRepaymentDetailLogForm.getPage(),accountRepaymentDetailLogForm.getSize());

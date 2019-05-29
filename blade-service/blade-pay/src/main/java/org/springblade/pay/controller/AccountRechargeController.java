@@ -22,7 +22,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/api/accountRecharge")
-@Api(value="充值记录表(TbAccountRecharge)表服务实现类")
+@Api(tags="充值记录表(TbAccountRecharge)表服务实现类")
 public class AccountRechargeController {
     @Resource
     private AccountRechargeService accountRechargeService;

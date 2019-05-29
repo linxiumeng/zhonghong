@@ -1,5 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.QuotationEntity;
 import org.springblade.bgadmin.modules.sys.service.QuotationService;
 import org.springblade.common.utils.PageUtils;
@@ -21,6 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/quotation")
+@Api(tags = "报价单表", description = " * @author jinzeze")
 public class QuotationController {
     @Autowired
     private QuotationService quotationService;
@@ -28,7 +31,8 @@ public class QuotationController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions("sys:quotation:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = quotationService.queryPage(params);
@@ -40,7 +44,8 @@ public class QuotationController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
    // @RequiresPermissions("sys:quotation:info")
     public R info(@PathVariable("id") Integer id) {
             QuotationEntity quotation = quotationService.getById(id);
@@ -51,7 +56,8 @@ public class QuotationController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:quotation:save")
     public R save(@RequestBody QuotationEntity quotation) {
             quotationService.save(quotation);
@@ -62,7 +68,8 @@ public class QuotationController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:quotation:update")
     public R update(@RequestBody QuotationEntity quotation) {
         //ValidatorUtils.validateEntity(quotation);
@@ -74,7 +81,8 @@ public class QuotationController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:quotation:delete")
     public R delete(@RequestBody Integer[] ids) {
             quotationService.removeByIds(Arrays.asList(ids));

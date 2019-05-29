@@ -29,12 +29,12 @@ public class CreditForm extends Credit {
     /**
      * 最高授信额度
      */
-    @ApiModelProperty(value = "最高授信额度",example = "A")
+    @ApiModelProperty(value = "最高授信额度",example = "12.36")
     private BigDecimal creditHigh;
     /**
      * 单笔授信额度
      */
-    @ApiModelProperty(value = "单笔授信额度",example = "A")
+    @ApiModelProperty(value = "单笔授信额度",example = "23.32")
     private BigDecimal creditUnit;
 
 

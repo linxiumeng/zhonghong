@@ -1,5 +1,7 @@
 package org.springblade.bgadmin.modules.sys.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.bgadmin.modules.sys.entity.CreditEntity;
 import org.springblade.bgadmin.modules.sys.service.CreditService;
 import org.springblade.common.utils.PageUtils;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sys/credit")
+@Api(tags = "授信表", description = " * @author jinzeze")
 public class CreditController {
     @Autowired
     private CreditService creditService;
@@ -27,7 +30,8 @@ public class CreditController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
     //@RequiresPermissions("sys:credit:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = creditService.queryPage(params);
@@ -39,7 +43,8 @@ public class CreditController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:credit:info")
     public R info(@PathVariable("id") Integer id) {
             CreditEntity credit = creditService.getById(id);
@@ -50,7 +55,8 @@ public class CreditController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:credit:save")
     public R save(@RequestBody CreditEntity credit) {
             creditService.save(credit);
@@ -61,7 +67,8 @@ public class CreditController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:credit:update")
     public R update(@RequestBody CreditEntity credit) {
         //ValidatorUtils.validateEntity(credit);
@@ -73,7 +80,8 @@ public class CreditController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:credit:delete")
     public R delete(@RequestBody Integer[] ids) {
             creditService.removeByIds(Arrays.asList(ids));

@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
@@ -43,6 +45,9 @@ public class ChatMessageController {
     @Login
     @PostMapping("list")
     @ApiOperation(value = "消息列表", notes = "" )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R listChatMessage(@RequestBody ChatMessageForm param,@LoginUser UserEntity userEntity){
 
         IPage<ChatMessage> chatMessagePage = new Page<>(1,param.getSize());
@@ -103,6 +108,9 @@ public class ChatMessageController {
     @Login
     @PostMapping("conversations")
     @ApiOperation(value = "列出当前人的会话列表", notes = "" )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R listSessions(@LoginUser UserEntity user){
         QueryWrapper<ChatSession> wrapper = new QueryWrapper<>();
         wrapper.eq("`to`",user.getUserId()).orderBy(true,false,"`status`").orderBy(true,false,"update_date");
@@ -120,6 +128,9 @@ public class ChatMessageController {
     @Login
     @PostMapping("unread")
     @ApiOperation(value = "未读条数", notes = "" )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R countUnread(@LoginUser UserEntity user){
         QueryWrapper<ChatSession> wrapper = new QueryWrapper<>();
         wrapper.eq("`to`",user.getUserId()).eq("`read`",false);

@@ -2,6 +2,8 @@ package org.springblade.information.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.common.annotation.HasPermission;
 import org.springblade.common.annotation.Login;
@@ -60,6 +62,9 @@ public class GoodsController {
     @PostMapping("selectone")
     @Login
     @HasPermission(needVerifyUser = true)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R selectOne(@RequestParam String id) {
         Goods row = this.goodsService.getGoodsFromCache(Long.valueOf(id));
         UserEntity userEntity = null;
@@ -90,6 +95,9 @@ public class GoodsController {
     @PostMapping("selectStatus")
     @Login
     @HasPermission(needVerifyCredit = true)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R selectStatus(@RequestBody @Validated(SelectDetailGroup.class) Goods param) {
         QueryWrapper<Goods> wrapper = new QueryWrapper<>();
         wrapper.eq("id", param.getId());
@@ -111,6 +119,9 @@ public class GoodsController {
     @PostMapping("insert")
     @Login
     @HasPermission(needVerifyUser = true)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R insert(@RequestBody @Validated(InsertGroup.class) GoodsCheckCodeForm param, @LoginUser UserEntity user) {
 
         //修改校验方式 ， 避免重复代码
@@ -141,6 +152,9 @@ public class GoodsController {
     @PostMapping("update")
     @Login
     @HasPermission(needVerifyUser = true)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R update(@RequestBody @Validated(UpdateGroup.class) GoodsCheckCodeForm param, @LoginUser UserEntity user) {
 
         if (!smsCheckUtils.check(user.getMobile(), param.getCode())) {
@@ -155,6 +169,9 @@ public class GoodsController {
     @PostMapping("changestatus")
     @Login
     @HasPermission(needVerifyUser = true)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R up(@RequestBody GoodsStatusForm param, @LoginUser UserEntity user) {
 
         if (!smsCheckUtils.check(user.getMobile(), String.valueOf(param.getCode()))) {
@@ -167,6 +184,9 @@ public class GoodsController {
     @PostMapping("provider_goods_page")
     @Login
     @HasPermission(needVerifyUser = true)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     public R selectPage(@RequestBody PageForm pageForm, @LoginUser UserEntity userEntity) {
         return R.ok().put("row", goodsService.listGoodsByUserId(pageForm, userEntity.getUserId()));
     }

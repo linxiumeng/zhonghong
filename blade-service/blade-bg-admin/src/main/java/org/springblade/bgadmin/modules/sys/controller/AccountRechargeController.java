@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springblade.bgadmin.modules.sys.entity.AccountEntity;
 import org.springblade.bgadmin.modules.sys.entity.AccountRechargeEntity;
@@ -27,6 +29,7 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("sys/accountrecharge")
+@Api(tags = "充值记录表", description = " * @author jinzeze")
 public class AccountRechargeController {
     @Autowired
     private AccountRechargeService accountRechargeService;
@@ -37,7 +40,8 @@ public class AccountRechargeController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
+    @ApiOperation(value = "列表", notes = "")
   //  @RequiresPermissions("sys:accountrecharge:list")
     public R list(@RequestBody AccountRechargeForm accountRechargeForm) {
         IPage page = new Page(accountRechargeForm.getPage(),accountRechargeForm.getSize());
@@ -67,7 +71,8 @@ public class AccountRechargeController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @PostMapping("/info/{id}")
+    @ApiOperation(value = "信息", notes = "")
     //@RequiresPermissions("sys:accountrecharge:info")
     public R info(@PathVariable("id") Integer id) {
             AccountRechargeEntity accountRecharge = accountRechargeService.getById(id);
@@ -78,7 +83,8 @@ public class AccountRechargeController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
+    @ApiOperation(value = "保存", notes = "")
     //@RequiresPermissions("sys:accountrecharge:save")
     public R save(@RequestBody AccountRechargeEntity accountRecharge) {
             accountRechargeService.save(accountRecharge);
@@ -89,7 +95,8 @@ public class AccountRechargeController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改", notes = "")
     //@RequiresPermissions("sys:accountrecharge:update")
     public R update(@RequestBody AccountRechargeEntity accountRecharge) {
         //ValidatorUtils.validateEntity(accountRecharge);
@@ -101,7 +108,8 @@ public class AccountRechargeController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "")
     //@RequiresPermissions("sys:accountrecharge:delete")
     public R delete(@RequestBody Integer[] ids) {
         accountRechargeService.removeByIds(Arrays.asList(ids));
@@ -111,6 +119,7 @@ public class AccountRechargeController {
 
 
     @PostMapping("review")
+    @ApiOperation(value = "检验", notes = "")
     public R reviewRecharge(@RequestBody AccountRechargeForm accountRechargeForm){
 
         if(accountRechargeForm.getStatus() == null || accountRechargeForm.getId() == null){

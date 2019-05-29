@@ -2,6 +2,8 @@ package org.springblade.pay.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
@@ -51,6 +53,10 @@ public class AccountRepaymentController {
     @PostMapping("getRepaymentbyorder")
     @ApiOperation("根据订单id查询分期")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string"),
+            @ApiImplicitParam(name = "id", value = "订单id", paramType = "header", dataType = "integer")
+    })
     public R recharge(@RequestBody AccountRepayment param, @LoginUser UserEntity user) {
      //   PurchaseOrders order = purchaseOrdersService.getPurchaseOrdersDetail(param.getOrderId().longValue()).getData();
 
@@ -90,6 +96,9 @@ public class AccountRepaymentController {
     @PostMapping("payRepayment")
     @ApiOperation("还款每期")
     @Login
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
+    })
     @Transactional(rollbackFor = Exception.class)
     public R payRepayment(@RequestBody AccountRepaymentStep param, @LoginUser UserEntity user) {
 

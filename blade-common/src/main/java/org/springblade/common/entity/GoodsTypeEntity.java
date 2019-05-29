@@ -2,6 +2,7 @@ package org.springblade.common.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -35,6 +36,7 @@ public class GoodsTypeEntity implements Serializable {
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间",name="createDate",example = "2019-12-01 12:23")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date createDate;
 
     /**
@@ -47,6 +49,7 @@ public class GoodsTypeEntity implements Serializable {
      * 修改时间
      */
     @ApiModelProperty(value = "修改时间",name="updateDate",example = "2019-12-01 12:23")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date updateDate;
 
 

@@ -24,11 +24,13 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/AccountWithdraw")
+@Api(tags="余额详情表(AccountRepaymentStep)表服务实现类")
 public class AccountWithdrawController {
     @Resource
     private AccountWithdrawService accountWithdrawService;
 
     @PostMapping("createAccountWithdraw")
+    @ApiOperation(value = "账户提现")
     public R save(@RequestBody AccountWithdraw accountWithdraw){
         accountWithdrawService.save(accountWithdraw);
         R r = R.status(true);
