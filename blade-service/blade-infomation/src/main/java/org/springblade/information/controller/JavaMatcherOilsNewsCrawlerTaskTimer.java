@@ -42,7 +42,7 @@ public class JavaMatcherOilsNewsCrawlerTaskTimer {
      * 每个五秒钟执行一次 @Scheduled(cron = "0/5 * * * * *")  0 20 10 * * ?
      * 每天10点触发@Scheduled(cron = "0 0 10 * * *")
      */
-    @Scheduled(cron = "0 0 0/1 * * *")
+    @Scheduled(cron = "0 0/20 * * * *")
     public void scheduled() {
         saveBatchHotNews(getHotNews(getHotNewsUrl()));
         saveBatchPriceNews(getPriceNews(getPriceNewsUrl()));
@@ -259,7 +259,7 @@ public class JavaMatcherOilsNewsCrawlerTaskTimer {
                 news.setEditor("中国石油网");
                 news.setOrigin("中国石油网");
                 news.setCreateDate(publishDate);
-                news.setType(NewsTypeEnum.PRICE.ordinal());
+                news.setType(NewsTypeEnum.REPORT.ordinal());
                 detailList.add(news);
 
             }
@@ -365,7 +365,7 @@ public class JavaMatcherOilsNewsCrawlerTaskTimer {
                     news.setEditor("中国石油网");
                     news.setOrigin(origin);
                     news.setCreateDate(publishDate);
-                    news.setType(NewsTypeEnum.REPORT.ordinal());
+                    news.setType(NewsTypeEnum.PRICE.ordinal());
                     detailList.add(news);
 
                 }
