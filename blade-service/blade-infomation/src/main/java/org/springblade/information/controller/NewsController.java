@@ -7,6 +7,7 @@ import org.springblade.common.annotation.Login;
 import org.springblade.common.annotation.LoginUser;
 import org.springblade.common.entity.News;
 import org.springblade.common.entity.UserEntity;
+import org.springblade.common.enums.NewsTypeEnum;
 import org.springblade.common.form.PageForm;
 import org.springblade.common.utils.R;
 import org.springblade.information.service.NewsService;
@@ -59,9 +60,8 @@ public class NewsController {
 
         //缓存批量获取返回
       //  Page<News> newsPage = newsService.selectPageFromCache(page);
-        Page<News> newsPage = newsService.selectPageNoCache(page);
+        Page<News> newsPage = newsService.selectPageNoCache(page, pageForm.getType());
         return R.ok().put("result", newsPage);
     }
-
 
 }

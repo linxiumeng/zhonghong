@@ -3,6 +3,7 @@ package org.springblade.information.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.common.entity.News;
+import org.springblade.common.enums.NewsTypeEnum;
 
 import java.util.Date;
 
@@ -46,7 +47,7 @@ public interface NewsService extends IService<News> {
      * @param page
      * @return
      */
-    Page<News> selectPageNoCache(Page page);
+    Page<News> selectPageNoCache(Page page, Integer type);
 
 
 }

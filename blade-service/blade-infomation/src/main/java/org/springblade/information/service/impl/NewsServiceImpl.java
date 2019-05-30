@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import org.springblade.common.entity.News;
+import org.springblade.common.enums.NewsTypeEnum;
 import org.springblade.common.utils.RedisUtils;
 import org.springblade.common.utils.SpringContextUtils;
 import org.springblade.information.mapper.NewsDao;
@@ -99,9 +100,12 @@ public class NewsServiceImpl extends ServiceImpl<NewsDao, News> implements NewsS
     }
 
     @Override
-    public Page<News> selectPageNoCache(Page page) {
+    public Page<News> selectPageNoCache(Page page, Integer type) {
         QueryWrapper<News> entityWrapper = new QueryWrapper<>();
         entityWrapper.le("create_date", new Date());
+        if(type != null){
+            entityWrapper.eq("`type`",type);
+        }
         //设置倒叙
         entityWrapper.orderBy(true, false, "create_date");
 
