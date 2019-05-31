@@ -301,7 +301,7 @@ public class SinaOilCrawlerTaskTimer {
      */
     public FinancePrice generateForeignFinancePriceByResponse(String response, FinancePriceType financePriceType) {
 
-        String minStr = "";
+        /*String minStr = "";
 
         if(financePriceType == FinancePriceType.HF_OIL){
             minStr = "08:00:00";
@@ -314,7 +314,7 @@ public class SinaOilCrawlerTaskTimer {
         Date openPriceDate = DateUtils.stringToDate(DateUtils.format(currentDateTime,DATE_PATTERN)+" "+minStr,DATE_TIME_PATTERN);
         if(openPriceDate != null && currentDateTime.before(openPriceDate)){
             return null;
-        }
+        }*/
 
         FinancePrice financePrice = null;
         int commaPosition = 0;
