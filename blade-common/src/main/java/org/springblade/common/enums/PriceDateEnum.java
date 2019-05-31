@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @author hanbin
  */
 public enum PriceDateEnum implements IEnum<Integer> {
-    DAY(0,"天"),WEEK(1,"周"),MONTH(2,"月"),YEAR(3,"年");
+    DAY(0,"天"),WEEK(1,"周"),MONTH(2,"月"),YEAR(3,"年"),MINUTE(4,"分钟"),HOUR(5,"小时");
 
     private String desc;//中文描述
     private int status;//中文描述

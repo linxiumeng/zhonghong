@@ -1,0 +1,109 @@
+version: '3'
+services:
+  nacos:
+    image: nacos/nacos-server:latest
+    hostname: "nacos-standalone"
+    environment:
+      - MODE=standalone
+    ports:
+      - 8848:8848
+    networks:
+      blade_net:
+        ipv4_address: 172.30.0.48
+
+  blade-redis:
+    image: redis:5.0.2-alpine
+    hostname: "blade-redis"
+    ports:
+      - 3379:6379
+    command: "redis-server --appendonly yes"
+    privileged: true
+    #restart: always
+    networks:
+      blade_net:
+        ipv4_address: 172.30.0.5
+
+  blade-bg-admin:
+    image: "docker-registry.verasti.com/blade/blade-bg-admin:2.2.1"
+    ports:
+      - 8200:8200
+    privileged: true
+    #restart: always
+    networks:
+      blade_net:
+        ipv4_address: 172.30.0.80
+
+  blade-foreward-user:
+    image: "docker-registry.verasti.com/blade/blade-foreward-user:2.2.1"
+    privileged: true
+    #restart: always
+    networks:
+      blade_net:
+        ipv4_address: 172.30.0.81
+
+  blade-information:
+    image: "docker-registry.verasti.com/blade/blade-information:2.2.1"
+    privileged: true
+    #restart: always
+    networks:
+      blade_net:
+        ipv4_address: 172.30.0.82
+
+  blade-order:
+    image: "docker-registry.verasti.com/blade/blade-order:2.2.1"
+    privileged: true
+    #restart: always
+    networks:
+      blade_net:
+        ipv4_address: 172.30.0.83
+
+  blade-pay:
+    image: "docker-registry.verasti.com/blade/blade-pay:2.2.1"
+    privileged: true
+    #restart: always
+    networks:
+      blade_net:
+        ipv4_address: 172.30.0.84
+
+  blade-log:
+    image: "docker-registry.verasti.com/blade/blade-bg-admin:2.2.1"
+    privileged: true
+    #restart: always
+    networks:
+      - blade_net
+
+  blade-gateway:
+    image: "docker-registry.verasti.com/blade/blade-gateway:2.2.1"
+    privileged: true
+    #restart: always
+    networks:
+      blade_net:
+        ipv4_address: 172.30.0.85
+
+  zhonghong-forward-web:
+    image: "docker-registry.verasti.com/blade-web/zhonghong-forward-web:latest"
+    privileged: true
+    #restart: always
+    ports:
+      - 8099:8099
+    networks:
+      blade_net:
+        ipv4_address: 172.30.0.86
+
+  zhonghong-background-web:
+    image: "docker-registry.verasti.com/blade-web/zhonghong-background-web:latest"
+    privileged: true
+    #restart: always
+    ports:
+      - 8098:8098
+    networks:
+      blade_net:
+        ipv4_address: 172.30.0.87
+
+
+networks:
+  blade_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
