@@ -6,11 +6,16 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import org.springblade.common.entity.FinancePrice;
 
+import org.springblade.common.enums.PriceDateEnum;
+import org.springblade.common.form.FinanceDailyPriceForm;
 import org.springblade.information.mapper.FinancePriceDao;
 import org.springblade.information.service.FinancePriceService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -62,9 +67,21 @@ public class FinancePriceServiceImpl extends ServiceImpl<FinancePriceDao, Financ
         baseMapper.replaceOrInsert(financePrice);
     }
 
-    @Override
+    /*@Override
     public List<FinancePrice> groupFinancePriceCreateHour(FinancePrice financePrice) {
         return financePriceDao.groupFinancePriceCreateHour(financePrice);
+    }*/
+    @Override
+    public List<FinancePrice> listFinancePriceDayandWeek(FinanceDailyPriceForm financeDailyPriceForm){
+        PriceDateEnum type = financeDailyPriceForm.getType();
+       if(type.getValue() == 1){
+         return financePriceDao.listDayMinute(financeDailyPriceForm);
+       }
+       else{
+           return financePriceDao.listWeekHour(financeDailyPriceForm);
+       }
     }
+
+
 }
 

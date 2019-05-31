@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springblade.common.entity.FinancePrice;
+import org.springblade.common.form.FinanceDailyPriceForm;
 
 import java.util.List;
 
@@ -42,7 +43,23 @@ public interface FinancePriceDao extends BaseMapper<FinancePrice> {
      *
      * @return
      */
-    @Select("select * from tb_finance_price where `code` = #{code} and create_time in (select min(create_time) from tb_finance_price where `code` = #{code} group by DATE_FORMAT(create_time,'%Y%m%d%H')) and create_time > CURDATE()")
-    List<FinancePrice> groupFinancePriceCreateHour(FinancePrice financePrice);
+    /*@Select("select * from tb_finance_price where `code` = #{code} and create_time in (select min(create_time) from tb_finance_price where `code` = #{code} group by DATE_FORMAT(create_time,'%Y%m%d%H')) and create_time > CURDATE()")
+    List<FinancePrice> groupFinancePriceCreateHour(FinancePrice financePrice);*/
+
+    /**
+     * 获取当前24小时的数据 每条数据间隔5min
+     * @param
+     * @return
+     */
+    @Select("select * from tb_finance_price where create_time >(NOW() - interval 24 hour) and DATE_FORMAT(create_time,'%i')%5 = 0 and `code` = #{code}")
+    List<FinancePrice> listDayMinute(FinanceDailyPriceForm  financeDailyPriceForm);
+
+    /**
+     * 获取当前前一周的数据 每条数据间隔1hour
+     * @param
+     * @return
+     */
+    @Select("select * from tb_finance_price where date_sub(curdate(), INTERVAL 7 DAY) <= date(`create_time`) and DATE_FORMAT(create_time,'%H')%1 = 0 and `code` = #{code}")
+    List<FinancePrice> listWeekHour(FinanceDailyPriceForm  financeDailyPriceForm);
 
 }

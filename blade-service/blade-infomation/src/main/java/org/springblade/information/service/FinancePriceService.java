@@ -1,7 +1,9 @@
 package org.springblade.information.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Select;
 import org.springblade.common.entity.FinancePrice;
+import org.springblade.common.form.FinanceDailyPriceForm;
 import org.springblade.common.form.FinancePriceForm;
 import org.springblade.common.utils.PageUtils;
 
@@ -34,5 +36,12 @@ public interface FinancePriceService extends IService<FinancePrice> {
      *
      * @return
      */
-    List<FinancePrice> groupFinancePriceCreateHour(FinancePrice financePrice);
+   /* List<FinancePrice> groupFinancePriceCreateHour(FinancePrice financePrice);*/
+    /**
+     * 获取当前24小时和当前一周的数据 每条数据间隔5min
+     * @param financeDailyPriceForm
+     * @return
+     */
+    List<FinancePrice> listFinancePriceDayandWeek(FinanceDailyPriceForm financeDailyPriceForm);
+
 }

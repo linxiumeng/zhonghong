@@ -30,7 +30,7 @@ public class FinancePrice {
     /**
      * 创建时间 使用createTime 利用long类型便于排序
      */
-    @JsonFormat(pattern = "HH", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     Date createTime;
 
     /**

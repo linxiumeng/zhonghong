@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.common.entity.FinancePrice;
+import org.springblade.common.form.FinanceDailyPriceForm;
 import org.springblade.common.form.FinancePriceForm;
 import org.springblade.common.utils.R;
 import org.springblade.information.service.FinancePriceService;
@@ -62,10 +63,17 @@ public class FinancePriceController {
      *
      * @return
      */
-    @PostMapping("groupFinancePriceCreateHour")
+   /* @PostMapping("groupFinancePriceCreateHour")
     @ApiOperation(value="根据Hour查询分时数据")
     public R groupFinancePriceCreateHour(@RequestBody FinancePrice financePrice){
         List<FinancePrice> price = financePriceService.groupFinancePriceCreateHour(financePrice);
         return R.ok().put("result",price);
-    }
+    }*/
+   @PostMapping("listFinancePriceDayAndWeek")
+    @ApiOperation(value="查询当前24小时和当前一周的数据")
+    public R listFinancePriceDayAndWeek(@RequestBody FinanceDailyPriceForm FinanceDailyPriceForm){
+       List<FinancePrice> prices = financePriceService.listFinancePriceDayandWeek(FinanceDailyPriceForm);
+       return R.ok().put("result",prices);
+
+   }
 }
