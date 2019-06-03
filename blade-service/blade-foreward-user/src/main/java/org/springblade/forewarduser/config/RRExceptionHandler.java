@@ -57,7 +57,7 @@ public class RRExceptionHandler extends BladeRestExceptionTranslator {
 
     @ExceptionHandler(Exception.class)
     public R handleException(Exception e) {
-        logger.error(e.getMessage(), e);
+        logger.error("服务器出现异常，请联系管理员", e);
         return R.error();
     }
 }

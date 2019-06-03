@@ -27,12 +27,12 @@ echo "`zip -r jar4.zip jar4/*`" &&
 
 
 ## 现将自己公钥拷贝到服务器的authorized_keys实现免密码登陆 只有免密码登陆才能用scp命令
-echo "`scp -i ~/.ssh/id_rsa jar4.zip root@10.71.0.87:~`" &&
+echo "`scp -i ~/.ssh/id_rsa jar4.zip root@47.111.12.2:~`" &&
 
-echo "`scp -i ~/.ssh/id_rsa deploy-server.sh root@10.71.0.87:~`" &&
+echo "`scp -i ~/.ssh/id_rsa deploy-server.sh root@47.111.12.2:~`" &&
 
 ## 进入服务器 进行部署操作
-ssh root@10.71.0.87  "
+ssh root@47.111.12.2  "
 
 #echo `rm -rf jar4/` &&
 

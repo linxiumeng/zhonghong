@@ -59,6 +59,6 @@ public class RRExceptionHandler extends BladeRestExceptionTranslator {
     public R handleException(Exception e) {
         logger.error(e.getMessage(), e);
         e.printStackTrace();
-        return R.error(e.getMessage());
+        return R.error();
     }
 }
