@@ -1,6 +1,7 @@
 package org.springblade.bgadmin.common.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springblade.core.tool.jackson.AbstractReadWriteJackson2HttpMessageConverter;
 import org.springframework.http.MediaType;
@@ -8,6 +9,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.lang.Nullable;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 
 /**
@@ -67,6 +69,9 @@ public class OverrideMappingApiJackson2HttpMessageConverter extends AbstractRead
    //     writeObjectMapper.setSerializerFactory(writeObjectMapper.getSerializerFactory().withSerializerModifier(new BladeBeanSerializerModifier()));
         writeObjectMapper.setSerializerFactory(writeObjectMapper.getSerializerFactory());
   //      writeObjectMapper.getSerializerProvider().setNullValueSerializer(BladeBeanSerializerModifier.NullJsonSerializers.STRING_JSON_SERIALIZER);
+
+        writeObjectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+
         return writeObjectMapper;
     }
 
