@@ -71,7 +71,7 @@ public class PurchaseOrdersController {
 
         wrapper.in("status",purchaseOrderForm.getOrderStatusArr());
 
-        CheckBGListUtils.check(wrapper,purchaseOrderForm,"creat_time","buyer_company","provider_company");
+        CheckBGListUtils.check(wrapper,purchaseOrderForm,"update_time","buyer_company","provider_company");
 
         return R.ok().put("page", purchaseOrdersService.listOrderWithRepayment(page,wrapper));
     }
