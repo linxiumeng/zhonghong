@@ -117,6 +117,7 @@ public class AccountRepaymentController {
         if(afterCaoZuo.signum() == -1){
             return R.error("还款失败，账户余额不足");
         }
+        afterCaoZuo = afterCaoZuo.setScale(2);
         account.setAccount(afterCaoZuo);
         accountRepaymentStep.setStatus(1);
         accountService.updateAccountById(account);

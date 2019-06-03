@@ -133,6 +133,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         Map<String, Object> map = this.login(form1);
         Account account = new Account();
         BigDecimal bd = new BigDecimal("0.0");
+        bd = bd.setScale(2);
         account.setAccount(bd);
         account.setUserId(((Long) map.get("userId")));
         account.setCashFund(bd);

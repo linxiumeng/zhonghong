@@ -137,7 +137,9 @@ public class AccountController {
             canUseAccount = canUseAccount.subtract(amount);
             if(finalFreezeAmount != null && canUseAccount != null) {
                 finalFreezeAmount = finalFreezeAmount.add(amount);
+                finalFreezeAmount = finalFreezeAmount.setScale(2);
                 account.setFreezeAmount(finalFreezeAmount);
+                canUseAccount = canUseAccount.setScale(2);
                 account.setAccount(canUseAccount);
                 accountService.updateById(account);
             }

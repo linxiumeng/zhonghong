@@ -63,13 +63,14 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
         }
 
         AccountDetail ad = new AccountDetail();
-        ad.setTotal(account.getTotal());
+        ad.setTotal(account.getTotal().setScale(2));
         ad.setAccount(bd);
         ad.setUserId(user.getUserId());
         accountDetailService.save(ad);
 
-        account.setFreezeAmount(account.getFreezeAmount().add(bd));
-        account.setAccount(account.getAccount().subtract(bd));
+        account.setFreezeAmount(account.getFreezeAmount().add(bd).setScale(2));
+        BigDecimal b = account.getAccount().subtract(bd).setScale(2);
+        account.setAccount(b);
         updateById(account);
 
 
@@ -91,22 +92,24 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
 
         double d = Math.min(account.getCreditLimit().doubleValue(), account.getCreditUnit().doubleValue());
 
-        d = Math.min(d, bigDecimalFinalQuotation.doubleValue());
+        double e = Math.min(account.getCreditHigh().doubleValue(), bigDecimalFinalQuotation.doubleValue());
 
-        if(new BigDecimal(d).subtract(param1.getFinancing()).signum() < 0){
+        double f = Math.min(d,e);
+
+        if(new BigDecimal(f).subtract(param1.getFinancing()).signum() < 0){
             throw new RRException("额度不足");
         }
 
         AccountRepayment ar = new AccountRepayment();
         ar.setUserId(user.getUserId());
         ar.setOrderId(param.getId());
-        ar.setTotalAmount(param1.getFinancing());
-        ar.setWaitAmount(param1.getFinancing());
+        ar.setTotalAmount(param1.getFinancing().setScale(2));
+        ar.setWaitAmount(param1.getFinancing().setScale(2));
         ar.setPaidAmount(new BigDecimal(0.0));
         ar.setCurrentPeriod(1);
         BigDecimal totalInterest = param1.getFinancing().multiply(new BigDecimal(0.1));
-        ar.setTotalInterest(totalInterest);
-        ar.setWaitAmount(totalInterest);
+        ar.setTotalInterest(totalInterest.setScale(2));
+        ar.setWaitAmount(totalInterest.setScale(2));
         ar.setPaidInterest(new BigDecimal(0.0));
         ar.setPeriods(param1.getStages());
         ar.setRecentRepaymentDate(new Date());
@@ -128,7 +131,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
         for (int i = 1; i <= param1.getStages(); i++) {
             AccountRepaymentStep accountRepaymentStep = new AccountRepaymentStep();
             accountRepaymentStep.setRepaymentId(ar.getId());
-            accountRepaymentStep.setAccount(divide);
+            accountRepaymentStep.setAccount(divide.setScale(2));
             accountRepaymentStep.setInterest(divide1);
             accountRepaymentStep.setPreiod(i);
             accountRepaymentStep.setPreiodDate(cal.getTime());
