@@ -1,12 +1,17 @@
 package org.springblade.bgadmin.common.config;
 
+import org.springblade.bgadmin.common.jackson.OverrideMappingApiJackson2HttpMessageConverter;
+import org.springblade.core.tool.utils.Charsets;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.*;
+import org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * WebMvc配置
@@ -62,5 +67,15 @@ public class WebConfig implements WebMvcConfigurer {
 //        jackson2HttpMessageConverter.setObjectMapper(objectMapper);
 //        converters.add(0, jackson2HttpMessageConverter);
 //    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.removeIf(x -> x instanceof StringHttpMessageConverter || x instanceof AbstractJackson2HttpMessageConverter);
+        converters.add(new StringHttpMessageConverter(Charsets.UTF_8));
+        converters.add(new ByteArrayHttpMessageConverter());
+        converters.add(new ResourceHttpMessageConverter());
+        converters.add(new ResourceRegionHttpMessageConverter());
+        converters.add(new OverrideMappingApiJackson2HttpMessageConverter());
+    }
 
 }

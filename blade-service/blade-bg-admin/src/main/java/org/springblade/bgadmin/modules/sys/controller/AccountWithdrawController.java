@@ -2,14 +2,17 @@ package org.springblade.bgadmin.modules.sys.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
+import org.springblade.bgadmin.modules.sys.entity.AccountEntity;
 import org.springblade.bgadmin.modules.sys.entity.AccountRechargeEntity;
 import org.springblade.bgadmin.modules.sys.entity.AccountWithdrawEntity;
 import org.springblade.bgadmin.modules.sys.form.AccountRechargeForm;
 import org.springblade.bgadmin.modules.sys.form.AccountWithdrawForm;
+import org.springblade.bgadmin.modules.sys.service.AccountService;
 import org.springblade.bgadmin.modules.sys.service.AccountWithdrawService;
 import org.springblade.common.utils.R;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 
 
 /**
@@ -34,6 +38,9 @@ public class AccountWithdrawController {
 
     @Resource
     AccountWithdrawService accountWithdrawService;
+
+    @Resource
+    AccountService accountService;
 
     /**
      * 列表
@@ -75,14 +82,31 @@ public class AccountWithdrawController {
         }
 
         AccountWithdrawEntity withdrawEntity = accountWithdrawService.getById(accountRechargeForm.getId());
-        if(withdrawEntity != null) {
+        if(withdrawEntity != null && accountRechargeForm.getStatus() != null) {
             if (withdrawEntity.getStatus() == 1) {
                 return R.ok();
             }
             withdrawEntity.setId(accountRechargeForm.getId());
-            withdrawEntity.setStatus(1);
+            withdrawEntity.setStatus(accountRechargeForm.getStatus());
             accountWithdrawService.updateById(withdrawEntity);
+
+            BigDecimal account = new BigDecimal(withdrawEntity.getAmount());
+
+            AccountEntity accountEntity = accountService.getOne(Wrappers.<AccountEntity>query().eq("user_id",withdrawEntity.getUserId()));
+
+            if(accountEntity != null){
+                BigDecimal finalFreezeAmount = accountEntity.getFreezeAmount();
+                finalFreezeAmount = finalFreezeAmount.subtract(account);
+                accountEntity.setFreezeAmount(finalFreezeAmount);
+                accountService.updateById(accountEntity);
+            }
+
+
+
         }
+
+
+
         return R.ok();
     }
 

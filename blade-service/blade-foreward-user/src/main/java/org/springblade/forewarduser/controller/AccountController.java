@@ -2,6 +2,7 @@ package org.springblade.forewarduser.controller;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -29,6 +30,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -111,7 +113,6 @@ public class AccountController {
     /*@ApiOperation("余额提现")*/
     @Login
     public R extract(@RequestBody @Validated AccountExtractForm form, @LoginUser UserEntity user) {
-        AccountRecharge accountRecharge = new AccountRecharge();
 
         String password = DigestUtils.sha256Hex(form.getPassword());
 
@@ -119,20 +120,26 @@ public class AccountController {
             return R.error("密码错误");
         }
 
-        //todo 银行对接
 
-        BeanUtils.copyProperties(form, accountRecharge);
-        accountRecharge.setUserId(user.getUserId());
-        accountRecharge.setType(1);
-        org.springblade.core.tool.api.R r = accountRechargeService.save(accountRecharge);
-        if(r.getCode() == FeignResultCodeConstant.EXCEPTION_CODE){
-            throw new RRException(r.getMsg());
-        }
+        BigDecimal amount = new BigDecimal(String.valueOf(form.getAccount()));
 
         AccountWithdraw accountWithdraw = new AccountWithdraw();
         accountWithdraw.setAmount(String.valueOf(form.getAccount()));
         accountWithdraw.setWithdrawDate(new Date());
         accountWithdraw.setUserId(user.getUserId().intValue());
+        accountWithdraw.setStatus(0);
+
+        Account account = accountService.getOne(Wrappers.<Account>query().eq("user_id",user.getUserId()));
+
+        if(account != null){
+            BigDecimal finalFreezeAmount = account.getFreezeAmount();
+            if(finalFreezeAmount != null) {
+                finalFreezeAmount = finalFreezeAmount.add(amount);
+                account.setFreezeAmount(finalFreezeAmount);
+                accountService.updateById(account);
+            }
+
+        }
 
         //todo 做校验
         accountWithdrawService.save(accountWithdraw);
