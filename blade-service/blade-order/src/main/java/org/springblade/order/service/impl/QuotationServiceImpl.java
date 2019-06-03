@@ -62,7 +62,9 @@ public class QuotationServiceImpl extends ServiceImpl<QuotationDao, Quotation> i
                 //填入批量的userid
                 demandUserIdList.add(Long.valueOf(demand.getCreatUserid()));
                 //填入批量的goodsTypeId
-                demandGoodsTypeIdList.add(demand.getFType());
+                if(demand.getFType() != null) {
+                    demandGoodsTypeIdList.add(demand.getFType());
+                }
             }
         }
 

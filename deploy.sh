@@ -27,28 +27,26 @@ echo "`zip -r jar4.zip jar4/*`" &&
 
 
 ## 现将自己公钥拷贝到服务器的authorized_keys实现免密码登陆 只有免密码登陆才能用scp命令
-echo "`scp -i ~/.ssh/id_rsa jar4.zip root@47.111.12.2:~`" &&
+echo "`scp -i ~/.ssh/id_rsa jar4.zip root@10.71.0.87:~`" &&
+
+echo "`scp -i ~/.ssh/id_rsa deploy-server.sh root@10.71.0.87:~`" &&
 
 ## 进入服务器 进行部署操作
-ssh root@47.111.12.2  "
+ssh root@10.71.0.87  "
 
 #echo `rm -rf jar4/` &&
 
-unzip -o jar4.zip -d jar4 &&
+unzip -o jar4.zip &&
 
-cd jar4 &&
+cd jar4/ &&
+
+rm -rf log &&
 
 mkdir log &&
 
-ps -aux | grep 'blade' | awk '{print $2}' | xargs kill ;
+mv ~/deploy-server.sh ./
 
-echo `nohup java -jar blade-foreward-user.jar >log/userlog.txt 2>&1 &` &&
-echo `nohup java -jar blade-information.jar >log/infolog.txt 2>&1 &` &&
-echo `nohup java -jar blade-log.jar >log/loglog.txt 2>&1 &` &&
-echo `nohup java -jar blade-order.jar >log/orderlog.txt 2>&1 &` &&
-echo `nohup java -jar blade-pay.jar >log/paylog.txt 2>&1 &` &&
-echo `nohup java -jar blade-bg-admin.jar >log/bglog.txt 2>&1 &` &&
-echo `nohup java -jar blade-gateway.jar >log/gwlog.txt 2>&1 &`
+./deploy-server.sh
 
 "
 echo done!

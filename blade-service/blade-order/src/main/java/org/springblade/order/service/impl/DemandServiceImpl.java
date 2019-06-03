@@ -76,7 +76,9 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
                 BeanUtils.copyProperties(demand, demandResp);
                 demandResp.setQuotationList(quotationList);
                 demandRespList.add(demandResp);
-                goodsTypeIds.add(demandResp.getFType());
+                if(demandResp.getFType() != null) {
+                    goodsTypeIds.add(demandResp.getFType());
+                }
             }
 
             //插入demand的goodstype
@@ -165,7 +167,9 @@ public class DemandServiceImpl extends ServiceImpl<DemandDao, Demand> implements
             for (Demand demand : demandList) {
                 Long createUserid = Long.valueOf(demand.getCreatUserid());
                 userIds.add(createUserid);
-                goodsTypeIds.add(demand.getFType());
+                if(demand.getFType() != null) {
+                    goodsTypeIds.add(demand.getFType());
+                }
                 demandIds.add(demand.getId());
             }
             int cursor = 0;

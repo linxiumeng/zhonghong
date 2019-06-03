@@ -144,9 +144,11 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
 
         param.setId(null);
 
-        List<GoodsTypeEntity> goodsTypeEntities = (List<GoodsTypeEntity>) (goodsService.batchGetGoodsType(Arrays.asList(param.getGoodsType()))).getData();
-        if(!goodsTypeEntities.isEmpty()){
-            param.setGoodsTypeEntity(goodsTypeEntities.get(0));
+        if(param.getGoodsType() != null) {
+            List<GoodsTypeEntity> goodsTypeEntities = (List<GoodsTypeEntity>) (goodsService.batchGetGoodsType(Arrays.asList(param.getGoodsType()))).getData();
+            if (!goodsTypeEntities.isEmpty()) {
+                param.setGoodsTypeEntity(goodsTypeEntities.get(0));
+            }
         }
 
         return param;
