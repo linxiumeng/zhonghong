@@ -289,7 +289,7 @@ public class PurchaseOrdersServiceImpl extends ServiceImpl<PurchaseOrdersDao, Pu
 
         Set<Long> goodsTypeIds = new HashSet<>();
         for (PurchaseOrders po1 : purchaseOrdersList) {
-            if(po1 != null) {
+            if(po1 != null && po1.getGoodsType()!= null) {
                 goodsTypeIds.add(po1.getGoodsType());
             }
         }
