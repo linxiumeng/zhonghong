@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -117,7 +118,7 @@ public class AccountRepaymentController {
         if(afterCaoZuo.signum() == -1){
             return R.error("还款失败，账户余额不足");
         }
-        afterCaoZuo = afterCaoZuo.setScale(2);
+        afterCaoZuo = afterCaoZuo.setScale(2, RoundingMode.HALF_DOWN);
         account.setAccount(afterCaoZuo);
         accountRepaymentStep.setStatus(1);
         accountService.updateAccountById(account);

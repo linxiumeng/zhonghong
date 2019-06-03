@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -63,13 +64,13 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
         }
 
         AccountDetail ad = new AccountDetail();
-        ad.setTotal(account.getTotal().setScale(2));
+        ad.setTotal(account.getTotal().setScale(2, RoundingMode.HALF_DOWN));
         ad.setAccount(bd);
         ad.setUserId(user.getUserId());
         accountDetailService.save(ad);
 
-        account.setFreezeAmount(account.getFreezeAmount().add(bd).setScale(2));
-        BigDecimal b = account.getAccount().subtract(bd).setScale(2);
+        account.setFreezeAmount(account.getFreezeAmount().add(bd).setScale(2, RoundingMode.HALF_DOWN));
+        BigDecimal b = account.getAccount().subtract(bd).setScale(2, RoundingMode.HALF_DOWN);
         account.setAccount(b);
         updateById(account);
 
@@ -103,13 +104,13 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
         AccountRepayment ar = new AccountRepayment();
         ar.setUserId(user.getUserId());
         ar.setOrderId(param.getId());
-        ar.setTotalAmount(param1.getFinancing().setScale(2));
-        ar.setWaitAmount(param1.getFinancing().setScale(2));
+        ar.setTotalAmount(param1.getFinancing().setScale(2, RoundingMode.HALF_DOWN));
+        ar.setWaitAmount(param1.getFinancing().setScale(2, RoundingMode.HALF_DOWN));
         ar.setPaidAmount(new BigDecimal(0.0));
         ar.setCurrentPeriod(1);
         BigDecimal totalInterest = param1.getFinancing().multiply(new BigDecimal(0.1));
-        ar.setTotalInterest(totalInterest.setScale(2));
-        ar.setWaitAmount(totalInterest.setScale(2));
+        ar.setTotalInterest(totalInterest.setScale(2, RoundingMode.HALF_DOWN));
+        ar.setWaitAmount(totalInterest.setScale(2, RoundingMode.HALF_DOWN));
         ar.setPaidInterest(new BigDecimal(0.0));
         ar.setPeriods(param1.getStages());
         ar.setRecentRepaymentDate(new Date());
@@ -121,8 +122,8 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
         account.setCreditLimit(account.getCreditLimit().subtract(bd));
         updateById(account);
 
-        BigDecimal divide1 = totalInterest.divide(new BigDecimal(12), 3, BigDecimal.ROUND_HALF_UP);
-        BigDecimal divide = param1.getFinancing().divide(new BigDecimal(12), 3, BigDecimal.ROUND_HALF_UP);
+        BigDecimal divide1 = totalInterest.divide(new BigDecimal(ar.getPeriods()), 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal divide = param1.getFinancing().divide(new BigDecimal(ar.getPeriods()), 2, BigDecimal.ROUND_HALF_UP);
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -131,7 +132,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
         for (int i = 1; i <= param1.getStages(); i++) {
             AccountRepaymentStep accountRepaymentStep = new AccountRepaymentStep();
             accountRepaymentStep.setRepaymentId(ar.getId());
-            accountRepaymentStep.setAccount(divide.setScale(2));
+            accountRepaymentStep.setAccount(divide.setScale(2, RoundingMode.HALF_DOWN));
             accountRepaymentStep.setInterest(divide1);
             accountRepaymentStep.setPreiod(i);
             accountRepaymentStep.setPreiodDate(cal.getTime());

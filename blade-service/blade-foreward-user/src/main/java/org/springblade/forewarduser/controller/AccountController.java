@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 
@@ -137,9 +138,9 @@ public class AccountController {
             canUseAccount = canUseAccount.subtract(amount);
             if(finalFreezeAmount != null && canUseAccount != null) {
                 finalFreezeAmount = finalFreezeAmount.add(amount);
-                finalFreezeAmount = finalFreezeAmount.setScale(2);
+                finalFreezeAmount = finalFreezeAmount.setScale(2, RoundingMode.HALF_DOWN);
                 account.setFreezeAmount(finalFreezeAmount);
-                canUseAccount = canUseAccount.setScale(2);
+                canUseAccount = canUseAccount.setScale(2, RoundingMode.HALF_DOWN);
                 account.setAccount(canUseAccount);
                 accountService.updateById(account);
             }

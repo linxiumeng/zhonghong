@@ -57,6 +57,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -133,7 +134,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         Map<String, Object> map = this.login(form1);
         Account account = new Account();
         BigDecimal bd = new BigDecimal("0.0");
-        bd = bd.setScale(2);
+        bd = bd.setScale(2, RoundingMode.HALF_DOWN);
         account.setAccount(bd);
         account.setUserId(((Long) map.get("userId")));
         account.setCashFund(bd);
