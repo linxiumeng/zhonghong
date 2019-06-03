@@ -6,10 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 /**
  * 充值记录表(AccountRecharge) 实体类
@@ -25,7 +22,7 @@ public class AccountExtractForm {
      * 提现金额
      */
     @ApiModelProperty(value = "提现金额",example = "5000")
-    @NotBlank(message = "提现金额不能为空")
+    @NotNull(message = "提现金额不能为空")
     @Min(message = "最小值为0",value = 0)
     @Max(message = "最大值为100000000",value = 100000000)
     private Double account;
