@@ -133,9 +133,12 @@ public class AccountController {
 
         if(account != null){
             BigDecimal finalFreezeAmount = account.getFreezeAmount();
-            if(finalFreezeAmount != null) {
+            BigDecimal canUseAccount = account.getAccount();
+            canUseAccount = canUseAccount.subtract(amount);
+            if(finalFreezeAmount != null && canUseAccount != null) {
                 finalFreezeAmount = finalFreezeAmount.add(amount);
                 account.setFreezeAmount(finalFreezeAmount);
+                account.setAccount(canUseAccount);
                 accountService.updateById(account);
             }
 

@@ -98,6 +98,11 @@ public class AccountWithdrawController {
                 BigDecimal finalFreezeAmount = accountEntity.getFreezeAmount();
                 finalFreezeAmount = finalFreezeAmount.subtract(account);
                 accountEntity.setFreezeAmount(finalFreezeAmount);
+                BigDecimal totalAccount = accountEntity.getTotal();
+                if(totalAccount != null){
+                    totalAccount = totalAccount.subtract(account);
+                    accountEntity.setTotal(totalAccount);
+                }
                 accountService.updateById(accountEntity);
             }
 
