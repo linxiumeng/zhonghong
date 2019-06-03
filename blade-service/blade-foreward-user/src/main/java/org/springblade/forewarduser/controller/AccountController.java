@@ -192,6 +192,7 @@ public class AccountController {
     public org.springblade.core.tool.api.R financingPay(@RequestBody AccountFinancingPayForm accountFinancingPayForm){
         org.springblade.core.tool.api.R r = org.springblade.core.tool.api.R.status(true);
         try {
+
             boolean flag = accountService.financingPay(accountFinancingPayForm.getPurchaseOrders(), accountFinancingPayForm.getUser(),accountFinancingPayForm.getPayForm());
             if(!flag){
                 throw new RRException("融资付款失败");

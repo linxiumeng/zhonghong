@@ -83,7 +83,17 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, Account> impleme
         QueryWrapper<Account> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", user.getUserId());
         Account account = getOne(wrapper);
-        if(account.getCreditLimit().subtract(param1.getFinancing()).signum() < 0){
+        /*if(account.getCreditLimit().subtract(param1.getFinancing()).signum() < 0){
+            throw new RRException("额度不足");
+        }*/
+
+        BigDecimal bigDecimalFinalQuotation = new BigDecimal(param.getFinalQuotation()).multiply(new BigDecimal("0.7"));
+
+        double d = Math.min(account.getCreditLimit().doubleValue(), account.getCreditUnit().doubleValue());
+
+        d = Math.min(d, bigDecimalFinalQuotation.doubleValue());
+
+        if(new BigDecimal(d).subtract(param1.getFinancing()).signum() < 0){
             throw new RRException("额度不足");
         }
 

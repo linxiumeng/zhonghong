@@ -213,6 +213,9 @@ public class PurchaseOrdersController {
             @ApiImplicitParam(name = "token", value = "用户token", paramType = "header", dataType = "string")
     })
     public R financing(@RequestBody PayForm param, @LoginUser UserEntity user) {
+
+
+
         PurchaseOrders po = purchaseOrdersService.getById(param.getOrderNo());
         PurchaseOrders purchaseOrders = payCheck(param, user);
         AccountFinancingPayForm form = new AccountFinancingPayForm();
